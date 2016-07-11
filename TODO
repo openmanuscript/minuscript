@@ -1,0 +1,30 @@
+10 July 2016
+ [ ] update TOC to use latex 
+
+22 April 2016
+ [ ] compute word count
+ [ ] include a 'scans' directory and sample scan file in the 'example' dir
+ [ ] check for existence of any pdf scene files, and report if they are
+        not found. exit and clean up
+ [x] check version of input files (json files) against verison of app,
+        when reading them in
+
+20 April 2016
+  [x] fix writing out chapter name in TOC file - it's python at this point
+      so we have to create a python counter for the chapter number, and
+      then translate that to a word, and then write that out in the 
+      TOC file. Yikes ...
+
+12 April 2016
+  [ ] create novel settings file, and defaults in overall settings
+  [ ] add indent and margins to novel settings file
+
+09 April 2016
+  [ ] have minuscript install and app check for dependencies:
+        multimarkdown
+        pdflatex
+  [ ] update to use settings file in ~/.minuscript
+
+23 January 2016
+  [x] adopt the argparse module, instead of the optparse module
+  [x] adapt all print statements to the 'logging' module format

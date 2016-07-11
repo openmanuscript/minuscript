@@ -1,0 +1,14 @@
+{
+"version" : "1.0",
+"author" : {
+    "name"      : "Ima Q. Writer",
+    "surname"   : "Writer",
+    "email"     : "imaqwriter@imawriter.com",
+    "phone"     : "(000) 000-0000",
+    "website"   : "www.imawriter.com",
+    "address"   : "111 Writer's Way",
+    "city"      : "Writerville",
+    "state"     : "NM",
+    "zip"       : "88888"
+}
+}
