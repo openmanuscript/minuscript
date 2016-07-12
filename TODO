@@ -1,6 +1,7 @@
 10 July 2016
  [x] update TOC to use latex 
- [ ] Change TOC title font to use the one requested by the user
+ [x] Change TOC title font to use the one requested by the user
+ [ ] Change spacing on the table of contents so it has smaller margins
 
 22 April 2016
  [ ] compute word count
