@@ -590,5 +590,5 @@ log.info( "Cleaning up ..." )
 if args.debug == False:
     os.system( "rm -rf " + APP_BUILDDIR )
     os.system( 
-        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.tex" )
+        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex" )
 
