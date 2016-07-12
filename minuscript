@@ -410,6 +410,7 @@ with open( args.output, 'w' ) as out:
         out.write("\\usepackage{endnotes}\n")
     out.write("\n")
     out.write("\\renewcommand\\cftsecleader{\\cftdotfill{\\cftdotsep}}\n")
+    out.write("\\renewcommand\\contentsname{}\n")
     out.write("\\renewcommand{\\emph}[1]{\\textit{#1}}\n")
     out.write("\\pagestyle{fancy}\n")
     out.write("\\fancyhead{}\n")
@@ -522,7 +523,9 @@ with open( args.output, 'w' ) as out:
     # write out table of contents, if requested
     if ( args.toc == True ):
         out.write("\\newpage\n")
-        out.write("\\bigskip\n")
+        out.write("\\begin{noindent}\n")
+        out.write("\\textbf{Contents}\n")
+        out.write("\\end{noindent}\n")
         out.write("\\tableofcontents\n")
 
     # iterate through chapters and scenes
