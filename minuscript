@@ -523,10 +523,12 @@ with open( args.output, 'w' ) as out:
     # write out table of contents, if requested
     if ( args.toc == True ):
         out.write("\\newpage\n")
-        out.write("\\begin{noindent}\n")
+        out.write("{\n")
+        out.write("\\begin{center}\n")
         out.write("\\textbf{Contents}\n")
-        out.write("\\end{noindent}\n")
+        out.write("\\end{center}\n")
         out.write("\\tableofcontents\n")
+        out.write("}\n")
 
     # iterate through chapters and scenes
     for chapter in manuscript_data["manuscript"]["chapters"]:
