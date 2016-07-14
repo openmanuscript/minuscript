@@ -46,6 +46,8 @@ import textwrap
 # ---------------------------------------------------------------------------
 # this application
 APP_NAME        = "minuscript"
+APP_DOTDIR = os.path.expanduser("~/.minuscript")
+APP_INITDATADIR = os.path.join( APP_DOTDIR, "init" ) 
 # APP_CONF_FILE   = os.path.expanduser("~/.minuscript/minuscript.conf")
 APP_VERSION     = 1.0
 APP_EXIT_ERROR  = 42
@@ -205,6 +207,23 @@ if (args.sourcedir == "notDefined"):
 
 if (status == 0): 
     sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+#
+# if it's a simple command, deal with it and exit
+#
+# ---------------------------------------------------------------------------
+exit_code = 0
+if (args.init == True):
+    log.info("creating initial minuscript files in local directory")
+    if  os.path.exists( APP_INITDATADIR ): 
+        os.system( "cp -rf " + APP_INITDATADIR + "/* ." )
+    else:
+        log.error("minuscript init data not found")
+        exit_code = APP_EXIT_ERROR
+    sys.exit(exit_code)
+
 
 # ---------------------------------------------------------------------------
 #
