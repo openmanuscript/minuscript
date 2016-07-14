@@ -134,6 +134,8 @@ parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
 parser.add_argument( "--fontfamily", default="pcr", 
     help="define the font family for the resulting pdf")
+parser.add_argument( "-i", "--init", action="store_true", default=False,
+    help="populate an initial minuscript project")
 parser.add_argument( "--manuscript", default="defaultMS", 
     help="name of the manuscript")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
