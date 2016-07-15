@@ -125,7 +125,7 @@ parser = argparse.ArgumentParser(
             directory.
             ''')
 )
-parser.set_defaults(**defaults)
+# parser.set_defaults(**defaults)
 parser.add_argument( "-d", "--debug", action="store_true", default=False,
     help="run in debug mode")
 parser.add_argument( "-v", "--verbose", action="store_true", default=False,
