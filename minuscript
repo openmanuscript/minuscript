@@ -248,7 +248,7 @@ if os.path.isfile( fullpath ):
 
         # set local variables using this data
         # TODO: make sure this data is there
-        args.manuscript = manuscript_data["manuscript"]["runningtitle"]
+        args.manuscript = manuscript_data["manuscript"]["runningtitle"].lower()
 
 else:
     log.error( args.manuscriptfile + " does not exist" )
