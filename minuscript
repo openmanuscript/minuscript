@@ -76,10 +76,11 @@ conf_parser = argparse.ArgumentParser(
 
 args, remaining_argv = conf_parser.parse_known_args()
 
-defaults = {
-    "sourcedir" : "defaultSourcedir",
-    "author"    : "defaultAuthor",
-    }
+# you can set stuff here, but we're not  currently using this
+# defaults = {
+#     "sourcedir" : "defaultSourcedir",
+#     "author"    : "defaultAuthor",
+#     }
 
 # SHORT CIRCUIT
 # currently not implementing this, until the following work correctly:
@@ -130,7 +131,7 @@ parser.add_argument( "-d", "--debug", action="store_true", default=False,
 parser.add_argument( "-v", "--verbose", action="store_true", default=False,
     help="report verbosely")
 # TODO: internal logic of notes and endnotes interfering with each other
-parser.add_argument( "--author",
+parser.add_argument( "--author", default="notDefined",
     help="read author data from this file")
 parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
@@ -138,7 +139,7 @@ parser.add_argument( "--fontfamily", default="pcr",
     help="define the font family for the resulting pdf")
 parser.add_argument( "-i", "--init", action="store_true", default=False,
     help="populate an initial minuscript project")
-parser.add_argument( "--manuscript", default="defaultMS", 
+parser.add_argument( "--manuscript", default="notDefined", 
     help="name of the manuscript")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
@@ -148,7 +149,7 @@ parser.add_argument( "--notes", action="store_true", default=False,
     help="write internal notes as footnotes")
 parser.add_argument( "--output", default="manuscript.tex", 
     help="write output to this file")
-parser.add_argument( "--sourcedir", 
+parser.add_argument( "--sourcedir", default="notDefined",
     help="use this as the root directory for the manuscript")
 parser.add_argument( "--synopsis", action="store_true", default=False,
     help="include synopsis before the first chapter")
@@ -168,12 +169,10 @@ args = parser.parse_args(remaining_argv)
 # manuscript directory, so look for files locally 
 #
 # ---------------------------------------------------------------------------
-if ( args.manuscript == "defaultMS" ):  
-    path, curdir = os.path.split( os.getcwd() )
-    args.manuscript = curdir
-    args.sourcedir = path
+if ( args.sourcedir == "notDefined" ):  
+    args.sourcedir = os.getcwd() 
 
-if ( args.author == "defaultAuthor" ):  
+if ( args.author == "notDefined" ):  
     args.author = "author.json" 
 
 
@@ -234,7 +233,7 @@ if (args.init == True):
 # ---------------------------------------------------------------------------
 
 # manuscript data
-fullpath = os.path.join( args.sourcedir, args.manuscript, args.manuscriptfile )
+fullpath = os.path.join( args.sourcedir, args.manuscriptfile )
 log.info( "opening input file " + args.manuscriptfile )
 log.info( "opening input file " + fullpath )
 if os.path.isfile( fullpath ):
@@ -246,12 +245,17 @@ if os.path.isfile( fullpath ):
             log.error( args.manuscriptfile + 
                 " version later than minuscript version" )
             exit( APP_EXIT_ERROR ) 
+
+        # set local variables using this data
+        # TODO: make sure this data is there
+        args.manuscript = manuscript_data["manuscript"]["runningtitle"]
+
 else:
-    log.error( args.manuscript + " does not exist" )
+    log.error( args.manuscriptfile + " does not exist" )
     exit( APP_EXIT_ERROR ) 
 
 # author data
-fullpath = os.path.join( args.sourcedir, args.manuscript, args.author )
+fullpath = os.path.join( args.sourcedir, args.author )
 log.info( "opening input file " + args.author )
 log.info( "opening input file " + fullpath )
 if os.path.isfile( fullpath ):
@@ -269,7 +273,7 @@ else:
 # synopsis file, if requested
 if (args.synopsis == True):
     fullpath = os.path.join( 
-        args.sourcedir, args.manuscript, "scenes", args.synopsisfile )
+        args.sourcedir, "scenes", args.synopsisfile )
     log.info( "opening input file " + args.synopsisfile )
     log.info( "opening input file " + fullpath )
     if not os.path.isfile( fullpath ):
@@ -298,13 +302,13 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
             # copy the file into the work dir
             log.info( APP_BUILDDIR + "/" + scene )
             command = APP_CP + " " + args.sourcedir + "/" + \
-                    args.manuscript + "/" + scene + " " + APP_BUILDDIR
+                    scene + " " + APP_BUILDDIR
             os.system( command )
         else:
             # translate the file into tex, and place it in the work dir 
             log.info( APP_BUILDDIR + "/" + scene + "." + extension )
             command = APP_MMD + " -t " + format + " " + args.sourcedir + "/" + \
-                    args.manuscript + "/scenes/" + scene + ".md > " + \
+                    "scenes/" + scene + ".md > " + \
                     APP_BUILDDIR + "/" + scene + "." + extension
             os.system( command )
 
@@ -314,7 +318,7 @@ if (args.synopsis == True):
     # translate the file into tex, and place it in the work dir 
     log.info( APP_BUILDDIR + "/synopsis.tex" )
     command = APP_MMD + " -t " + format + " " + args.sourcedir + "/" + \
-            args.manuscript + "/scenes/" + args.synopsisfile + " > " + \
+            "scenes/" + args.synopsisfile + " > " + \
             APP_BUILDDIR + "/synopsis.tex"
     os.system( command )
 
