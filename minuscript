@@ -135,6 +135,8 @@ parser.add_argument( "--author", default="notDefined",
     help="read author data from this file")
 parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
+parser.add_argument( "--footnotes", action="store_true", default=False,
+    help="write internal notes as footnotes")
 parser.add_argument( "--fontfamily", default="pcr", 
     help="define the font family for the resulting pdf")
 parser.add_argument( "-i", "--init", action="store_true", default=False,
@@ -145,8 +147,6 @@ parser.add_argument( "--manuscriptfile", default="manuscript.json",
     help="read manuscript definition from this file")
 parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file")
-parser.add_argument( "--notes", action="store_true", default=False,
-    help="write internal notes as footnotes")
 parser.add_argument( "--output", default="manuscript.tex", 
     help="write output to this file")
 parser.add_argument( "--sourcedir", default="notDefined",
@@ -441,7 +441,7 @@ with open( args.output, 'w' ) as out:
     out.write("\\fancyhead{}\n")
     out.write("\\fancyfoot{}\n")
     out.write("\\renewcommand{\\headrulewidth}{0pt}\n")
-    if (args.notes == False):
+    if (args.footnotes == False):
         out.write("\\renewcommand{\\footnote}[1]{}\n")
     out.write("\\fancyhead[R]{\n")
     out.write("    \\fontsize{10}{12} \\fontfamily{" + args.fontfamily +
