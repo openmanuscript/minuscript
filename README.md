@@ -20,7 +20,7 @@ Then, in the minuscript repository directory:
 4. `minuscript`
 5. you will now have a document called `documentation.pdf` which is the 
    documentation for `minuscript`. That document and the files in the 
-   directory, have all the information you need to create your own manuscripts.
+   directory have all the information you need to create your own manuscripts.
    I hope. If not, please contact me and I'll revise the docs or explain
    what's missing.
 
@@ -28,3 +28,4 @@ Good luck, and please contact me for help and with suggestions. If you'd like to
 
     minuscript@dhrogers.com
 
+Keep it simple.
