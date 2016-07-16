@@ -1,4 +1,4 @@
-Thanks for your interest in `**minuscript**`
+Thanks for your interest in `minuscript`
 
 
 Everything you need is in the git repository. Instructions assume a facility
@@ -26,5 +26,5 @@ Then, in the minuscript repository directory:
 
 Good luck, and please contact me for help and with suggestions. If you'd like to help code `minuscript`, we can talk about that, too.
 
-    `minuscript@dhrogers.com`
+    minuscript@dhrogers.com
 
