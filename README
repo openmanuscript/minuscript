@@ -1,15 +1,18 @@
-Thanks for downloading minuscript
+Thanks for your interest in **minuscript**
 
-To get started:
 
 Everything you need is in the git repository. Instructions assume a facility
 with basic tools used in coding, so I assume you can do things like edit a 
-makefile and other operations like that.
+makefile. If you don't know what a makefile is, you might want to bail right now.
 
-Good luck, and please contact me with suggestions. If you'd like to help code
-minuscript, we can talk about that, too.
+To get started:
 
-In the repository directory:
+- install the dependent software:
+    - multimarkdown
+    - latex
+    - texcount.pl
+
+Then, in the minuscript repository directory:
 
 1. Edit the makefile to install minuscript in a directory of your choice
 2. make install
@@ -20,7 +23,7 @@ In the repository directory:
    files in the directory, you will have all the information you
    need to create your own manuscripts
 
-For help:
+Good luck, and please contact me for help and with suggestions. If you'd like to help code minuscript, we can talk about that, too.
 
     minuscript@dhrogers.com
 
