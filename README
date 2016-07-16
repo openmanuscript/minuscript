@@ -13,12 +13,12 @@ In the repository directory:
 
 1. Edit the makefile to install minuscript in a directory of your choice
 2. make install
-3. cd examples/awakenings
+3. cd doc 
 4. minuscript
-5. you will now have a document called 'awakenings.pdf' which is the examples
+5. you will now have a document called 'documentation.pdf' which is the 
    documentation for minuscript. By reading that document and looking at the
-   files in the 'awakenings' directory, you will have all the information you
-   need to create your own novels
+   files in the directory, you will have all the information you
+   need to create your own manuscripts
 
 For help:
 

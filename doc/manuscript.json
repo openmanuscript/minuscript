@@ -1,0 +1,17 @@
+{
+"version" : "1.0",
+"manuscript" : {
+    "title" : "Minuscript Documentation",
+    "runningtitle" : "documentation",
+    "chapters" : [
+        {
+            "title"  : "Overview",
+            "scenes" : ["overview"]
+        },
+        {
+            "title"  : "What is a Manuscript?",
+            "scenes" : ["manuscript"]
+        }
+    ]
+}
+}

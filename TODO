@@ -1,5 +1,6 @@
 15 July 2016
- [ ] remove 'output' option - it's meaningless
+ [x] remove 'output' option - it's meaningless
+ [ ] texcount -l -sum manuscript.tex > manuscript.sum
 
 10 July 2016
  [x] update TOC to use latex 
@@ -15,21 +16,21 @@
         when reading them in
 
 20 April 2016
-  [x] fix writing out chapter name in TOC file - it's python at this point
-      so we have to create a python counter for the chapter number, and
-      then translate that to a word, and then write that out in the 
-      TOC file. Yikes ...
+ [x] fix writing out chapter name in TOC file - it's python at this point
+     so we have to create a python counter for the chapter number, and
+     then translate that to a word, and then write that out in the 
+     TOC file. Yikes ...
 
 12 April 2016
-  [ ] create novel settings file, and defaults in overall settings
-  [ ] add indent and margins to novel settings file
+ [ ] create novel settings file, and defaults in overall settings
+ [ ] add indent and margins to novel settings file
 
 09 April 2016
-  [ ] have minuscript install and app check for dependencies:
+ [ ] have minuscript install and app check for dependencies:
         multimarkdown
         pdflatex
-  [ ] update to use settings file in ~/.minuscript
+ [ ] update to use settings file in ~/.minuscript
 
 23 January 2016
-  [x] adopt the argparse module, instead of the optparse module
-  [x] adapt all print statements to the 'logging' module format
+ [x] adopt the argparse module, instead of the optparse module
+ [x] adapt all print statements to the 'logging' module format

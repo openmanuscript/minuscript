@@ -54,6 +54,7 @@ APP_EXIT_ERROR  = 42
 APP_BUILDDIR    = "minuscript_buildtemp"
 APP_NUMWORDS    = 1000
 APP_START_PAGE_NUMBERING = 1
+APP_TEXFILE     = "manuscript.tex"
 # TODO: add global variable for 'scenes' directory
 
 # external applications
@@ -142,13 +143,11 @@ parser.add_argument( "--fontfamily", default="pcr",
 parser.add_argument( "-i", "--init", action="store_true", default=False,
     help="populate an initial minuscript project")
 parser.add_argument( "--manuscript", default="notDefined", 
-    help="name of the manuscript")
+    help="name of the final pdf that will be created. This overrides the setting in the manuscript.json file")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
 parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file")
-parser.add_argument( "--output", default="manuscript.tex", 
-    help="write output to this file")
 parser.add_argument( "--sourcedir", default="notDefined",
     help="use this as the root directory for the manuscript")
 parser.add_argument( "--synopsis", action="store_true", default=False,
@@ -246,9 +245,14 @@ if os.path.isfile( fullpath ):
                 " version later than minuscript version" )
             exit( APP_EXIT_ERROR ) 
 
-        # set local variables using this data
         # TODO: make sure this data is there
-        args.manuscript = manuscript_data["manuscript"]["runningtitle"].lower()
+        # set local variables using this data
+
+        # unless overridden on command line use the data to define the 
+        # name of the final output
+        if ( args.manuscript == "notDefined" ):
+            args.manuscript = \
+                manuscript_data["manuscript"]["runningtitle"].lower()
 
 else:
     log.error( args.manuscriptfile + " does not exist" )
@@ -414,8 +418,8 @@ def get_chapter_name_string():
 # create the manuscript tex file
 #
 # ---------------------------------------------------------------------------
-log.info( "creating file " + args.output )
-with open( args.output, 'w' ) as out:
+log.info( "creating file " + APP_TEXFILE )
+with open( APP_TEXFILE, 'w' ) as out:
     # write header
     out.write("\\documentclass[letterpaper,12pt,onecolumn]{article}\n")
     out.write("\n")
@@ -472,6 +476,7 @@ with open( args.output, 'w' ) as out:
     out.write("% commands\n")
     out.write("%\n")
     out.write("%-----------------------------\n")
+    out.write("\\newcommand{\\wordcount}{\\input{manuscript.sum}}\n")
     out.write("\\newcommand{\\sceneseparator}\n")
     out.write("{\n")
     out.write("  \\begin{center}\\#\\#\\#\\end{center}\n")
@@ -597,8 +602,8 @@ with open( args.output, 'w' ) as out:
     out.close()
 
 # see if the file was written
-if  not os.path.exists( args.output ): 
-    log.error( "Did not create output file: " + args.output )    
+if  not os.path.exists( APP_TEXFILE ): 
+    log.error( "Did not create output file: " + APP_TEXFILE )    
 
 # ---------------------------------------------------------------------------
 #
