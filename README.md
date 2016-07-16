@@ -3,7 +3,7 @@ Thanks for your interest in `minuscript`
 
 Everything you need is in the git repository. Instructions assume a facility
 with basic tools used in coding, so I assume you can do things like edit a 
-`makefile`. If you don't know what a `makefile` is, you might want to bail right now.
+`makefile`. If you don't know what a `makefile` is, you might want to bail right now. Familiarity with `json` files is also helpful.
 
 To get started:
 
