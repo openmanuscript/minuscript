@@ -1,7 +1,7 @@
 15 July 2016
  [ ] update gravatar for moonimal and djam@lanl.gov
  [x] remove 'output' option - it's meaningless
- [ ] texcount -l -sum manuscript.tex > manuscript.sum
+ [ ] texcount.pl -l -sum manuscript.tex > manuscript.sum
 
 10 July 2016
  [x] update TOC to use latex 
