@@ -140,9 +140,9 @@ parser.add_argument( "--footnotes", action="store_true", default=False,
     help="write internal notes as footnotes")
 parser.add_argument( "--fontfamily", default="pcr", 
     help="define the font family for the resulting pdf")
-parser.add_argument( "-i", "--init", action="store_true", default=False,
+parser.add_argument( "--init", action="store_true", default=False,
     help="populate an initial minuscript project")
-parser.add_argument( "--manuscript", default="notDefined", 
+parser.add_argument( "--manuscriptname", default="notDefined", 
     help="name of the final pdf that will be created. This overrides the setting in the manuscript.json file")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
@@ -250,8 +250,8 @@ if os.path.isfile( fullpath ):
 
         # unless overridden on command line use the data to define the 
         # name of the final output
-        if ( args.manuscript == "notDefined" ):
-            args.manuscript = \
+        if ( args.manuscriptname == "notDefined" ):
+            args.manuscriptname = \
                 manuscript_data["manuscript"]["runningtitle"].lower()
 
 else:
@@ -614,7 +614,7 @@ if (args.nopdf == False):
     log.info( "Creating pdf file ..." )
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
-    os.system( "mv manuscript.pdf " + args.manuscript + ".pdf")
+    os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
 
 # ---------------------------------------------------------------------------
 #

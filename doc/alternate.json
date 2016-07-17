@@ -1,12 +1,12 @@
 {
 "version" : "1.0",
 "manuscript" : {
-    "title" : "Minuscript Documentation",
-    "runningtitle" : "documentation",
+    "title" : "Minuscript Alternate Documentation",
+    "runningtitle" : "alternate",
     "chapters" : [
         {
-            "title"  : "Overview",
-            "scenes" : ["overview", "principles", "dependencies"]
+            "title"  : "One Alternative",
+            "scenes" : ["alternate"]
         },
         {
             "title"  : "Workflow",
