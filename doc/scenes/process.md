@@ -1,0 +1,3 @@
+**minuscript** is designed to fill the space between simple text tools and a manuscript draft in pdf form. I realize there may be a need for other document types for a final output (Microsoft Word, for example), but for me getting a story from inspiration to pretty-well-crafted draft is a process that should remain as sloppy, inspired and lightweight as possible. I can do a lot of drafting, editing and raw content creating with minuscript far easier than I can do with any other system I've tried.
+
+It supports simple, distraction-free editing of text files, and cobbling together scenes and chapters in different ways easily and quickly.

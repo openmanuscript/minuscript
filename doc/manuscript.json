@@ -6,7 +6,11 @@
     "chapters" : [
         {
             "title"  : "Overview",
-            "scenes" : ["overview"]
+            "scenes" : ["overview", "principles", "dependencies"]
+        },
+        {
+            "title"  : "Workflow",
+            "scenes" : ["workflow", "directories"]
         },
         {
             "title"  : "What is a Manuscript?",
