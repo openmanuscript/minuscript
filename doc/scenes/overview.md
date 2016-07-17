@@ -1,6 +1,6 @@
-The philosophy behind **minuscript** is distraction-free production of manuscript drafts by bridging the gap between simple text editors and manuscript organization, in a format that will be around for a long time.
+The philosophy behind **minuscript** is distraction-free production of manuscript drafts by bridging the gap between simple text editors and manuscript organization, in a format that will be around for a long time[^ I have manuscripts I have been working on for 10 years. You will, too ... eventually.].
 
-There are plenty of distraction-free writing tools, and I've tried most of them. There are very few distraction-free workflow tools. This is one that might work for you.
+There are plenty of distraction-free writing tools, and I've tried most of them [^ Scrivener and iAwriter are two of my favorites. I have designed this workflow to work with both tools, as you'll see later in the documentation.]. There are very few distraction-free workflow tools. This is one that might work for you.
 
 I want to build a simple tool that helps you stay focused on the writing workflow. As a developer, and writer, I don't want to get distracted by user interfaces, long lists of features, or a lot of debate about the tool. The best tools are hammers. **minuscript** is a hammer. 
 

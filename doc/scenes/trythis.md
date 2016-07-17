@@ -1,5 +1,3 @@
-**Try This**
-
 A few quick experiments will show you the range of things that **minuscript** is set up to create. Run these in the `doc/` directory to see what results.
 
 - `minuscript` 
