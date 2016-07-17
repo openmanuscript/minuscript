@@ -128,7 +128,7 @@ parser = argparse.ArgumentParser(
 )
 # parser.set_defaults(**defaults)
 parser.add_argument( "-d", "--debug", action="store_true", default=False,
-    help="run in debug mode")
+    help="run in debug mode: create all files, but do not clean up after pdf is created.")
 parser.add_argument( "-v", "--verbose", action="store_true", default=False,
     help="report verbosely")
 # TODO: internal logic of notes and endnotes interfering with each other
@@ -147,7 +147,7 @@ parser.add_argument( "--manuscriptname", default="notDefined",
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
 parser.add_argument( "--nopdf", action="store_true", default=False,
-    help="don't create pdf file")
+    help="don't create pdf file. useful in debugging problems")
 parser.add_argument( "--sourcedir", default="notDefined",
     help="use this as the root directory for the manuscript")
 parser.add_argument( "--synopsis", action="store_true", default=False,
