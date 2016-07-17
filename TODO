@@ -1,4 +1,6 @@
 15 July 2016
+ [ ] fix bug: using a colon in the first line of a scene pops multimarkdown 
+     into the 'metadata' mode
  [ ] update gravatar for moonimal and djam@lanl.gov
  [x] remove 'output' option - it's meaningless
  [ ] texcount.pl -l -sum manuscript.tex > manuscript.sum
