@@ -1,18 +1,21 @@
 15 July 2016
  [ ] fix bug: using a colon in the first line of a scene pops multimarkdown 
      into the 'metadata' mode
- [ ] update gravatar for moonimal and djam@lanl.gov
- [x] remove 'output' option - it's meaningless
  [ ] texcount.pl -l -sum manuscript.tex > manuscript.sum
+ [ ] add some .pdf content and another example manuscript.json file
+     that pulls it in (content not tied to documentation spefics - too
+     hard to change w/o typewriter)
+ [ ] update gravatar for moonimal and djam@lanl.gov
+ [ ] create settings.min (minuscript settings file) that resides in the same
+     directory as the manuscript, and controls things in the layout
+ [x] remove 'output' option - it's meaningless
 
 10 July 2016
  [x] update TOC to use latex 
  [x] Change TOC title font to use the one requested by the user
- [ ] Change spacing on the table of contents so it has smaller margins
+ [o] Change spacing on the table of contents so it has smaller margins
 
 22 April 2016
- [ ] compute word count
- [ ] include a 'scans' directory and sample scan file in the 'example' dir
  [ ] check for existence of any pdf scene files, and report if they are
         not found. exit and clean up
  [x] check version of input files (json files) against verison of app,
@@ -25,14 +28,14 @@
      TOC file. Yikes ...
 
 12 April 2016
- [ ] create novel settings file, and defaults in overall settings
- [ ] add indent and margins to novel settings file
+ [o] create novel settings file, and defaults in overall settings
+ [o] add indent and margins to novel settings file
 
 09 April 2016
- [ ] have minuscript install and app check for dependencies:
+ [ ] check for dependencies:
         multimarkdown
         pdflatex
- [ ] update to use settings file in ~/.minuscript
+ [o] update to use settings file in ~/.minuscript
 
 23 January 2016
  [x] adopt the argparse module, instead of the optparse module
