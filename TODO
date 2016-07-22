@@ -5,6 +5,8 @@ Features
 15 July 2016
  [ ] fix bug: using a colon in the first line of a scene pops multimarkdown 
      into the 'metadata' mode
+ [x] fix bug: using an underscore in the runningtitle field of the
+     manuscript.json file causes failure
  [x] texcount.pl -l -sum manuscript.tex > manuscript.sum
  [x] add some .pdf content and another example manuscript.json file
      that pulls it in (content not tied to documentation spefics - too
