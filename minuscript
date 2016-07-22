@@ -32,11 +32,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ---------------------------------------------------------------------------
 
 import argparse
+import configparser
 import json
+import logging as log
+import math
 import os
 import sys
-import logging as log
-import configparser
 import textwrap
 
 # ---------------------------------------------------------------------------
@@ -50,7 +51,7 @@ APP_DOTDIR = os.path.expanduser("~/.minuscript")
 APP_INITDATADIR = os.path.join( APP_DOTDIR, "init" ) 
 APP_VERSION     = 1.0
 APP_EXIT_ERROR  = 42
-APP_BUILDDIR    = "minuscript_buildtemp"
+APP_BUILDDIR    = "buildtemp"
 APP_SCENESDIR   = "scenes"
 APP_NUMWORDS    = 1000
 APP_START_PAGE_NUMBERING = 1
@@ -254,7 +255,6 @@ if os.path.isfile( fullpath ):
         if ( args.manuscriptname == "notDefined" ):
             args.manuscriptname = \
                 manuscript_data["manuscript"]["runningtitle"].lower()
-
 else:
     log.error( args.manuscriptfile + " does not exist" )
     exit( APP_EXIT_ERROR ) 
@@ -368,6 +368,14 @@ def numToWords(num,join=True):
 
 # ---------------------------------------------------------------------------
 #
+# round a number to the nearest tens 
+#
+# ---------------------------------------------------------------------------
+def roundup(x):
+    return int(math.ceil(x / 10.0)) * 10
+
+# ---------------------------------------------------------------------------
+#
 # latex file support functions 
 #
 # ---------------------------------------------------------------------------
@@ -421,12 +429,16 @@ def get_chapter_name_string():
 # ---------------------------------------------------------------------------
 log.info( "creating file " + APP_TEXFILE )
 with open( APP_TEXFILE, 'w' ) as out:
+    escaped_runningtitle = \
+        manuscript_data["manuscript"]["runningtitle"].translate( \
+        str.maketrans({"_":  r"\_"}))
     # write header
     out.write("\\documentclass[letterpaper,12pt,onecolumn]{article}\n")
     out.write("\n")
     out.write("\\newcounter{chapter}\n")
     out.write("\n")
     out.write("\\usepackage[page]{totalcount}\n")
+    out.write("\\usepackage{underscore}\n")
     out.write("\\usepackage{fmtcount}\n")
     out.write("\\usepackage{fancyhdr}\n")
     out.write("\\usepackage{setspace}\n")
@@ -452,8 +464,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("    \\fontsize{10}{12} \\fontfamily{" + args.fontfamily +
         "} \\selectfont ")
     out.write(author_data["author"]["surname"] + " / ")
-    out.write("\\MakeUppercase{" + 
-        manuscript_data["manuscript"]["runningtitle"] + "} / ")
+    out.write("\\MakeUppercase{" + escaped_runningtitle + "} /" ) 
     out.write("\\thepage }\n")
     out.write("\n")
     if ( args.endnotes == True ):
@@ -612,19 +623,22 @@ if  not os.path.exists( APP_TEXFILE ):
 #
 # ---------------------------------------------------------------------------
 if (args.nopdf == False):
-    log.info( "Creating pdf file ..." )
     # count the words
-    os.system( APP_WORDCOUNT + " -merge manuscript.tex > ms.sum" ) 
-    # now find the total
-    with open( 'ms.sum', 'r' ) as sumfile:
-        with open( 'm.sum', 'w' ) as countfile:
-            for line in sumfile:
-                if line.startswith( 'Words in text' ):
-                    counts = line.split( ':' )
-                    countfile.write( counts[1].strip() )
+    if ( args.wordcount == True ):
+        log.info( "performing wordcount" )
+        os.system( APP_WORDCOUNT + " -merge manuscript.tex > ms.sum" ) 
+        # now find the total
+        with open( 'ms.sum', 'r' ) as sumfile:
+            with open ( 'm.sum', 'w' ) as countfile:
+                for line in sumfile:
+                    if line.startswith( 'Words in text' ):
+                        counts = line.split( ':' )
+                        countfile.write( "{}".format(
+                            roundup( int(counts[1].strip() ) ) ) )
 
+    log.info( "Creating pdf file ..." )
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
-    os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
+    log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
     os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
 
 # ---------------------------------------------------------------------------
