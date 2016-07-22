@@ -5,7 +5,7 @@ Features
 15 July 2016
  [ ] fix bug: using a colon in the first line of a scene pops multimarkdown 
      into the 'metadata' mode
- [ ] texcount.pl -l -sum manuscript.tex > manuscript.sum
+ [x] texcount.pl -l -sum manuscript.tex > manuscript.sum
  [x] add some .pdf content and another example manuscript.json file
      that pulls it in (content not tied to documentation spefics - too
      hard to change w/o typewriter)
