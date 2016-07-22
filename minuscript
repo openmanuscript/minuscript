@@ -477,7 +477,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("% commands\n")
     out.write("%\n")
     out.write("%-----------------------------\n")
-    out.write("\\newcommand{\\wordcount}{\\input{manuscript.sum}}\n")
+    out.write("\\newcommand{\\wordcount}{approx. words: \\input{m.sum}}\n")
     out.write("\\newcommand{\\sceneseparator}\n")
     out.write("{\n")
     out.write("  \\begin{center}\\#\\#\\#\\end{center}\n")
@@ -617,7 +617,7 @@ if (args.nopdf == False):
     os.system( APP_WORDCOUNT + " -merge manuscript.tex > ms.sum" ) 
     # now find the total
     with open( 'ms.sum', 'r' ) as sumfile:
-        with open( 'manuscript.sum', 'w' ) as countfile:
+        with open( 'm.sum', 'w' ) as countfile:
             for line in sumfile:
                 if line.startswith( 'Words in text' ):
                     counts = line.split( ':' )
@@ -636,5 +636,5 @@ log.info( "Cleaning up ..." )
 if args.debug == False:
     os.system( "rm -rf " + APP_BUILDDIR )
     os.system( 
-        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum ms.sum" )
+        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum ms.sum m.sum" )
 
