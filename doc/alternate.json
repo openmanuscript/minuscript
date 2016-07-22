@@ -1,25 +1,14 @@
 {
 "version" : "1.0",
-"manuscript" : {
-    "title" : "Minuscript Alternate Documentation",
-    "runningtitle" : "alternate",
-    "chapters" : [
-        {
-            "title"  : "One Alternative",
-            "scenes" : ["alternate"]
-        },
-        {
-            "title"  : "Workflow",
-            "scenes" : ["workflow", "directories"]
-        },
-        {
-            "title"  : "What is a Manuscript?",
-            "scenes" : ["manuscript"]
-        },
-        {
-            "title"  : "Try This?",
-            "scenes" : ["trythis"]
-        }
-    ]
+"author" : {
+    "name"      : "Ima Q. Writer",
+    "surname"   : "Writer",
+    "email"     : "imaqwriter@imawriter.com",
+    "phone"     : "(000) 000-0000",
+    "website"   : "www.imawriter.com",
+    "address"   : "111 Writer's Way",
+    "city"      : "Writerville",
+    "state"     : "NM",
+    "zip"       : "88888"
 }
 }

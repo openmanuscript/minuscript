@@ -508,7 +508,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("\\begin{minipage}{0.45\\linewidth}\n")
     out.write("\\flushright\n")
     if ( args.wordcount == True ):
-        out.write("wordcount 1000 \\\\\n")
+        out.write("\wordcount\\\\\n")
     out.write("\\ \\newline\n")
     out.write("\\ \\newline\n")
     out.write("\\ \\newline\n")
@@ -613,6 +613,16 @@ if  not os.path.exists( APP_TEXFILE ):
 # ---------------------------------------------------------------------------
 if (args.nopdf == False):
     log.info( "Creating pdf file ..." )
+    # count the words
+    os.system( APP_WORDCOUNT + " -merge manuscript.tex > ms.sum" ) 
+    # now find the total
+    with open( 'ms.sum', 'r' ) as sumfile:
+        with open( 'manuscript.sum', 'w' ) as countfile:
+            for line in sumfile:
+                if line.startswith( 'Words in text' ):
+                    counts = line.split( ':' )
+                    countfile.write( counts[1].strip() )
+
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
     os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
@@ -626,5 +636,5 @@ log.info( "Cleaning up ..." )
 if args.debug == False:
     os.system( "rm -rf " + APP_BUILDDIR )
     os.system( 
-        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex" )
+        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum ms.sum" )
 
