@@ -2,12 +2,12 @@
  [ ] fix bug: using a colon in the first line of a scene pops multimarkdown 
      into the 'metadata' mode
  [ ] texcount.pl -l -sum manuscript.tex > manuscript.sum
- [ ] add some .pdf content and another example manuscript.json file
-     that pulls it in (content not tied to documentation spefics - too
-     hard to change w/o typewriter)
- [ ] update gravatar for moonimal and djam@lanl.gov
  [ ] create settings.min (minuscript settings file) that resides in the same
      directory as the manuscript, and controls things in the layout
+ [x] add some .pdf content and another example manuscript.json file
+     that pulls it in (content not tied to documentation spefics - too
+     hard to change w/o typewriter)
+ [x] update gravatar for moonimal and djam@lanl.gov
  [x] remove 'output' option - it's meaningless
 
 10 July 2016
