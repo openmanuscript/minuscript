@@ -51,10 +51,11 @@ APP_INITDATADIR = os.path.join( APP_DOTDIR, "init" )
 APP_VERSION     = 1.0
 APP_EXIT_ERROR  = 42
 APP_BUILDDIR    = "minuscript_buildtemp"
+APP_SCENESDIR   = "scenes"
 APP_NUMWORDS    = 1000
 APP_START_PAGE_NUMBERING = 1
 APP_TEXFILE     = "manuscript.tex"
-# TODO: add global variable for 'scenes' directory
+APP_WORDCOUNT   = "texcount.pl"
 
 # external applications
 APP_MMD         = "multimarkdown"
@@ -277,7 +278,7 @@ else:
 # synopsis file, if requested
 if (args.synopsis == True):
     fullpath = os.path.join( 
-        args.sourcedir, "scenes", args.synopsisfile )
+        args.sourcedir, APP_SCENESDIR, args.synopsisfile )
     log.info( "opening input file " + args.synopsisfile )
     log.info( "opening input file " + fullpath )
     if not os.path.isfile( fullpath ):
@@ -312,7 +313,7 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
             # translate the file into tex, and place it in the work dir 
             log.info( APP_BUILDDIR + "/" + scene + "." + extension )
             command = APP_MMD + " -t " + format + " " + args.sourcedir + "/" + \
-                    "scenes/" + scene + ".md > " + \
+                    APP_SCENESDIR + "/" + scene + ".md > " + \
                     APP_BUILDDIR + "/" + scene + "." + extension
             os.system( command )
 
@@ -322,7 +323,7 @@ if (args.synopsis == True):
     # translate the file into tex, and place it in the work dir 
     log.info( APP_BUILDDIR + "/synopsis.tex" )
     command = APP_MMD + " -t " + format + " " + args.sourcedir + "/" + \
-            "scenes/" + args.synopsisfile + " > " + \
+            APP_SCENESDIR + "/" + args.synopsisfile + " > " + \
             APP_BUILDDIR + "/synopsis.tex"
     os.system( command )
 

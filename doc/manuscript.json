@@ -22,7 +22,7 @@
         },
         {
             "title"  : "Scans As Part of the Workflow",
-            "scenes" : ["pdf", "scans/lorem.pdf", "scans/ipsum.pdf"]
+            "scenes" : ["pdf", "scans/lorem.pdf", "scans/ipsum.pdf", "end"]
         }
     ]
 }
