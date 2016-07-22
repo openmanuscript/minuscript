@@ -48,7 +48,6 @@ import textwrap
 APP_NAME        = "minuscript"
 APP_DOTDIR = os.path.expanduser("~/.minuscript")
 APP_INITDATADIR = os.path.join( APP_DOTDIR, "init" ) 
-# APP_CONF_FILE   = os.path.expanduser("~/.minuscript/minuscript.conf")
 APP_VERSION     = 1.0
 APP_EXIT_ERROR  = 42
 APP_BUILDDIR    = "minuscript_buildtemp"
@@ -71,9 +70,6 @@ conf_parser = argparse.ArgumentParser(
     # Turn off help, so we print all options in response to -h
     add_help=False
     )
-# TODO: add global configuration file
-# conf_parser.add_argument("-c", "--conf_file", default=APP_CONF_FILE,
-#                             help="Specify config file")
 
 args, remaining_argv = conf_parser.parse_known_args()
 
