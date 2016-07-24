@@ -56,7 +56,7 @@ APP_SCENESDIR   = "scenes"
 APP_NUMWORDS    = 1000
 APP_START_PAGE_NUMBERING = 1
 APP_TEXFILE     = "manuscript.tex"
-APP_WORDCOUNT   = "texcount.pl"
+APP_WORDCOUNT   = "texcount"
 
 # external applications
 APP_MMD         = "multimarkdown"
@@ -568,7 +568,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     if (args.synopsis == True):
         out.write("\\synopsis{}\n")
         # add synopsis 
-        out.write("\input{" + APP_BUILDDIR + "/synopsis.tex}\n")
+        out.write("\\input{" + APP_BUILDDIR + "/synopsis.tex}\n")
         out.write("\n")
 
     # write out table of contents, if requested
@@ -606,7 +606,10 @@ with open( APP_TEXFILE, 'w' ) as out:
                 out.write("\includepdf[pages={1-},frame,noautoscale,scale=0.9]{" + 
                     APP_BUILDDIR + "/" + scene_name + "}\n")
             else:
-                out.write("\input{" + APP_BUILDDIR + "/" + scene + "}\n")
+                out.write("\\begingroup\n")
+                out.write("\\catcode`\\_=12\\relax\n")
+                out.write("\\input{\"" + APP_BUILDDIR + "/" + scene + "\"}\n")
+                out.write("\\endgroup\n")
             if (curscene != numscenes):
                 out.write("\\sceneseparator\n")
                 out.write("\n")
@@ -646,6 +649,7 @@ if (args.nopdf == False):
                             roundup( int(counts[1].strip() ) ) ) )
 
     log.info( "Creating pdf file ..." )
+    os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
     log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
     os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
