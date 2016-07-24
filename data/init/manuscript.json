@@ -1,20 +1,16 @@
 {
 "version" : "1.0",
 "manuscript" : {
-    "title" : "Awakening The Writer Within",
-    "runningtitle" : "Awakening",
+    "title" : "Initial Manuscript",
+    "runningtitle" : "initial",
     "chapters" : [
         {
-            "title"  : "Simple Text",
-            "scenes" : ["003", "002", "001"]
+            "title"  : "Example Chapter",
+            "scenes" : ["lorem", "ipsum"]
         },
         {
-            "title"  : "A Chapter Can Be Named Anything That You Can Possibly Imagine in All of The World ... And So Can A Scene",
-            "scenes" : ["This_name", "look01", "chapter_i_hate"]
-        },
-        {
-            "title"  : "Quotes and Footnotes",
-            "scenes" : ["footnotes", "quotes", "footnotes"]
+            "title"  : "Another Example",
+            "scenes" : ["lorem"]
         }
     ]
 }
