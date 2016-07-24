@@ -23,16 +23,21 @@ To get started:
       irectory have all the information you need to create your own 
       manuscripts. I hope. If not, please contact me and I'll revise the docs 
       or explain what's missing.
-    - `minuscript --manuscriptfile examples.json` This command will
-      create a file called `examples.pdf` that includes examples of how to 
-      do things like create block quotes, bold and italic text, and other
-      capabilities.
-    - `minuscript --manuscriptfile examples.json --endnotes` This command will
-      create a file called `examples.pdf` that includes internal notes as 
-      endnotes - a section at the end of the document.
-    - `minuscript --manuscriptfile examples.json --footnotes` This command
-      creates a file calls `examples.pdf` that includes internal notes as
-      footnotes, found at the bottom of the pages as appropriate.
+- More examples:
+    - because `minuscript` is built on `multimarkdown`, there are a lot of
+      capabilities available, such as formatting block quotes, end notes 
+      and footnotes, etc. The following commands give a few important examples.
+    - `minuscript --manuscriptfile examples.json` 
+        - This command will create a file called `examples.pdf` that includes 
+          examples of how to do things like create block quotes, bold and 
+          italic text, and other capabilities.
+    - `minuscript --manuscriptfile examples.json --endnotes` 
+        - This command will create a file called `examples.pdf` that includes 
+          internal notes as endnotes - a section at the end of the document.
+    - `minuscript --manuscriptfile examples.json --footnotes` 
+        - This command creates a file calls `examples.pdf` that includes 
+          internal notes as footnotes, found at the bottom of the pages as 
+          appropriate.
 
 Good luck, and please contact me for help and with suggestions. If you'd like to help code `minuscript`, we can talk about that, too.
 
