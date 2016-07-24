@@ -300,7 +300,7 @@ if  not os.path.exists( APP_BUILDDIR ):
 
 # TODO: generalize 'latex' and 'tex' values to APP_ values
 format = "latex"
-extension = "tex"
+extension = ".tex"
 for chapter in manuscript_data["manuscript"]["chapters"]:
     for scene in chapter["scenes"]:
         if scene.endswith(".pdf"): 
@@ -311,10 +311,19 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
             os.system( command )
         else:
             # translate the file into tex, and place it in the work dir 
-            log.info( APP_BUILDDIR + "/" + scene + "." + extension )
-            command = APP_MMD + " -t " + format + " " + args.sourcedir + "/" + \
-                    APP_SCENESDIR + "/" + scene + ".md > " + \
-                    APP_BUILDDIR + "/" + scene + "." + extension
+
+            # first, add two blank lines to prevent multimarkdown from 
+            # treating colon separators in the first lines as a key, value pair
+            tmp_mdfile = os.path.join( args.sourcedir, APP_BUILDDIR, scene + ".md" ) 
+            tmp_scfile = os.path.join( args.sourcedir, APP_SCENESDIR, scene + ".md" )
+            with open( tmp_mdfile, 'w' ) as mdfile, open( tmp_scfile, 'r') as scfile:
+                mdfile.write( "\n\n" )
+                mdfile.write( scfile.read() )
+
+            log.info( os.path.join ( args.sourcedir, APP_BUILDDIR, scene + "." + extension ) )
+            tmp_texfile = os.path.join( args.sourcedir, APP_BUILDDIR, scene + extension )
+            command = APP_MMD + " -t " + format + " " + tmp_mdfile + " > " + \
+                tmp_texfile
             os.system( command )
 
 # TODO: check for existence of the synopsis file
