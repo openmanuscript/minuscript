@@ -3,7 +3,7 @@ Features
      directory as the manuscript, and controls things in the layout
 
 15 July 2016
- [ ] fix bug: using a colon in the first line of a scene pops multimarkdown 
+ [x] fix bug: using a colon in the first line of a scene pops multimarkdown 
      into the 'metadata' mode
  [x] fix bug: using an underscore in the runningtitle field of the
      manuscript.json file causes failure
