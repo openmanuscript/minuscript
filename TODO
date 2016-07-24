@@ -1,4 +1,5 @@
 Features
+ [ ] check for existence of the scene files before doing anything
  [ ] create settings.min (minuscript settings file) that resides in the same
      directory as the manuscript, and controls things in the layout
 
