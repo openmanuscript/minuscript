@@ -56,7 +56,7 @@ APP_SCENESDIR   = "scenes"
 APP_NUMWORDS    = 1000
 APP_START_PAGE_NUMBERING = 1
 APP_TEXFILE     = "manuscript.tex"
-APP_WORDCOUNT   = "texcount"
+APP_WORDCOUNT   = "texcount.pl"
 
 # external applications
 APP_MMD         = "multimarkdown"

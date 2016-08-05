@@ -1,9 +1,9 @@
 Features
- [ ] "--init" likely no longer works, b/c the files are no longer being
-     installed. Determine how best to fix that.
  [ ] check for existence of the scene files before doing anything
  [ ] create settings.min (minuscript settings file) that resides in the same
      directory as the manuscript, and controls things in the layout
+ [x] "--init" likely no longer works, b/c the files are no longer being
+     installed. Determine how best to fix that.
 
 15 July 2016
  [x] fix bug: using a colon in the first line of a scene pops multimarkdown 
