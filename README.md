@@ -1,5 +1,4 @@
-Thanks for your interest in `minuscript`
-
+Thanks for your interest in `minuscript`, software to support a minimal manuscript workflow for writing fiction.
 
 Everything you need is in the git repository. Instructions assume you can use 
 basic coding tools. For example, you should be able to edit a 
