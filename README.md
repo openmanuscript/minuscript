@@ -19,7 +19,7 @@ To get started:
     - `minuscript`
     - you will now have a document called `documentation.pdf` which is the 
       documentation for `minuscript`. That document and the files in the 
-      irectory have all the information you need to create your own 
+      directory have all the information you need to create your own 
       manuscripts. I hope. If not, please contact me and I'll revise the docs 
       or explain what's missing.
 - More examples:
