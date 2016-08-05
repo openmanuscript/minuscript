@@ -105,19 +105,22 @@ APP_INIT_LOREM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
 #
 # ---------------------------------------------------------------------------
 def write_initial_files( directory ):
-    with open( "author.json", 'w' ) as a:
-        a.write( APP_INIT_AUTHOR_STRING )
-    with open( "manuscript.json", 'w' ) as m:
-        m.write( APP_INIT_MANUSCRIPT_STRING )
-    os.makedirs( APP_SCENESDIR ) 
-    with open( os.path.join( APP_SCENESDIR, "lorem.md" ), 'w' ) as l:
-        l.write( APP_INIT_LOREM_TEXT )
-        l.write( "\n\n" )
-        l.write( APP_INIT_LOREM_TEXT )
-        l.write( "\n\n" )
-        l.write( APP_INIT_LOREM_TEXT )
-    with open( os.path.join( APP_SCENESDIR, "ipsum.md" ), 'w' ) as i:
-        i.write( APP_INIT_LOREM_TEXT )
+    if  os.path.exists( APP_SCENESDIR ): 
+        log.error(" {} exists; cannot continue - it looks like there's already a manuscript here.".format(APP_SCENESDIR) )
+    else:
+        with open( "author.json", 'w' ) as a:
+            a.write( APP_INIT_AUTHOR_STRING )
+        with open( "manuscript.json", 'w' ) as m:
+            m.write( APP_INIT_MANUSCRIPT_STRING )
+        os.makedirs( APP_SCENESDIR ) 
+        with open( os.path.join( APP_SCENESDIR, "lorem.md" ), 'w' ) as l:
+            l.write( APP_INIT_LOREM_TEXT )
+            l.write( "\n\n" )
+            l.write( APP_INIT_LOREM_TEXT )
+            l.write( "\n\n" )
+            l.write( APP_INIT_LOREM_TEXT )
+        with open( os.path.join( APP_SCENESDIR, "ipsum.md" ), 'w' ) as i:
+            i.write( APP_INIT_LOREM_TEXT )
 
 # ---------------------------------------------------------------------------
 #
