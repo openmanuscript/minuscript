@@ -63,6 +63,62 @@ APP_MMD         = "multimarkdown"
 APP_LATEX       = "pdflatex"
 APP_CP          = "cp"
 
+# data
+APP_INIT_AUTHOR_STRING = """{{ 
+\"version\" : \"{version}\",
+\"author\" : {{
+    \"name\"      : \"Ima Q. Writer\",
+    \"surname\"   : \"Writer\",
+    \"email\"     : \"imaqwriter@imawriter.com\",
+    \"phone\"     : \"(000) 000-0000\",
+    \"website\"   : \"www.imawriter.com\",
+    \"address\"   : \"111 Writer's Way\",
+    \"city\"      : \"Writerville\",
+    \"state\"     : \"NM\",
+    \"zip\"       : \"88888\"
+}}
+}}""".format(version=APP_VERSION) 
+
+APP_INIT_MANUSCRIPT_STRING = """{{
+"version\" : \"{version}\",
+\"manuscript\" : {{
+    \"title\" : \"Initial Manuscript\",
+    \"runningtitle\" : \"initial\",
+    \"chapters\" : [
+        {{
+            \"title\"  : \"Example Chapter\",
+            \"scenes\" : [\"lorem\", \"ipsum\"]
+        }},
+        {{
+            \"title\"  : \"Another Example\",
+            \"scenes\" : [\"lorem\"]
+        }}
+    ]
+}}
+}}""".format(version=APP_VERSION) 
+
+APP_INIT_LOREM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius faucibus fermentum. Ut id nibh orci. Praesent posuere purus ac libero sagittis porttitor. Donec pulvinar sapien ligula, id ultrices ipsum interdum ac. Integer maximus lobortis nisl, eget vulputate erat ultricies id. Phasellus semper, massa sit amet porttitor finibus, mauris lacus placerat orci, in sagittis lectus leo sit amet sem. Fusce eu condimentum sapien. Proin sed sapien tortor. Donec viverra, erat eget elementum laoreet, ipsum ligula faucibus massa, non pellentesque est quam eget tellus." 
+
+# ---------------------------------------------------------------------------
+#
+# write the inital files needed for a manuscript 
+#
+# ---------------------------------------------------------------------------
+def write_initial_files( directory ):
+    with open( "author.json", 'w' ) as a:
+        a.write( APP_INIT_AUTHOR_STRING )
+    with open( "manuscript.json", 'w' ) as m:
+        m.write( APP_INIT_MANUSCRIPT_STRING )
+    os.makedirs( APP_SCENESDIR ) 
+    with open( os.path.join( APP_SCENESDIR, "lorem.md" ), 'w' ) as l:
+        l.write( APP_INIT_LOREM_TEXT )
+        l.write( "\n\n" )
+        l.write( APP_INIT_LOREM_TEXT )
+        l.write( "\n\n" )
+        l.write( APP_INIT_LOREM_TEXT )
+    with open( os.path.join( APP_SCENESDIR, "ipsum.md" ), 'w' ) as i:
+        i.write( APP_INIT_LOREM_TEXT )
+
 # ---------------------------------------------------------------------------
 #
 # get initial settings from settings file, if there is one
@@ -217,13 +273,8 @@ if (status == 0):
 exit_code = 0
 if (args.init == True):
     log.info("creating initial minuscript files in local directory")
-    if  os.path.exists( APP_INITDATADIR ): 
-        os.system( "cp -rf " + APP_INITDATADIR + "/* ." )
-    else:
-        log.error("minuscript init data not found")
-        exit_code = APP_EXIT_ERROR
-    sys.exit(exit_code)
-
+    write_initial_files( "." )
+    exit( exit_code )
 
 # ---------------------------------------------------------------------------
 #
