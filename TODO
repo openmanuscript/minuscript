@@ -42,6 +42,7 @@ Features
  [ ] check for dependencies:
         multimarkdown
         pdflatex
+        texcount (or texcount.pl)
  [o] update to use settings file in ~/.minuscript
 
 23 January 2016

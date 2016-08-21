@@ -56,7 +56,9 @@ APP_SCENESDIR   = "scenes"
 APP_NUMWORDS    = 1000
 APP_START_PAGE_NUMBERING = 1
 APP_TEXFILE     = "manuscript.tex"
-APP_WORDCOUNT   = "texcount.pl"
+APP_WORDCOUNT   = "texcount"
+APP_FORMAT      = "latex"
+APP_FORMAT_EXT  = ".tex"
 
 # external applications
 APP_MMD         = "multimarkdown"
@@ -205,6 +207,8 @@ parser.add_argument( "--manuscriptfile", default="manuscript.json",
     help="read manuscript definition from this file")
 parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file. useful in debugging problems")
+parser.add_argument( "--outline", action="store_true", default=False,
+    help="print a simple outline of the manuscript and exit")
 parser.add_argument( "--sourcedir", default="notDefined",
     help="use this as the root directory for the manuscript")
 parser.add_argument( "--synopsis", action="store_true", default=False,
@@ -339,6 +343,25 @@ if (args.synopsis == True):
         log.error( args.synopsisfile + " does not exist" )
         exit( APP_EXIT_ERROR ) 
 
+# ---------------------------------------------------------------------------
+#
+# query operations
+#
+# These are operations you want to do without creating a manuscript
+#
+# ---------------------------------------------------------------------------
+
+if (args.outline):
+    print(manuscript_data["manuscript"]["title"])
+    for chapter in manuscript_data["manuscript"]["chapters"]:
+     if (not "state" in chapter or 
+         ("state" in chapter) and (not chapter["state"] == "off")):
+
+         print("    " + chapter["title"])
+         for scene in chapter["scenes"]:
+             print("        " + scene)
+
+    exit(0)
 
 # ---------------------------------------------------------------------------
 #
@@ -353,39 +376,44 @@ if  not os.path.exists( APP_BUILDDIR ):
     os.makedirs( APP_BUILDDIR ) 
 
 # TODO: generalize 'latex' and 'tex' values to APP_ values
-format = "latex"
-extension = ".tex"
 for chapter in manuscript_data["manuscript"]["chapters"]:
-    for scene in chapter["scenes"]:
-        if scene.endswith(".pdf"): 
-            # copy the file into the work dir
-            log.info( APP_BUILDDIR + "/" + scene )
-            command = APP_CP + " " + args.sourcedir + "/" + \
-                    scene + " " + APP_BUILDDIR
-            os.system( command )
-        else:
-            # translate the file into tex, and place it in the work dir 
-
-            # first, add two blank lines to prevent multimarkdown from 
-            # treating colon separators in the first lines as a key, value pair
-            tmp_mdfile = os.path.join( args.sourcedir, APP_BUILDDIR, scene + ".md" ) 
-            tmp_scfile = os.path.join( args.sourcedir, APP_SCENESDIR, scene + ".md" )
-            with open( tmp_mdfile, 'w' ) as mdfile, open( tmp_scfile, 'r') as scfile:
-                mdfile.write( "\n\n" )
-                mdfile.write( scfile.read() )
-
-            log.info( os.path.join ( args.sourcedir, APP_BUILDDIR, scene + "." + extension ) )
-            tmp_texfile = os.path.join( args.sourcedir, APP_BUILDDIR, scene + extension )
-            command = APP_MMD + " -t " + format + " " + tmp_mdfile + " > " + \
-                tmp_texfile
-            os.system( command )
+    if (not "state" in chapter or 
+        ("state" in chapter) and (not chapter["state"] == "off")):
+        for scene in chapter["scenes"]:
+            if scene.endswith(".pdf"): 
+                # copy the file into the work dir
+                log.info( APP_BUILDDIR + "/" + scene )
+                command = APP_CP + " " + args.sourcedir + "/" + \
+                        scene + " " + APP_BUILDDIR
+                os.system( command )
+            else:
+                # translate the file into tex, and place it in the work dir 
+    
+                # first, add two blank lines to prevent multimarkdown from 
+                # treating colons in the first lines as a key, value pair
+                tmp_mdfile = \
+                    os.path.join( args.sourcedir, APP_BUILDDIR, scene + ".md" ) 
+                tmp_scfile = \
+                    os.path.join( args.sourcedir, APP_SCENESDIR, scene + ".md" )
+                with open( tmp_mdfile, 'w' ) as mdfile, open( tmp_scfile, 
+                    'r') as scfile:
+                    mdfile.write( "\n\n" )
+                    mdfile.write( scfile.read() )
+    
+                log.info( os.path.join ( args.sourcedir, APP_BUILDDIR, scene + \
+                    "." + APP_FORMAT_EXT ) )
+                tmp_texfile = os.path.join( args.sourcedir, APP_BUILDDIR, 
+                    scene + APP_FORMAT_EXT )
+                command = APP_MMD + " -t " + APP_FORMAT + " " + tmp_mdfile + \
+                    " > " + tmp_texfile
+                os.system( command )
 
 # TODO: check for existence of the synopsis file
 # optionally do this for synopsis as well
 if (args.synopsis == True):
     # translate the file into tex, and place it in the work dir 
     log.info( APP_BUILDDIR + "/synopsis.tex" )
-    command = APP_MMD + " -t " + format + " " + args.sourcedir + "/" + \
+    command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
             APP_SCENESDIR + "/" + args.synopsisfile + " > " + \
             APP_BUILDDIR + "/synopsis.tex"
     os.system( command )
@@ -637,37 +665,38 @@ with open( APP_TEXFILE, 'w' ) as out:
 
     # iterate through chapters and scenes
     for chapter in manuscript_data["manuscript"]["chapters"]:
+        if (not "state" in chapter or 
+            ("state" in chapter) and (not chapter["state"] == "off")):
+            # write chapters
+            out.write("\\newchapter{" + chapter["title"] + "}\n")
+            if ( args.toc == True ):
+                out.write("  \\addcontentsline{toc}{section}{" + 
+                    chapter["title"] + "}\n")
 
-        # write chapters
-        out.write("\\newchapter{" + chapter["title"] + "}\n")
-        if ( args.toc == True ):
-            out.write("  \\addcontentsline{toc}{section}{" + 
-                chapter["title"] + "}\n")
+            # start the page numbering
+            if APP_START_PAGE_NUMBERING:
+                out.write("\\pagenumbering{arabic}\n")
+                out.write("\\setcounter{page}{1}\n")
+                APP_START_PAGE_NUMBERING = 0
 
-        # start the page numbering
-        if APP_START_PAGE_NUMBERING:
-            out.write("\\pagenumbering{arabic}\n")
-            out.write("\\setcounter{page}{1}\n")
-            APP_START_PAGE_NUMBERING = 0
-
-        # add scene references, and separators
-        curscene = 0
-        numscenes = len(chapter["scenes"])
-        for scene in chapter["scenes"]:
-            curscene += 1
-            if scene.endswith(".pdf"): 
-                scene_name = os.path.basename( scene )
-                out.write("\includepdf[pages={1-},frame,noautoscale,scale=0.9]{" + 
-                    APP_BUILDDIR + "/" + scene_name + "}\n")
-            else:
-                out.write("\\begingroup\n")
-                out.write("\\catcode`\\_=12\\relax\n")
-                out.write("\\input{\"" + APP_BUILDDIR + "/" + scene + "\"}\n")
-                out.write("\\endgroup\n")
-            if (curscene != numscenes):
-                out.write("\\sceneseparator\n")
-                out.write("\n")
-        out.write("\n")
+            # add scene references, and separators
+            curscene = 0
+            numscenes = len(chapter["scenes"])
+            for scene in chapter["scenes"]:
+                curscene += 1
+                if scene.endswith(".pdf"): 
+                    scene_name = os.path.basename( scene )
+                    out.write("\includepdf[pages={1-},frame,noautoscale,scale=0.9]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
+                else:
+                    out.write("\\begingroup\n")
+                    out.write("\\catcode`\\_=12\\relax\n")
+                    out.write("\\input{\"" + APP_BUILDDIR + "/" + \
+                        scene + "\"}\n")
+                    out.write("\\endgroup\n")
+                if (curscene != numscenes):
+                    out.write("\\sceneseparator\n")
+                    out.write("\n")
+            out.write("\n")
 
     # end notes
     if ( args.endnotes == True ):
