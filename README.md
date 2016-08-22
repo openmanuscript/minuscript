@@ -36,6 +36,9 @@ To get started:
         - This command creates a file calls `examples.pdf` that includes 
           internal notes as footnotes, found at the bottom of the pages as 
           appropriate.
+- Tools (for convenience)
+    - medit <scene name, no extension> runs vi on a scene file
+    - moutline (prints to sdtout an outline of the manuscript)
 
 Good luck, and please contact me for help and with suggestions. If you'd like to help code `minuscript`, we can talk about that, too.
 
