@@ -254,30 +254,23 @@ else:
 # check options
 #
 # ---------------------------------------------------------------------------
-status = 1
-
 if (args.sourcedir == "notDefined"):
     log.error("sourcedir not defined")
-    status = 0
+    sys.exit(APP_EXIT_ERROR)
 
 if (args.endnotes and args.footnotes):
     log.error("both \'endnotes\' and \'footnotes\' have been requested. Choose one at a time, please.")
-    status = 0
-
-if (status == 0): 
-    sys.exit(1)
-
+    sys.exit(APP_EXIT_ERROR)
 
 # ---------------------------------------------------------------------------
 #
 # if it's a simple command, deal with it and exit
 #
 # ---------------------------------------------------------------------------
-exit_code = 0
 if (args.init == True):
     log.info("creating initial minuscript files in local directory")
     write_initial_files( "." )
-    exit( exit_code )
+    exit( 0 )
 
 # ---------------------------------------------------------------------------
 #
