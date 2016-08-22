@@ -1,10 +1,10 @@
 Features
- [ ] remove mentions of texcount in docs - it's no longer needed
  [ ] check for existence of the scene files before doing anything
  [ ] create settings.min (minuscript settings file) that resides in the same
      directory as the manuscript, and controls things in the layout
  [x] "--init" likely no longer works, b/c the files are no longer being
      installed. Determine how best to fix that.
+ [x] remove mentions of texcount in docs - it's no longer needed
 
 15 July 2016
  [x] fix bug: using a colon in the first line of a scene pops multimarkdown 
@@ -43,7 +43,6 @@ Features
  [ ] check for dependencies:
         multimarkdown
         pdflatex
-        texcount (or texcount.pl)
  [o] update to use settings file in ~/.minuscript
 
 23 January 2016
