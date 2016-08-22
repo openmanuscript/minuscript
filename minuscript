@@ -723,6 +723,8 @@ if (args.nopdf == False):
     log.info( "Creating pdf file ..." )
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
+    log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
+    os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
 
     # count the words
     if ( args.wordcount == True ):
@@ -730,11 +732,10 @@ if (args.nopdf == False):
         os.system( "pdftops " + args.manuscriptname + ".pdf" )
         os.system( "ps2ascii " + args.manuscriptname + ".ps | wc -w > m.sum" )
         os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
+        os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
         # note: may need to open that file and round the number up, then
         # write it out again
 
-    log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
-    os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
 
 # ---------------------------------------------------------------------------
 #
