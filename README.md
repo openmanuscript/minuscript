@@ -9,7 +9,6 @@ To get started:
 - Install the dependent software:
     - `multimarkdown`
     - `latex`
-    - `texcount.pl`
     - a simple editor like `vim` or `emacs` is all you need, but this workflow
       meshes well with tools like `iAwriter` or other markdown-enabled editors
 - Then, in the minuscript repository directory:

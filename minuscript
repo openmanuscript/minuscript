@@ -56,7 +56,6 @@ APP_SCENESDIR   = "scenes"
 APP_NUMWORDS    = 1000
 APP_START_PAGE_NUMBERING = 1
 APP_TEXFILE     = "manuscript.tex"
-APP_WORDCOUNT   = "texcount"
 APP_FORMAT      = "latex"
 APP_FORMAT_EXT  = ".tex"
 
@@ -718,22 +717,22 @@ if  not os.path.exists( APP_TEXFILE ):
 #
 # ---------------------------------------------------------------------------
 if (args.nopdf == False):
-    # count the words
     if ( args.wordcount == True ):
-        log.info( "performing wordcount" )
-        os.system( APP_WORDCOUNT + " -merge manuscript.tex > ms.sum" ) 
-        # now find the total
-        with open( 'ms.sum', 'r' ) as sumfile:
-            with open ( 'm.sum', 'w' ) as countfile:
-                for line in sumfile:
-                    if line.startswith( 'Words in text' ):
-                        counts = line.split( ':' )
-                        countfile.write( "{}".format(
-                            roundup( int(counts[1].strip() ) ) ) )
+        os.system( "echo 0 > m.sum" )
 
     log.info( "Creating pdf file ..." )
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
     os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
+
+    # count the words
+    if ( args.wordcount == True ):
+        log.info( "performing wordcount" )
+        os.system( "pdftops " + args.manuscriptname + ".pdf" )
+        os.system( "ps2ascii " + args.manuscriptname + ".ps | wc -w > m.sum" )
+        os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
+        # note: may need to open that file and round the number up, then
+        # write it out again
+
     log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
     os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
 
@@ -746,5 +745,5 @@ log.info( "Cleaning up ..." )
 if args.debug == False:
     os.system( "rm -rf " + APP_BUILDDIR )
     os.system( 
-        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum ms.sum m.sum" )
+        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum m.sum " + args.manuscriptname + ".ps" )
 
