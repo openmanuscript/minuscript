@@ -191,6 +191,8 @@ parser.add_argument( "--author", default="notDefined",
     help="read author data from this file")
 parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
+parser.add_argument( "--chapsum", action="store_true", default=False,
+    help="include chapter summaries, if they are present")
 parser.add_argument( "--footnotes", action="store_true", default=False,
     help="write internal notes as footnotes")
 parser.add_argument( "--fontfamily", default="pcr", 
@@ -368,7 +370,14 @@ if  not os.path.exists( APP_BUILDDIR ):
 for chapter in manuscript_data["manuscript"]["chapters"]:
     if (not "state" in chapter or 
         ("state" in chapter) and (not chapter["state"] == "off")):
-        for scene in chapter["scenes"]:
+
+        # get all the files that need to be converted
+        allfiles = chapter["scenes"]
+        if ("chapsum" in chapter):
+            allfiles.append(chapter["chapsum"][0])
+
+        # iterate through scenes
+        for scene in allfiles:
             if scene.endswith(".pdf"): 
                 # copy the file into the work dir
                 log.info( APP_BUILDDIR + "/" + scene )
@@ -464,7 +473,7 @@ def roundup(x):
 # writes a centered, bold all caps chapter header with the chapter number
 #   as a word, and the chapter title on a second line below that
 #
-def latex_write_newchapter( out ):
+def latex_write_newchapter_command( out ):
     out.write("\\newcommand{\\newchapter}[1]\n")
     out.write("{\n")
     out.write("  \\stepcounter{chapter}\n")
@@ -484,7 +493,7 @@ def latex_write_newchapter( out ):
 # writes a centered, bold all caps header with the word SYNOPSIS 
 #   as a heading. chapter counter is not increased
 #
-def latex_write_synopsis( out ):
+def latex_write_synopsis_command( out ):
     out.write("\\newcommand{\\synopsis}\n")
     out.write("{\n")
     out.write("  \\newpage\n")
@@ -574,8 +583,8 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("  \\begin{center}\\#\\#\\#\\end{center}\n")
     out.write("  \\vspace*{0.125in}\n")
     out.write("}\n")
-    latex_write_newchapter( out )
-    latex_write_synopsis( out )
+    latex_write_newchapter_command( out )
+    latex_write_synopsis_command( out )
     out.write("\n")
     out.write("%-----------------------------\n")
     out.write("%\n")
@@ -667,6 +676,20 @@ with open( APP_TEXFILE, 'w' ) as out:
                 out.write("\\pagenumbering{arabic}\n")
                 out.write("\\setcounter{page}{1}\n")
                 APP_START_PAGE_NUMBERING = 0
+
+            # write chapter synopsis, if that's been requested
+            if ( args.chapsum == True ):
+                if ("chapsum" in chapter):
+                    out.write("\\begin{quote}\n")
+                    out.write("\\textit{\n")
+                    out.write("  \\begingroup\n")
+                    out.write("  \\catcode`\\_=12\\relax\n")
+                    out.write("\\input{\"" + APP_BUILDDIR + "/" + \
+                        chapter["chapsum"][0] + "\"}\n")
+                    out.write("  \\endgroup\n")
+                    out.write("}\n\n")
+                    out.write("\\end{quote}\n")
+                    out.write("\\bigskip\n")
 
             # add scene references, and separators
             curscene = 0
