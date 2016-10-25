@@ -149,6 +149,16 @@ args, remaining_argv = conf_parser.parse_known_args()
 #    config.readfp(open(args.conf_file))
 #    defaults = dict(config.items("Default"))
 
+
+# ---------------------------------------------------------------------------
+#
+# helper functions
+#
+# ---------------------------------------------------------------------------
+def get_chapsum( chapter ):
+    return chapter["chapsum"][0]
+
+
 # ---------------------------------------------------------------------------
 #
 # command line options
@@ -374,7 +384,7 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
         # get all the files that need to be converted
         allfiles = chapter["scenes"]
         if ("chapsum" in chapter):
-            allfiles.append(chapter["chapsum"][0])
+            allfiles.append(get_chapsum( chapter ))
 
         # iterate through scenes
         for scene in allfiles:
@@ -681,11 +691,11 @@ with open( APP_TEXFILE, 'w' ) as out:
             if ( args.chapsum == True ):
                 if ("chapsum" in chapter):
                     out.write("\\begin{quote}\n")
-                    out.write("\\textit{\n")
+                    out.write("\\textit{Summary: \n")
                     out.write("  \\begingroup\n")
                     out.write("  \\catcode`\\_=12\\relax\n")
                     out.write("\\input{\"" + APP_BUILDDIR + "/" + \
-                        chapter["chapsum"][0] + "\"}\n")
+                        get_chapsum( chapter ) + "\"}\n")
                     out.write("  \\endgroup\n")
                     out.write("}\n\n")
                     out.write("\\end{quote}\n")
