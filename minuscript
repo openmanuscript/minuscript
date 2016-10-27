@@ -196,7 +196,6 @@ parser.add_argument( "-d", "--debug", action="store_true", default=False,
     help="run in debug mode: create all files, but do not clean up after pdf is created.")
 parser.add_argument( "-v", "--verbose", action="store_true", default=False,
     help="report verbosely")
-# TODO: internal logic of notes and endnotes interfering with each other
 parser.add_argument( "--author", default="notDefined",
     help="read author data from this file")
 parser.add_argument( "--endnotes", action="store_true", default=False,
@@ -334,7 +333,7 @@ else:
     log.error( args.author + " does not exist" )
     exit( APP_EXIT_ERROR ) 
 
-# synopsis file, if requested
+# operate on synopsis file, if requested
 if (args.synopsis == True):
     fullpath = os.path.join( 
         args.sourcedir, APP_SCENESDIR, args.synopsisfile )
@@ -376,7 +375,6 @@ log.info( "Creating scene files ..." )
 if  not os.path.exists( APP_BUILDDIR ): 
     os.makedirs( APP_BUILDDIR ) 
 
-# TODO: generalize 'latex' and 'tex' values to APP_ values
 for chapter in manuscript_data["manuscript"]["chapters"]:
     if (not "state" in chapter or 
         ("state" in chapter) and (not chapter["state"] == "off")):
@@ -416,15 +414,19 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
                     " > " + tmp_texfile
                 os.system( command )
 
-# TODO: check for existence of the synopsis file
-# optionally do this for synopsis as well
+# if requested, handle the synopsis file as well 
 if (args.synopsis == True):
-    # translate the file into tex, and place it in the work dir 
-    log.info( APP_BUILDDIR + "/synopsis.tex" )
-    command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
-            APP_SCENESDIR + "/" + args.synopsisfile + " > " + \
-            APP_BUILDDIR + "/synopsis.tex"
-    os.system( command )
+    sfile = os.path.join( APP_BUILDDIR + "/synopsis.tex" )
+
+    if os.path.exists( sfile ): 
+        # translate the file into tex, and place it in the work dir 
+        log.info( sfile ) 
+        command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
+                APP_SCENESDIR + "/" + args.synopsisfile + " > " + sfile 
+        os.system( command )
+    else:
+        log.error( "synopsis file does not exist" )    
+        sys.exit(APP_EXIT_ERROR)
 
 # ---------------------------------------------------------------------------
 #
@@ -708,7 +710,8 @@ with open( APP_TEXFILE, 'w' ) as out:
                 curscene += 1
                 if scene.endswith(".pdf"): 
                     scene_name = os.path.basename( scene )
-                    out.write("\includepdf[pages={1-},frame,noautoscale,scale=0.9]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
+                    # out.write("\includepdf[pages={1-},frame,noautoscale,scale=0.9]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
+                    out.write("\includepdf[pages={1-},frame]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
                 else:
                     out.write("\\begingroup\n")
                     out.write("\\catcode`\\_=12\\relax\n")
