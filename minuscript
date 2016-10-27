@@ -711,7 +711,7 @@ with open( APP_TEXFILE, 'w' ) as out:
                 if scene.endswith(".pdf"): 
                     scene_name = os.path.basename( scene )
                     # out.write("\includepdf[pages={1-},frame,noautoscale,scale=0.9]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
-                    out.write("\includepdf[pages={1-},frame]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
+                    out.write("\includepdf[pages={1-},frame,scale=0.9]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
                 else:
                     out.write("\\begingroup\n")
                     out.write("\\catcode`\\_=12\\relax\n")
