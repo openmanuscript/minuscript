@@ -1,2 +1,2 @@
 sudo port install imagemagick texlive texlive-latex-extra python33
-sudo port select select --set python python33
+sudo port select --set python python33
