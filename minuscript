@@ -718,9 +718,9 @@ with open( APP_TEXFILE, 'w' ) as out:
                     out.write("\\input{\"" + APP_BUILDDIR + "/" + \
                         scene + "\"}\n")
                     out.write("\\endgroup\n")
-                if (curscene != numscenes):
-                    out.write("\\sceneseparator\n")
-                    out.write("\n")
+                    if (curscene != numscenes):
+                        out.write("\\sceneseparator\n")
+                        out.write("\n")
             out.write("\n")
 
     # end notes
