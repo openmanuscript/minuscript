@@ -154,15 +154,6 @@ args, remaining_argv = conf_parser.parse_known_args()
 
 # ---------------------------------------------------------------------------
 #
-# helper functions
-#
-# ---------------------------------------------------------------------------
-def get_chapsum( chapter ):
-    return chapter["desc"]
-
-
-# ---------------------------------------------------------------------------
-#
 # command line options
 #
 # ---------------------------------------------------------------------------
@@ -690,12 +681,12 @@ with open( APP_TEXFILE, 'w' ) as out:
 
             # write chapter synopsis, if that's been requested
             if ( args.chapsum == True ):
-                if ("chapsum" in chapter):
+                if ("desc" in chapter):
                     out.write("\\begin{quote}\n")
                     out.write("\\textit{Summary: \n")
                     out.write("  \\begingroup\n")
                     out.write("  \\catcode`\\_=12\\relax\n")
-                    out.write(get_chapsum( chapter ))
+                    out.write( chapter["desc"] )
                     out.write("  \\endgroup\n")
                     out.write("}\n\n")
                     out.write("\\end{quote}\n")
