@@ -37,6 +37,7 @@ import json
 import logging as log
 import math
 import os
+import subprocess
 import sys
 import textwrap
 
@@ -60,6 +61,7 @@ APP_FORMAT_EXT  = ".tex"
 APP_MMD         = "multimarkdown"
 APP_LATEX       = "pdflatex"
 APP_CP          = "cp"
+APP_PS2ASCII    = "/opt/local/bin/ps2ascii"
 
 # data
 APP_INIT_AUTHOR_STRING = """{{ 
@@ -156,7 +158,7 @@ args, remaining_argv = conf_parser.parse_known_args()
 #
 # ---------------------------------------------------------------------------
 def get_chapsum( chapter ):
-    return chapter["chapsum"][0]
+    return chapter["desc"]
 
 
 # ---------------------------------------------------------------------------
@@ -381,9 +383,6 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
 
         # get all the files that need to be converted
         allfiles = chapter["scenes"]
-        if ("chapsum" in chapter):
-            allfiles.append(get_chapsum( chapter ))
-
         # iterate through scenes
         for scene in allfiles:
             if scene.endswith(".pdf"): 
@@ -696,8 +695,7 @@ with open( APP_TEXFILE, 'w' ) as out:
                     out.write("\\textit{Summary: \n")
                     out.write("  \\begingroup\n")
                     out.write("  \\catcode`\\_=12\\relax\n")
-                    out.write("\\input{\"" + APP_BUILDDIR + "/" + \
-                        get_chapsum( chapter ) + "\"}\n")
+                    out.write(get_chapsum( chapter ))
                     out.write("  \\endgroup\n")
                     out.write("}\n\n")
                     out.write("\\end{quote}\n")
@@ -755,7 +753,7 @@ if (args.nopdf == False):
     if ( args.wordcount == True ):
         log.info( "performing wordcount" )
         os.system( "pdftops " + args.manuscriptname + ".pdf" )
-        os.system( "ps2ascii " + args.manuscriptname + ".ps | wc -w > m.sum" )
+        os.system( APP_PS2ASCII + " " + args.manuscriptname + ".ps | wc -w > m.sum" )
         os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
         os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
         os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
