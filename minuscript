@@ -209,6 +209,8 @@ parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file. useful in debugging problems")
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
+parser.add_argument( "--scenelist", action="store_true", default=False,
+    help="print a simple scenelist of the manuscript and exit")
 parser.add_argument( "--sourcedir", default="notDefined",
     help="use this as the root directory for the manuscript")
 parser.add_argument( "--synopsis", action="store_true", default=False,
@@ -344,15 +346,30 @@ if (args.synopsis == True):
 #
 # ---------------------------------------------------------------------------
 
-if (args.outline):
+if (args.scenelist):
     print(manuscript_data["manuscript"]["title"])
+    print( " " )
     for chapter in manuscript_data["manuscript"]["chapters"]:
      if (not "state" in chapter or 
          ("state" in chapter) and (not chapter["state"] == "off")):
 
-         print("    " + chapter["title"])
+         print(chapter["title"])
          for scene in chapter["scenes"]:
-             print("        " + scene)
+             print("    " + scene)
+
+    exit(0)
+
+if (args.outline):
+    print(manuscript_data["manuscript"]["title"])
+    print( " " )
+    for chapter in manuscript_data["manuscript"]["chapters"]:
+     if (not "state" in chapter or 
+         ("state" in chapter) and (not chapter["state"] == "off")):
+
+         print( "- " + chapter["title"] )
+         if ("desc" in chapter):
+             print(chapter["desc"])
+         print( " " )
 
     exit(0)
 
