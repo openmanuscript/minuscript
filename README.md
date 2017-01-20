@@ -41,7 +41,7 @@ To get started:
     - `medit <scene name, no extension>` runs vi on a scene file
     - `moutline` (prints to sdtout an outline of the manuscript)
 
-Good luck, and please contact me for help and with suggestions. If you'd like to help code `minuscript`, we can talk about that, too.
+Good luck, and please contact me for help and with suggestions.
 
     minuscript@dhrogers.com
 
