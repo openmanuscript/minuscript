@@ -1,4 +1,4 @@
-<img src="https://github.com/moonimal/minuscript/blob/master/doc/img/minuscript.png" width="50">
+<img src="https://github.com/moonimal/minuscript/blob/master/doc/img/minuscript.png" width="50" align="left">
 
 Thanks for your interest in `minuscript`, software to support a minimal manuscript workflow for writing fiction.
 
