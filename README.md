@@ -11,6 +11,7 @@ To get started:
     - `latex`
     - a simple editor like `vim` or `emacs` is all you need, but this workflow
       meshes well with tools like `iAwriter` or other markdown-enabled editors
+- Clone this repository
 - Then, in the minuscript repository directory:
     - Edit the makefile to install `minuscript` in a directory of your choice
     - `make install`
