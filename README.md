@@ -1,4 +1,5 @@
 ![alt tag](https://github.com/moonimal/minuscript/blob/master/doc/img/minuscript.png)
+![alt tag](minuscript.png)
 
 Thanks for your interest in `minuscript`, software to support a minimal manuscript workflow for writing fiction.
 
