@@ -1,5 +1,12 @@
 Thanks for your interest in `minuscript`, software to support a minimal manuscript workflow for writing fiction.
 
+To me, the most important thing is getting ideas from raw writing to finished manuscript with the least intellectual burden possible. This software supports a versioned, text-only system that's easy to use, add new content to, and re-organize - all in the service of creating stories. This is the simplest, most robust, least tool-specific workflow I could come up with. 
+
+The workflow supported by `minuscript` basically consists of:
+
+- Creating and editing individual files for each scene.
+- Editing a file that describes a set of chapters, which are collections of scenes.
+
 Everything you need is in the git repository. Instructions assume you can use 
 basic coding tools. For example, you should be able to edit a 
 `makefile`. If you don't know what a `makefile` is, you might want to bail right now. Familiarity with `json` files is also helpful.
