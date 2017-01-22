@@ -700,7 +700,7 @@ with open( APP_TEXFILE, 'w' ) as out:
             if ( args.chapsum == True ):
                 if ("desc" in chapter):
                     out.write("\\begin{quote}\n")
-                    out.write("\\textit{Summary: \n")
+                    out.write("\\textit{\n")
                     out.write("  \\begingroup\n")
                     out.write("  \\catcode`\\_=12\\relax\n")
                     out.write( chapter["desc"] )
