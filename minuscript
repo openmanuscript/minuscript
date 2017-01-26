@@ -335,6 +335,7 @@ if (args.synopsis == True):
     log.info( "opening input file " + args.synopsisfile )
     log.info( "opening input file " + fullpath )
     if not os.path.isfile( fullpath ):
+        log.error( fullpath + " does not exist" )
         log.error( args.synopsisfile + " does not exist" )
         exit( APP_EXIT_ERROR ) 
 
@@ -425,15 +426,11 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
 if (args.synopsis == True):
     sfile = os.path.join( APP_BUILDDIR + "/synopsis.tex" )
 
-    if os.path.exists( sfile ): 
-        # translate the file into tex, and place it in the work dir 
-        log.info( sfile ) 
-        command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
-                APP_SCENESDIR + "/" + args.synopsisfile + " > " + sfile 
-        os.system( command )
-    else:
-        log.error( "synopsis file does not exist" )    
-        sys.exit(APP_EXIT_ERROR)
+    # translate the file into tex, and place it in the work dir 
+    log.info( sfile ) 
+    command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
+        APP_SCENESDIR + "/" + args.synopsisfile + " > " + sfile 
+    os.system( command )
 
 # ---------------------------------------------------------------------------
 #
