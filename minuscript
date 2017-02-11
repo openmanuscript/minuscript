@@ -209,6 +209,10 @@ parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file. useful in debugging problems")
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
+parser.add_argument( "--quotes", action="store_true", default=False,
+    help="include quotes before the first chapter")
+parser.add_argument( "--quotesfile", default="quotes.md", 
+    help="if requested, read quotes from this file")
 parser.add_argument( "--scenecheck", action="store_true", default=False,
     help="perform scene check on manuscript and exit")
 parser.add_argument( "--scenelist", action="store_true", default=False,
@@ -330,15 +334,22 @@ else:
     log.error( args.author + " does not exist" )
     exit( APP_EXIT_ERROR ) 
 
-# operate on synopsis file, if requested
-if (args.synopsis == True):
+# determine if the quotes file exists, if that's been requested 
+if (args.quotes == True):
     fullpath = os.path.join( 
-        args.sourcedir, APP_SCENESDIR, args.synopsisfile )
-    log.info( "opening input file " + args.synopsisfile )
+        args.sourcedir, APP_SCENESDIR, args.quotesfile )
     log.info( "opening input file " + fullpath )
     if not os.path.isfile( fullpath ):
         log.error( fullpath + " does not exist" )
-        log.error( args.synopsisfile + " does not exist" )
+        exit( APP_EXIT_ERROR ) 
+
+# determine if the synopsis file exists, if that's been requested 
+if (args.synopsis == True):
+    fullpath = os.path.join( 
+        args.sourcedir, APP_SCENESDIR, args.synopsisfile )
+    log.info( "opening input file " + fullpath )
+    if not os.path.isfile( fullpath ):
+        log.error( fullpath + " does not exist" )
         exit( APP_EXIT_ERROR ) 
 
 # ---------------------------------------------------------------------------
@@ -443,12 +454,18 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
                     " > " + tmp_texfile
                 os.system( command )
 
+# if requested, handle the quotes file as well 
+if (args.quotes == True):
+    # translate the file into tex, and place it in the work dir 
+    qfile = os.path.join( APP_BUILDDIR + "/quotes.tex" )
+    command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
+        APP_SCENESDIR + "/" + args.quotesfile + " > " + qfile 
+    os.system( command )
+
 # if requested, handle the synopsis file as well 
 if (args.synopsis == True):
-    sfile = os.path.join( APP_BUILDDIR + "/synopsis.tex" )
-
     # translate the file into tex, and place it in the work dir 
-    log.info( sfile ) 
+    sfile = os.path.join( APP_BUILDDIR + "/synopsis.tex" )
     command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
         APP_SCENESDIR + "/" + args.synopsisfile + " > " + sfile 
     os.system( command )
@@ -545,6 +562,18 @@ def latex_write_synopsis_command( out ):
     out.write("  \\bigskip\n")
     out.write("}\n")
 
+#
+# creates a new page and skips down a bit, to make room for quotes 
+#   as a heading. chapter counter is not increased
+#
+def latex_write_quotes_command( out ):
+    out.write("\\newcommand{\\quotes}\n")
+    out.write("{\n")
+    out.write("  \\newpage\n")
+    out.write("  \\vspace*{2in}\n")
+    out.write("  \\bigskip\n")
+    out.write("}\n")
+
 def get_chapter_name_string():
     return "CHAPTER \\NUMBERstringnum{\\value{chapter}}"
 
@@ -622,6 +651,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("}\n")
     latex_write_newchapter_command( out )
     latex_write_synopsis_command( out )
+    latex_write_quotes_command( out )
     out.write("\n")
     out.write("%-----------------------------\n")
     out.write("%\n")
@@ -697,6 +727,12 @@ with open( APP_TEXFILE, 'w' ) as out:
         out.write("\\end{center}\n")
         out.write("\\tableofcontents\n")
         out.write("}\n")
+
+    # write out quotes, if that's been requested
+    if (args.quotes == True):
+        out.write("\\quotes{}\n")
+        out.write("\\input{" + APP_BUILDDIR + "/quotes.tex}\n")
+        out.write("\n")
 
     # iterate through chapters and scenes
     for chapter in manuscript_data["manuscript"]["chapters"]:
