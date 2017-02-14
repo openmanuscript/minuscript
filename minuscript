@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # ---------------------------------------------------------------------------
 
 import argparse
+from datetime import datetime
 import configparser
 import json
 import logging as log
@@ -199,6 +200,8 @@ parser.add_argument( "--footnotes", action="store_true", default=False,
     help="write internal notes as footnotes")
 parser.add_argument( "--fontfamily", default="pcr", 
     help="define the font family for the resulting pdf")
+parser.add_argument( "--includedate", action="store_true", default=False,
+    help="include the current date on the title page of the manuscript")
 parser.add_argument( "--init", action="store_true", default=False,
     help="populate an initial minuscript project")
 parser.add_argument( "--manuscriptname", default="notDefined", 
@@ -705,6 +708,10 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("by\\\\\n")
     out.write(author_data["author"]["name"]    + "\\\\\n")
     out.write("}\n")
+    if (args.includedate):
+        out.write("\n")
+        out.write("\n")
+        out.write("{0}\n".format( datetime.now()) )
     out.write("\\end{center}\n")
     out.write("\n")
     out.write("%-----------------------------\n")
