@@ -209,6 +209,8 @@ parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file. useful in debugging problems")
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
+parser.add_argument( "--poetry", action="store_true", default=False,
+    help="treat the manuscript as a collection of poems, instead of scenes")
 parser.add_argument( "--quotes", action="store_true", default=False,
     help="include quotes before the first chapter")
 parser.add_argument( "--quotesfile", default="quotes.md", 
@@ -544,6 +546,20 @@ def latex_write_newchapter_command( out ):
     out.write("}\n")
 
 #
+# writes a sceneseparator command - either three pound signs, or
+#   in the case of this being a collection of poems, a new page
+#
+def latex_write_sceneseparator_command( out ):
+    out.write("\\newcommand{\\sceneseparator}\n")
+    out.write("{\n")
+    if (args.poetry == True):
+        out.write("  \\newpage\n")
+    else:
+        out.write("  \\begin{center}\\#\\#\\#\\end{center}\n")
+        out.write("  \\vspace*{0.125in}\n")
+    out.write("}\n")
+
+#
 # writes a centered, bold all caps header with the word SYNOPSIS 
 #   as a heading. chapter counter is not increased
 #
@@ -644,11 +660,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("%\n")
     out.write("%-----------------------------\n")
     out.write("\\newcommand{\\wordcount}{approx. words: \\input{m.sum}}\n")
-    out.write("\\newcommand{\\sceneseparator}\n")
-    out.write("{\n")
-    out.write("  \\begin{center}\\#\\#\\#\\end{center}\n")
-    out.write("  \\vspace*{0.125in}\n")
-    out.write("}\n")
+    latex_write_sceneseparator_command( out )
     latex_write_newchapter_command( out )
     latex_write_synopsis_command( out )
     latex_write_quotes_command( out )
