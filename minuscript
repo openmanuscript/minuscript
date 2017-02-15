@@ -716,7 +716,7 @@ with open( APP_TEXFILE, 'w' ) as out:
         out.write("\\bigskip\n")
         out.write("\\bigskip\n")
         d = datetime.now()
-        out.write("{0}\n".format( d.strftime( "%A, %B %e \\\\ %r" ) ) )
+        out.write("{0}\n".format( d.strftime( "\\footnotesize{%A, %B %e \\\\ %r}" ) ) )
     out.write("\\end{center}\n")
     out.write("\n")
     out.write("%-----------------------------\n")
