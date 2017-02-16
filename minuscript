@@ -749,6 +749,7 @@ with open( APP_TEXFILE, 'w' ) as out:
         out.write("\\begin{center}\n")
         out.write("\\textbf{Contents}\n")
         out.write("\\end{center}\n")
+        out.write("\\footnotesize\n")
         out.write("\\tableofcontents\n")
         out.write("}\n")
 
