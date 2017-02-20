@@ -624,6 +624,8 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("\\usepackage{pdfpages}\n")
     out.write("\\usepackage{tocloft}\n")
     out.write("\\usepackage{tocstyle}\n")
+    out.write("\\usepackage{hyperref}\n")
+    out.write("\\hypersetup{ linktoc=all }\n" )
     if ( args.endnotes == True ):
         out.write("\\usepackage{endnotes}\n")
     out.write("\n")
@@ -765,11 +767,15 @@ with open( APP_TEXFILE, 'w' ) as out:
     for chapter in manuscript_data["manuscript"]["chapters"]:
         if (not "state" in chapter or 
             ("state" in chapter) and (not chapter["state"] == "off")):
+
             # write chapters
-            out.write("\\newchapter{" + chapter["title"] + "}\n")
             if ( args.toc == True ):
+                out.write("\\newchapter{" + chapter["title"] + "}\n")
+                out.write("\\phantomsection\n")
                 out.write("  \\addcontentsline{toc}{section}{" + 
                     chapter["title"] + "}\n")
+            else:
+                out.write("\\newchapter{" + chapter["title"] + "}\n")
 
             # start the page numbering
             if APP_START_PAGE_NUMBERING:
