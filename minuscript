@@ -797,7 +797,7 @@ with open( APP_TEXFILE, 'w' ) as out:
                 curscene += 1
 
                 if (args.filescenesep == True):
-                    out.write("\\begin{center}\\footnotesize{" + scene + "}\end{center}\n")
+                    out.write("\\begin{center}\\footnotesize{(" + scene + ")}\end{center}\n")
                     out.write("\\bigskip\n")
 
                 if scene.endswith(".pdf"): 
