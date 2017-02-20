@@ -196,6 +196,8 @@ parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
 parser.add_argument( "--chapsum", action="store_true", default=False,
     help="include chapter summaries, if they are present")
+parser.add_argument( "--filescenesep", action="store_true", default=False,
+    help="include file name in scene separator")
 parser.add_argument( "--footnotes", action="store_true", default=False,
     help="write internal notes as footnotes")
 parser.add_argument( "--fontfamily", default="pcr", 
@@ -793,6 +795,11 @@ with open( APP_TEXFILE, 'w' ) as out:
             numscenes = len(chapter["scenes"])
             for scene in chapter["scenes"]:
                 curscene += 1
+
+                if (args.filescenesep == True):
+                    out.write("\\begin{center}" + scene + "\end{center}\n")
+                    out.write("\\vspace*{0.125in}\n")
+
                 if scene.endswith(".pdf"): 
                     scene_name = os.path.basename( scene )
                     out.write("\\includepdf[pagecommand={\\pagestyle{fancy}},pages={1-},frame,scale=0.9]{" + APP_BUILDDIR + "/" + scene_name + "}\n")
