@@ -557,6 +557,7 @@ def latex_write_newchapter_command( out ):
     out.write("{\n")
     out.write("  \\stepcounter{chapter}\n")
     out.write("  \\newpage\n")
+    out.write("  \\phantomsection\n")
     out.write("  \\vspace*{3in}\n")
     out.write("  \\begin{center}\n")
     out.write("  \\begin{noindent}\n")
@@ -642,8 +643,8 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("\\usepackage{pdfpages}\n")
     out.write("\\usepackage{tocloft}\n")
     out.write("\\usepackage{tocstyle}\n")
-    out.write("\\usepackage{hyperref}\n")
-    out.write("\\hypersetup{ linktoc=all }\n" )
+    out.write("\\usepackage[pageanchor=true, linktocpage=true, linktoc=all]{hyperref}\n")
+    # out.write("\\hypersetup{ linktoc=all }\n" )
     if ( args.endnotes == True ):
         out.write("\\usepackage{endnotes}\n")
     out.write("\n")
@@ -788,7 +789,7 @@ with open( APP_TEXFILE, 'w' ) as out:
             # write chapters
             if ( args.toc == True ):
                 out.write("\\newchapter{" + chapter["title"] + "}\n")
-                out.write("\\phantomsection\n")
+                # out.write("\\phantomsection\n")
                 out.write("  \\addcontentsline{toc}{section}{" + 
                     chapter["title"] + "}\n")
             else:
