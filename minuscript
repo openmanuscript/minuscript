@@ -44,6 +44,21 @@ import textwrap
 
 # ---------------------------------------------------------------------------
 #
+# helper function to check state of a chapter 
+#
+# ---------------------------------------------------------------------------
+def check_chapter_state( chapter ): 
+    result = False
+
+    if ( (not "state" in chapter) or 
+        (("state" in chapter) and (chapter["state"] in APP_STATES)) ):
+        result = True
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+#
 # global variables
 #
 # ---------------------------------------------------------------------------
@@ -57,6 +72,7 @@ APP_START_PAGE_NUMBERING = 1
 APP_TEXFILE     = "manuscript.tex"
 APP_FORMAT      = "latex"
 APP_FORMAT_EXT  = ".tex"
+APP_STATES      =  ["on"]
 
 # external applications
 APP_MMD         = "multimarkdown"
@@ -192,6 +208,8 @@ parser.add_argument( "-v", "--verbose", action="store_true", default=False,
     help="report verbosely")
 parser.add_argument( "--author", default="notDefined",
     help="read author data from this file")
+parser.add_argument( "--addstates", default="none",
+    help="add states that are considered 'on'")
 parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
 parser.add_argument( "--chapsum", action="store_true", default=False,
@@ -376,9 +394,7 @@ if (args.scenecheck):
     print( "Scenes used more than once in " + args.manuscriptfile + ":" )
     print( " " )
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (not "state" in chapter or 
-            ("state" in chapter) and (not chapter["state"] == "off")):
-
+        if (check_chapter_state( chapter )):
             for scene in chapter["scenes"]:
                 if scene in seen: 
                     print("    " + scene)
@@ -390,8 +406,7 @@ if (args.scenelist):
     print(manuscript_data["manuscript"]["title"])
     print( " " )
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (not "state" in chapter or 
-            ("state" in chapter) and (not chapter["state"] == "off")):
+        if (check_chapter_state( chapter )):
 
             print(chapter["title"])
             for scene in chapter["scenes"]:
@@ -403,8 +418,7 @@ if (args.outline):
     print(manuscript_data["manuscript"]["title"])
     print( " " )
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (not "state" in chapter or 
-            ("state" in chapter) and (not chapter["state"] == "off")):
+        if (check_chapter_state( chapter )):
 
             print( "- " + chapter["title"] )
             if ("desc" in chapter):
@@ -426,8 +440,7 @@ if  not os.path.exists( APP_BUILDDIR ):
     os.makedirs( APP_BUILDDIR ) 
 
 for chapter in manuscript_data["manuscript"]["chapters"]:
-    if (not "state" in chapter or 
-        ("state" in chapter) and (not chapter["state"] == "off")):
+    if (check_chapter_state( chapter )):
 
         # get all the files that need to be converted
         allfiles = chapter["scenes"]
@@ -765,8 +778,7 @@ with open( APP_TEXFILE, 'w' ) as out:
 
     # iterate through chapters and scenes
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (not "state" in chapter or 
-            ("state" in chapter) and (not chapter["state"] == "off")):
+        if (check_chapter_state( chapter )):
 
             # write chapters
             if ( args.toc == True ):
@@ -870,5 +882,5 @@ log.info( "Cleaning up ..." )
 if args.debug == False:
     os.system( "rm -rf " + APP_BUILDDIR )
     os.system( 
-        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum m.sum " + args.manuscriptname + ".ps" )
+        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum manuscript.out m.sum " + args.manuscriptname + ".ps" )
 
