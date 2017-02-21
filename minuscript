@@ -72,6 +72,7 @@ APP_START_PAGE_NUMBERING = 1
 APP_TEXFILE     = "manuscript.tex"
 APP_FORMAT      = "latex"
 APP_FORMAT_EXT  = ".tex"
+    # a list of chapter states should be considered 'on'
 APP_STATES      =  ["on"]
 
 # external applications
@@ -208,8 +209,6 @@ parser.add_argument( "-v", "--verbose", action="store_true", default=False,
     help="report verbosely")
 parser.add_argument( "--author", default="notDefined",
     help="read author data from this file")
-parser.add_argument( "--addstates", default="none",
-    help="add states that are considered 'on'")
 parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
 parser.add_argument( "--chapsum", action="store_true", default=False,
@@ -244,6 +243,8 @@ parser.add_argument( "--scenelist", action="store_true", default=False,
     help="print a simple scenelist of the manuscript and exit")
 parser.add_argument( "--sourcedir", default="notDefined",
     help="use this as the root directory for the manuscript")
+parser.add_argument( "--states", nargs='+', type=str, 
+    help="add states that are considered 'on'")
 parser.add_argument( "--synopsis", action="store_true", default=False,
     help="include synopsis before the first chapter")
 parser.add_argument( "--synopsisfile", default="synopsis.md", 
@@ -298,6 +299,10 @@ if (args.sourcedir == "notDefined"):
 if (args.endnotes and args.footnotes):
     log.error("both \'endnotes\' and \'footnotes\' have been requested. Choose one at a time, please.")
     sys.exit(APP_EXIT_ERROR)
+
+if args.states is not None:
+    for value in args.states:
+        APP_STATES.append( value )
 
 # ---------------------------------------------------------------------------
 #
