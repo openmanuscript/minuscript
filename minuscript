@@ -425,7 +425,7 @@ if (args.outline):
     for chapter in manuscript_data["manuscript"]["chapters"]:
         if (check_chapter_state( chapter )):
 
-            print( "- " + chapter["title"] )
+            print( chapter["title"].upper() )
             if ("desc" in chapter):
                 print(chapter["desc"])
             print( " " )
