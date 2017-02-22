@@ -38,7 +38,7 @@ To get started:
 - More examples:
     - because `minuscript` is built on `multimarkdown`, there are a lot of
       capabilities available, such as formatting block quotes, end notes 
-      and footnotes, etc. The following commands give a few important examples.
+      and footnotes, etc. When run in the `doc` directory of the reposirtory, the following commands will create documents that show some important examples. 
     - `minuscript --manuscriptfile examples.json` 
         - This command will create a file called `examples.pdf` that includes 
           examples of how to do things like create block quotes, bold and 
@@ -51,8 +51,8 @@ To get started:
           internal notes as footnotes, found at the bottom of the pages as 
           appropriate.
 - Tools (for convenience)
-    - `medit <scene name, no extension>` runs vi on a scene file
-    - `moutline` (prints to sdtout an outline of the manuscript)
+    - `medit <scene name, no extension>` runs vi on a scene file. You can change it to run the editor of your choice.
+    - `moutline` prints to sdtout an outline of the manuscript. This is the same information found in other files, but it's better formatted.
 
 Good luck, and please contact me for help and with suggestions.
 
