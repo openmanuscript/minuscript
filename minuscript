@@ -669,6 +669,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("\n")
     out.write("\\begin{document}\n")
     out.write("\\raggedright\n")
+    out.write("\\frenchspacing\n")
     out.write("\n")
     out.write("%-----------------------------\n")
     out.write("%\n")
