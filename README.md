@@ -10,8 +10,8 @@ This is the simplest, most robust, least tool-confined workflow I could come up 
 
 The workflow supported by `minuscript` basically consists of:
 
-- Creating and editing individual files for each scene.
-- Editing a file that describes a set of chapters, which are collections of scenes.
+- Creating and editing individual files for each scene. A scene is the basic unit of writing that `minuscript` expects.
+- Editing a file that describes the content of the novel. A novel is a set of chapters. Chapters are collections of scenes. 
 
 Everything you need is in the git repository. Instructions assume you can use 
 basic coding tools. For example, you should be able to edit a 
