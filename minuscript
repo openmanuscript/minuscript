@@ -56,7 +56,30 @@ def check_chapter_state( chapter ):
 
     return result
 
+# ---------------------------------------------------------------------------
+#
+# helper function gets scenelist 
+#
+# ---------------------------------------------------------------------------
+def get_scenelist( mdata ): 
+    scenes = []
+    for chapter in mdata["manuscript"]["chapters"]:
+        if (check_chapter_state( chapter )):
+            for scene in chapter["scenes"]:
+                scenes.append( scene )
+    return scenes
 
+def get_unused_scenelist( mdata ): 
+    scenes = get_scenelist( mdata ) 
+    unused = []
+
+    for f in os.listdir( APP_SCENESDIR ):
+        basename = os.path.basename( f )
+        base = os.path.splitext(basename)[0]
+        if base not in scenes:
+            unused.append(base)
+
+    return unused
 # ---------------------------------------------------------------------------
 #
 # global variables
@@ -251,6 +274,8 @@ parser.add_argument( "--synopsisfile", default="synopsis.md",
     help="if requested, read synopsis from this file")
 parser.add_argument( "--toc", action="store_true", default=False,
     help="create table of contents")
+parser.add_argument( "--unusedscenes", action="store_true", default=False,
+    help="print a list of scenes that are in the scene directory but not the manuscript file")
 parser.add_argument( "--version", action="version", version=APP_VERSION)
 parser.add_argument( "--wordcount", action="store_true", default=False,
     help="add wordcount to title page")
@@ -416,7 +441,6 @@ if (args.scenelist):
             print(chapter["title"])
             for scene in chapter["scenes"]:
                 print("    " + scene)
-
     exit(0)
 
 if (args.outline):
@@ -430,6 +454,10 @@ if (args.outline):
                 print(chapter["desc"])
             print( " " )
 
+    exit(0)
+
+if (args.unusedscenes):
+    print( get_unused_scenelist( manuscript_data ) )
     exit(0)
 
 # ---------------------------------------------------------------------------
