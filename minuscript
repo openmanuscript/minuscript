@@ -457,7 +457,8 @@ if (args.outline):
     exit(0)
 
 if (args.unusedscenes):
-    print( get_unused_scenelist( manuscript_data ) )
+    for scene in get_unused_scenelist( manuscript_data ):
+        print( scene )
     exit(0)
 
 # ---------------------------------------------------------------------------
