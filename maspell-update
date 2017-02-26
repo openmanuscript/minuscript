@@ -1,0 +1,3 @@
+#!/bin/bash
+
+aspell --lang=en create master ./spell/aspell.rws < ./spell/vim.utf-8.add

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+for f in scenes/*.md ; do echo $f ; maspell $f | sort | uniq -c ; done 

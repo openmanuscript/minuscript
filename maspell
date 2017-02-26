@@ -1,0 +1,3 @@
+#!/bin/bash
+
+aspell --add-extra-dicts=./spell/aspell.rws list < $1 

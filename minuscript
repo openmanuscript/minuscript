@@ -634,6 +634,7 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.write("\n")
     out.write("\\usepackage[page]{totalcount}\n")
     out.write("\\usepackage{underscore}\n")
+    out.write("\\usepackage{comment}\n")
     out.write("\\usepackage{fmtcount}\n")
     out.write("\\usepackage{fancyhdr}\n")
     out.write("\\usepackage{setspace}\n")
