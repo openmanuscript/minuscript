@@ -53,6 +53,10 @@ To get started:
 - Tools (for convenience)
     - `medit <scene name, no extension>` runs vi on a scene file. You can change it to run the editor of your choice.
     - `moutline` prints to sdtout an outline of the manuscript. This is the same information found in other files, but it's better formatted.
+    - `maspell`, `maspell-scenes` and `maspell-update` are commands that can
+      help manage project-specific spelling files. These should be seen as
+      examples only, because they rely on other constraints (using `vim` and
+      `aspell`, among them)
 
 Good luck, and please contact me for help and with suggestions.
 
