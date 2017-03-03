@@ -58,6 +58,22 @@ def check_chapter_state( chapter ):
 
 # ---------------------------------------------------------------------------
 #
+# helper function gets texfilename 
+#
+# ---------------------------------------------------------------------------
+def get_texfilename():
+    return  os.path.splitext(os.path.basename(args.manuscriptfile))[0] + ".tex"
+
+# ---------------------------------------------------------------------------
+#
+# helper function gets default pdf name 
+#
+# ---------------------------------------------------------------------------
+def get_autopdfname():
+    return  os.path.splitext(os.path.basename(args.manuscriptfile))[0] + ".pdf"
+
+# ---------------------------------------------------------------------------
+#
 # helper function gets scenelist 
 #
 # ---------------------------------------------------------------------------
@@ -92,7 +108,6 @@ APP_EXIT_ERROR  = 42
 APP_BUILDDIR    = "buildtemp"
 APP_SCENESDIR   = "scenes"
 APP_START_PAGE_NUMBERING = 1
-APP_TEXFILE     = "manuscript.tex"
 APP_FORMAT      = "latex"
 APP_FORMAT_EXT  = ".tex"
     # a list of chapter states should be considered 'on'
@@ -247,7 +262,7 @@ parser.add_argument( "--includedate", action="store_true", default=False,
 parser.add_argument( "--init", action="store_true", default=False,
     help="populate an initial minuscript project")
 parser.add_argument( "--manuscriptname", default="notDefined", 
-    help="name of the final pdf that will be created. This overrides the setting in the manuscript.json file")
+    help="name of the final pdf that will be created.")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
 parser.add_argument( "--nopdf", action="store_true", default=False,
@@ -294,7 +309,6 @@ if ( args.sourcedir == "notDefined" ):
 if ( args.author == "notDefined" ):  
     args.author = "author.json" 
 
-
 # ---------------------------------------------------------------------------
 #
 # set up the proper reporting mode
@@ -328,6 +342,10 @@ if (args.endnotes and args.footnotes):
 if args.states is not None:
     for value in args.states:
         APP_STATES.append( value )
+
+if ( args.manuscriptname == "notDefined" ):  
+    args.manuscriptname = \
+        os.path.splitext(os.path.basename(args.manuscriptfile))[0]
 
 # ---------------------------------------------------------------------------
 #
@@ -364,11 +382,6 @@ if os.path.isfile( fullpath ):
         # TODO: make sure this data is there
         # set local variables using this data
 
-        # unless overridden on command line use the data to define the 
-        # name of the final output
-        if ( args.manuscriptname == "notDefined" ):
-            args.manuscriptname = \
-                manuscript_data["manuscript"]["runningtitle"].lower()
 else:
     log.error( args.manuscriptfile + " does not exist" )
     exit( APP_EXIT_ERROR ) 
@@ -651,8 +664,8 @@ def get_chapter_name_string():
 # create the manuscript tex file
 #
 # ---------------------------------------------------------------------------
-log.info( "creating file " + APP_TEXFILE )
-with open( APP_TEXFILE, 'w' ) as out:
+log.info( "creating file " + get_texfilename() ) 
+with open( get_texfilename(), 'w' ) as out:
     escaped_runningtitle = \
         manuscript_data["manuscript"]["runningtitle"].translate( \
         str.maketrans({"_":  r"\_"}))
@@ -880,8 +893,8 @@ with open( APP_TEXFILE, 'w' ) as out:
     out.close()
 
 # see if the file was written
-if  not os.path.exists( APP_TEXFILE ): 
-    log.error( "Did not create output file: " + APP_TEXFILE )    
+if  not os.path.exists( get_texfilename() ): 
+    log.error( "Did not create output file: " + get_texfilename() ) 
 
 # ---------------------------------------------------------------------------
 #
@@ -889,26 +902,25 @@ if  not os.path.exists( APP_TEXFILE ):
 #
 # ---------------------------------------------------------------------------
 if (args.nopdf == False):
+    pdfname = args.manuscriptname + ".pdf"
+    psname  = args.manuscriptname + ".ps"
     if ( args.wordcount == True ):
         os.system( "echo 0 > m.sum" )
-
-    log.info( "Creating pdf file ..." )
-    os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
-    os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
-    log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
-    os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
+    log.info( "Creating pdf file " + pdfname + " from " + get_texfilename() ) 
+    os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
+    os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
+    # log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
 
     # count the words
     if ( args.wordcount == True ):
         log.info( "performing wordcount" )
-        os.system( "pdftops " + args.manuscriptname + ".pdf" )
-        os.system( APP_PS2ASCII + " " + args.manuscriptname + ".ps | wc -w > m.sum" )
-        os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
-        os.system( APP_LATEX + " manuscript.tex 2>/dev/null 1>/dev/null" ) 
-        os.system( "mv manuscript.pdf " + args.manuscriptname + ".pdf")
-        # note: may need to open that file and round the number up, then
-        # write it out again
+        os.system( "pdftops " + pdfname ) 
+        os.system( APP_PS2ASCII + " " + psname + " | wc -w > m.sum" )
+        os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
 
+    if  os.path.exists( get_autopdfname() ):
+        if ( not (get_autopdfname() == pdfname) ): 
+            os.system( "mv " + get_autopdfname() + " " + pdfname )
 
 # ---------------------------------------------------------------------------
 #
@@ -917,7 +929,18 @@ if (args.nopdf == False):
 # ---------------------------------------------------------------------------
 log.info( "Cleaning up ..." )
 if args.debug == False:
+    base = os.path.splitext(os.path.basename(args.manuscriptfile))[0]
     os.system( "rm -rf " + APP_BUILDDIR )
     os.system( 
-        "rm -f manuscript.aux manuscript.ent manuscript.log manuscript.toc manuscript.tex manuscript.sum manuscript.out m.sum " + args.manuscriptname + ".ps" )
+        "rm -f " + 
+            base + ".aux " +
+            base + ".ent " +
+            base + ".log " +
+            base + ".toc " +
+            base + ".tex " +
+            base + ".sum " +
+            base + ".out " +
+            base + ".ps " +
+            "m.sum " + 
+            args.manuscriptname + ".ps" )
 
