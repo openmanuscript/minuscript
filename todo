@@ -1,4 +1,5 @@
 Features
+ [ ] bug: if you use --endnotes and there are none, ms fails
  [ ] test synopsis file option. Should now report if a synopsis file isn't
      found and translated to the build directory
  [ ] check for existence of the scene files before doing anything
