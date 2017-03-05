@@ -1,4 +1,4 @@
-#!/opt/local/bin/python
+#!/usr/bin/env python3
 
 # ---------------------------------------------------------------------------
 #
@@ -117,7 +117,7 @@ APP_STATES      =  ["on"]
 APP_MMD         = "multimarkdown"
 APP_LATEX       = "pdflatex"
 APP_CP          = "cp"
-APP_PS2ASCII    = "/opt/local/bin/ps2ascii"
+APP_PS2ASCII    = "ps2ascii"
 
 # data
 APP_INIT_AUTHOR_STRING = """{{ 
