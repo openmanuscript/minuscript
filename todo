@@ -1,4 +1,6 @@
 Features
+ [ ] incorporate 'make_pdf' script, found in the scans directory of the
+     n.nimbus repo - it's a way of converting and image to a compliant pdf
  [ ] bug: if you use --endnotes and there are none, ms fails
  [ ] test synopsis file option. Should now report if a synopsis file isn't
      found and translated to the build directory
