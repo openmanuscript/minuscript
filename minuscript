@@ -118,6 +118,7 @@ APP_MMD         = "multimarkdown"
 APP_LATEX       = "pdflatex"
 APP_CP          = "cp"
 APP_PS2ASCII    = "ps2ascii"
+APP_PDFTOPS     = "pdftops"
 
 # data
 APP_INIT_AUTHOR_STRING = """{{ 
@@ -906,7 +907,7 @@ if (args.nopdf == False):
     psname  = args.manuscriptname + ".ps"
     if ( args.wordcount == True ):
         os.system( "echo 0 > m.sum" )
-    log.info( "Creating pdf file " + pdfname + " from " + get_texfilename() ) 
+    log.info( "creating pdf file " + pdfname + " from " + get_texfilename() ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
     # log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
@@ -914,7 +915,7 @@ if (args.nopdf == False):
     # count the words
     if ( args.wordcount == True ):
         log.info( "performing wordcount" )
-        os.system( "pdftops " + pdfname ) 
+        os.system( APP_PDFTOPS + " " + pdfname ) 
         os.system( APP_PS2ASCII + " " + psname + " | wc -w > m.sum" )
         os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
 
