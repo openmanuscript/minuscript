@@ -94,7 +94,6 @@ def get_unused_scenelist( mdata ):
         base = os.path.splitext(basename)[0]
         if base not in scenes:
             unused.append(base)
-
     return unused
 # ---------------------------------------------------------------------------
 #
@@ -447,14 +446,9 @@ if (args.scenecheck):
     exit(0)
 
 if (args.scenelist):
-    print(manuscript_data["manuscript"]["title"])
-    print( " " )
-    for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_state( chapter )):
-
-            print(chapter["title"])
-            for scene in chapter["scenes"]:
-                print("    " + scene)
+    scenes = get_scenelist( manuscript_data )
+    for s in scenes:
+        print(s)
     exit(0)
 
 if (args.outline):
@@ -907,28 +901,36 @@ if (args.nopdf == False):
     psname  = args.manuscriptname + ".ps"
     if ( args.wordcount == True ):
         os.system( "echo 0 > m.sum" )
-    log.info( "creating pdf file " + pdfname + " from " + get_texfilename() ) 
+    log.info( "creating " + pdfname + " from " + get_texfilename() ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
     # log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
+
+    # move the resulting pdf to the requested name
+    if  os.path.exists( get_autopdfname() ):
+        if ( not (get_autopdfname() == pdfname) ): 
+            os.system( "mv " + get_autopdfname() + " " + pdfname )
 
     # count the words
     if ( args.wordcount == True ):
         log.info( "performing wordcount" )
         os.system( APP_PDFTOPS + " " + pdfname ) 
         os.system( APP_PS2ASCII + " " + psname + " | wc -w > m.sum" )
+        # remake and rename the pdf file
+        log.info( "creating " + pdfname + " from " + get_texfilename() ) 
         os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
 
-    if  os.path.exists( get_autopdfname() ):
-        if ( not (get_autopdfname() == pdfname) ): 
-            os.system( "mv " + get_autopdfname() + " " + pdfname )
+        # move the resulting pdf to the requested name
+        if  os.path.exists( get_autopdfname() ):
+            if ( not (get_autopdfname() == pdfname) ): 
+                os.system( "mv " + get_autopdfname() + " " + pdfname )
 
 # ---------------------------------------------------------------------------
 #
 # clean up
 #
 # ---------------------------------------------------------------------------
-log.info( "Cleaning up ..." )
+log.info( "cleaning up ..." )
 if args.debug == False:
     base = os.path.splitext(os.path.basename(args.manuscriptfile))[0]
     os.system( "rm -rf " + APP_BUILDDIR )
