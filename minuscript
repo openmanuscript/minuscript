@@ -44,17 +44,21 @@ import textwrap
 
 # ---------------------------------------------------------------------------
 #
-# helper function to check state of a chapter 
+# helper function to check tags of a chapter 
 #
 # ---------------------------------------------------------------------------
-def check_chapter_state( chapter ): 
+def check_chapter_tags( chapter ): 
     result = False
 
-    if ( (not "state" in chapter) or 
-        # (("state" in chapter) and (chapter["state"] in APP_STATES)) ):
-        (("state" in chapter) and 
-         any( i in chapter["state"] for i in APP_STATES)) ):
+    if ( (len(APP_TAGS) == 0) or
+         (("tags" in chapter) and 
+             any( i in chapter["tags"] for i in APP_TAGS)) ):
         result = True
+
+    #if ( (not "tags" in chapter) or 
+        #(("tags" in chapter) and 
+         #any( i in chapter["tags"] for i in APP_TAGS)) ):
+        #result = True
 
     return result
 
@@ -82,7 +86,7 @@ def get_autopdfname():
 def get_scenelist( mdata ): 
     scenes = []
     for chapter in mdata["manuscript"]["chapters"]:
-        if (check_chapter_state( chapter )):
+        if (check_chapter_tags( chapter )):
             for scene in chapter["scenes"]:
                 scenes.append( scene )
     return scenes
@@ -111,8 +115,8 @@ APP_SCENESDIR   = "scenes"
 APP_START_PAGE_NUMBERING = 1
 APP_FORMAT      = "latex"
 APP_FORMAT_EXT  = ".tex"
-    # a list of chapter states should be considered 'on'
-APP_STATES      =  ["on"]
+    # a list of chapter tags
+APP_TAGS        =  []
 
 # external applications
 APP_MMD         = "multimarkdown"
@@ -283,12 +287,12 @@ parser.add_argument( "--scenelist", action="store_true", default=False,
     help="print a simple scenelist of the manuscript and exit")
 parser.add_argument( "--sourcedir", default="notDefined",
     help="use this as the root directory for the manuscript")
-parser.add_argument( "--states", nargs='+', type=str, 
-    help="add states that are considered 'on'")
 parser.add_argument( "--synopsis", action="store_true", default=False,
     help="include synopsis before the first chapter")
 parser.add_argument( "--synopsisfile", default="synopsis.md", 
     help="if requested, read synopsis from this file")
+parser.add_argument( "--tags", nargs='+', type=str, 
+    help="add chapter tags that are considered 'on'")
 parser.add_argument( "--toc", action="store_true", default=False,
     help="create table of contents")
 parser.add_argument( "--unusedscenes", action="store_true", default=False,
@@ -341,9 +345,9 @@ if (args.endnotes and args.footnotes):
     log.error("both \'endnotes\' and \'footnotes\' have been requested. Choose one at a time, please.")
     sys.exit(APP_EXIT_ERROR)
 
-if args.states is not None:
-    for value in args.states:
-        APP_STATES.append( value )
+if (len(APP_TAGS) != 0):
+    for value in args.tags:
+        APP_TAGS.append( value )
 
 if ( args.manuscriptname == "notDefined" ):  
     args.manuscriptname = \
@@ -439,7 +443,7 @@ if (args.scenecheck):
     print( "Scenes used more than once in " + args.manuscriptfile + ":" )
     print( " " )
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_state( chapter )):
+        if (check_chapter_tags( chapter )):
             for scene in chapter["scenes"]:
                 if scene in seen: 
                     print("    " + scene)
@@ -457,7 +461,7 @@ if (args.outline):
     print(manuscript_data["manuscript"]["title"])
     print( " " )
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_state( chapter )):
+        if (check_chapter_tags( chapter )):
 
             print( chapter["title"].upper() )
             if ("desc" in chapter):
@@ -484,7 +488,7 @@ if  not os.path.exists( APP_BUILDDIR ):
     os.makedirs( APP_BUILDDIR ) 
 
 for chapter in manuscript_data["manuscript"]["chapters"]:
-    if (check_chapter_state( chapter )):
+    if (check_chapter_tags( chapter )):
 
         # get all the files that need to be converted
         allfiles = chapter["scenes"]
@@ -825,7 +829,7 @@ with open( get_texfilename(), 'w' ) as out:
 
     # iterate through chapters and scenes
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_state( chapter )):
+        if (check_chapter_tags( chapter )):
 
             # write chapters
             if ( args.toc == True ):
