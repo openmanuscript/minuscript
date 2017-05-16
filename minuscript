@@ -55,11 +55,6 @@ def check_chapter_tags( chapter ):
              any( i in chapter["tags"] for i in APP_TAGS)) ):
         result = True
 
-    #if ( (not "tags" in chapter) or 
-        #(("tags" in chapter) and 
-         #any( i in chapter["tags"] for i in APP_TAGS)) ):
-        #result = True
-
     return result
 
 # ---------------------------------------------------------------------------
@@ -345,9 +340,10 @@ if (args.endnotes and args.footnotes):
     log.error("both \'endnotes\' and \'footnotes\' have been requested. Choose one at a time, please.")
     sys.exit(APP_EXIT_ERROR)
 
-if (len(APP_TAGS) != 0):
+if (len(args.tags) != 0):
     for value in args.tags:
         APP_TAGS.append( value )
+    print(APP_TAGS)
 
 if ( args.manuscriptname == "notDefined" ):  
     args.manuscriptname = \
