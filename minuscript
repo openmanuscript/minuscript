@@ -343,7 +343,6 @@ if (args.endnotes and args.footnotes):
 if (len(args.tags) != 0):
     for value in args.tags:
         APP_TAGS.append( value )
-    print(APP_TAGS)
 
 if ( args.manuscriptname == "notDefined" ):  
     args.manuscriptname = \
