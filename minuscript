@@ -286,7 +286,7 @@ parser.add_argument( "--synopsis", action="store_true", default=False,
     help="include synopsis before the first chapter")
 parser.add_argument( "--synopsisfile", default="synopsis.md", 
     help="if requested, read synopsis from this file")
-parser.add_argument( "--tags", nargs='+', type=str, 
+parser.add_argument( "--tags", nargs='+', type=str,
     help="add chapter tags that are considered 'on'")
 parser.add_argument( "--toc", action="store_true", default=False,
     help="create table of contents")
@@ -340,7 +340,7 @@ if (args.endnotes and args.footnotes):
     log.error("both \'endnotes\' and \'footnotes\' have been requested. Choose one at a time, please.")
     sys.exit(APP_EXIT_ERROR)
 
-if (len(args.tags) != 0):
+if args.tags is not None:
     for value in args.tags:
         APP_TAGS.append( value )
 
