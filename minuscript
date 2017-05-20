@@ -276,6 +276,8 @@ parser.add_argument( "--quotes", action="store_true", default=False,
     help="include quotes before the first chapter")
 parser.add_argument( "--quotesfile", default="quotes.md", 
     help="if requested, read quotes from this file")
+parser.add_argument( "--shortstory", action="store_true", default=False,
+    help="treat the manuscript as a short story")
 parser.add_argument( "--scenecheck", action="store_true", default=False,
     help="perform scene check on manuscript and exit")
 parser.add_argument( "--scenelist", action="store_true", default=False,
@@ -597,14 +599,15 @@ def latex_write_newchapter_command( out ):
     out.write("  \\newpage\n")
     out.write("  \\phantomsection\n")
     out.write("  \\vspace*{3in}\n")
-    out.write("  \\begin{center}\n")
-    out.write("  \\begin{noindent}\n")
-    out.write("\n")
-    out.write("  \\textbf{" + get_chapter_name_string() + "}\n\n" ) 
-    out.write("  \\textbf{#1}\n")
-    out.write("  \\end{noindent}\n")
-    out.write("  \\end{center}\n")
-    out.write("  \\bigskip\n")
+    if (args.shortstory == False):
+        out.write("  \\begin{center}\n")
+        out.write("  \\begin{noindent}\n")
+        out.write("\n")
+        out.write("  \\textbf{" + get_chapter_name_string() + "}\n\n" ) 
+        out.write("  \\textbf{#1}\n")
+        out.write("  \\end{noindent}\n")
+        out.write("  \\end{center}\n")
+        out.write("  \\bigskip\n")
     out.write("}\n")
 
 #
@@ -905,7 +908,6 @@ if (args.nopdf == False):
     log.info( "creating " + pdfname + " from " + get_texfilename() ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
-    # log.info( "creating manuscript " + args.manuscriptname + ".pdf" )
 
     # move the resulting pdf to the requested name
     if  os.path.exists( get_autopdfname() ):
