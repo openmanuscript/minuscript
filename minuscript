@@ -259,7 +259,7 @@ parser.add_argument( "--footnotes", action="store_true", default=False,
 parser.add_argument( "--fontfamily", default="pcr", 
     help="define the font family for the resulting pdf")
 parser.add_argument( "--includedate", action="store_true", default=False,
-    help="include the current date on the title page of the manuscript")
+    help="include the current date on the title page")
 parser.add_argument( "--init", action="store_true", default=False,
     help="populate an initial minuscript project")
 parser.add_argument( "--manuscriptname", default="notDefined", 
@@ -271,7 +271,7 @@ parser.add_argument( "--nopdf", action="store_true", default=False,
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
 parser.add_argument( "--poetry", action="store_true", default=False,
-    help="treat the manuscript as a collection of poems, instead of scenes")
+    help="the manuscript is a collection of poems")
 parser.add_argument( "--quotes", action="store_true", default=False,
     help="include quotes before the first chapter")
 parser.add_argument( "--quotesfile", default="quotes.md", 
@@ -901,8 +901,9 @@ if  not os.path.exists( get_texfilename() ):
 #
 # ---------------------------------------------------------------------------
 if (args.nopdf == False):
-    pdfname = args.manuscriptname + ".pdf"
-    psname  = args.manuscriptname + ".ps"
+    pdfname     = args.manuscriptname + ".pdf"
+    psname      = args.manuscriptname + ".ps"
+    asciiname   = args.manuscriptname + ".txt"
     if ( args.wordcount == True ):
         os.system( "echo 0 > m.sum" )
     log.info( "creating " + pdfname + " from " + get_texfilename() ) 
@@ -918,7 +919,13 @@ if (args.nopdf == False):
     if ( args.wordcount == True ):
         log.info( "performing wordcount" )
         os.system( APP_PDFTOPS + " " + pdfname ) 
-        os.system( APP_PS2ASCII + " " + psname + " | wc -w > m.sum" )
+        os.system( APP_PS2ASCII + " " + psname + " > " + asciiname )
+        # os.system( "wc -w {0} > m.sum".format(asciiname) )
+        b_numwords = subprocess.check_output(["wc", "-w", asciiname])
+        numwords = (b_numwords.decode("utf-8").strip().split(" "))[0]
+        numwords = round(int(numwords), -2)
+        with open( "m.sum", 'w' ) as a:
+            a.write("{}".format(numwords)) 
         # remake and rename the pdf file
         log.info( "creating " + pdfname + " from " + get_texfilename() ) 
         os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
@@ -948,5 +955,6 @@ if args.debug == False:
             base + ".out " +
             base + ".ps " +
             "m.sum " + 
-            args.manuscriptname + ".ps" )
+            args.manuscriptname + ".ps " +
+            args.manuscriptname + ".txt" )
 
