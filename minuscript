@@ -114,6 +114,7 @@ APP_FORMAT_EXT  = ".tex"
 APP_TAGS        =  []
 
 # external applications
+APP_SED         = "sed"
 APP_MMD         = "multimarkdown"
 APP_LATEX       = "pdflatex"
 APP_CP          = "cp"
@@ -292,6 +293,8 @@ parser.add_argument( "--tags", nargs='+', type=str,
     help="add chapter tags that are considered 'on'")
 parser.add_argument( "--toc", action="store_true", default=False,
     help="create table of contents")
+parser.add_argument( "--underline", action="store_true", default=False,
+    help="use underlines for emphasis, instead of italics or bold")
 parser.add_argument( "--unusedscenes", action="store_true", default=False,
     help="print a list of scenes that are in the scene directory but not the manuscript file")
 parser.add_argument( "--version", action="version", version=str(APP_VERSION))
@@ -518,6 +521,10 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
                 command = APP_MMD + " -t " + APP_FORMAT + " " + tmp_mdfile + \
                     " > " + tmp_texfile
                 os.system( command )
+                if (args.underline == True):
+                    command = APP_SED + \
+                        " -i \"\" \"s/\\emph{/\\underline{/g\" " + tmp_texfile
+                    os.system( command )
 
 # if requested, handle the quotes file as well 
 if (args.quotes == True):
@@ -526,6 +533,10 @@ if (args.quotes == True):
     command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
         APP_SCENESDIR + "/" + args.quotesfile + " > " + qfile 
     os.system( command )
+    if (args.underline == True):
+        command = APP_SED + " -i \"\" \"s/\\emph{/\\underline{/g\" " \
+            + qfile 
+        os.system( command )
 
 # if requested, handle the synopsis file as well 
 if (args.synopsis == True):
@@ -534,6 +545,10 @@ if (args.synopsis == True):
     command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
         APP_SCENESDIR + "/" + args.synopsisfile + " > " + sfile 
     os.system( command )
+    if (args.underline == True):
+        command = APP_SED + " -i \"\" \"s/\\emph{/\\underline{/g\" " \
+            + sfile 
+        os.system( command )
 
 # ---------------------------------------------------------------------------
 #
