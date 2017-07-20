@@ -525,6 +525,9 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
                     command = APP_SED + \
                         " -i \"\" \"s/\\emph{/\\underline{/g\" " + tmp_texfile
                     os.system( command )
+                    command = APP_SED + \
+                        " -i \"\" \"s/\\textbf{/\\underline{/g\" " + tmp_texfile
+                    os.system( command )
 
 # if requested, handle the quotes file as well 
 if (args.quotes == True):
@@ -537,6 +540,9 @@ if (args.quotes == True):
         command = APP_SED + " -i \"\" \"s/\\emph{/\\underline{/g\" " \
             + qfile 
         os.system( command )
+        command = APP_SED + " -i \"\" \"s/\\textbf{/\\underline{/g\" " \
+            + qfile 
+        os.system( command )
 
 # if requested, handle the synopsis file as well 
 if (args.synopsis == True):
@@ -547,6 +553,9 @@ if (args.synopsis == True):
     os.system( command )
     if (args.underline == True):
         command = APP_SED + " -i \"\" \"s/\\emph{/\\underline{/g\" " \
+            + sfile 
+        os.system( command )
+        command = APP_SED + " -i \"\" \"s/\\textbf{/\\underline{/g\" " \
             + sfile 
         os.system( command )
 
