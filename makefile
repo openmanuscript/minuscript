@@ -2,7 +2,7 @@ APPNAME = minuscript
 DATADIR = data
 INITDATADIR = $(DATADIR)/init
 INSTALLDIR = ~/bin
-TOOLS = medit maspell maspell-scenes maspell-update
+TOOLS = mcount medit maspell maspell-scenes maspell-update
 
 install:
 	install -d $(INSTALLDIR)
