@@ -114,6 +114,7 @@ APP_FORMAT_EXT  = ".tex"
 APP_TAGS        =  []
 
 # external applications
+APP_SED         = "sed"
 APP_MMD         = "multimarkdown"
 APP_LATEX       = "pdflatex"
 APP_CP          = "cp"
@@ -268,6 +269,8 @@ parser.add_argument( "--manuscriptfile", default="manuscript.json",
     help="read manuscript definition from this file")
 parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file. useful in debugging problems")
+parser.add_argument( "--numwords", default="notDefined", 
+    help="override the wordcount with this number.")
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
 parser.add_argument( "--poetry", action="store_true", default=False,
@@ -292,6 +295,8 @@ parser.add_argument( "--tags", nargs='+', type=str,
     help="add chapter tags that are considered 'on'")
 parser.add_argument( "--toc", action="store_true", default=False,
     help="create table of contents")
+parser.add_argument( "--underline", action="store_true", default=False,
+    help="use underlines for emphasis, instead of italics or bold")
 parser.add_argument( "--unusedscenes", action="store_true", default=False,
     help="print a list of scenes that are in the scene directory but not the manuscript file")
 parser.add_argument( "--version", action="version", version=str(APP_VERSION))
@@ -518,6 +523,13 @@ for chapter in manuscript_data["manuscript"]["chapters"]:
                 command = APP_MMD + " -t " + APP_FORMAT + " " + tmp_mdfile + \
                     " > " + tmp_texfile
                 os.system( command )
+                if (args.underline == True):
+                    command = APP_SED + \
+                        " -i \"\" \"s/\\emph{/\\underline{/g\" " + tmp_texfile
+                    os.system( command )
+                    command = APP_SED + \
+                        " -i \"\" \"s/\\textbf{/\\underline{/g\" " + tmp_texfile
+                    os.system( command )
 
 # if requested, handle the quotes file as well 
 if (args.quotes == True):
@@ -526,6 +538,13 @@ if (args.quotes == True):
     command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
         APP_SCENESDIR + "/" + args.quotesfile + " > " + qfile 
     os.system( command )
+    if (args.underline == True):
+        command = APP_SED + " -i \"\" \"s/\\emph{/\\underline{/g\" " \
+            + qfile 
+        os.system( command )
+        command = APP_SED + " -i \"\" \"s/\\textbf{/\\underline{/g\" " \
+            + qfile 
+        os.system( command )
 
 # if requested, handle the synopsis file as well 
 if (args.synopsis == True):
@@ -534,6 +553,13 @@ if (args.synopsis == True):
     command = APP_MMD + " -t " + APP_FORMAT + " " + args.sourcedir + "/" + \
         APP_SCENESDIR + "/" + args.synopsisfile + " > " + sfile 
     os.system( command )
+    if (args.underline == True):
+        command = APP_SED + " -i \"\" \"s/\\emph{/\\underline{/g\" " \
+            + sfile 
+        os.system( command )
+        command = APP_SED + " -i \"\" \"s/\\textbf{/\\underline{/g\" " \
+            + sfile 
+        os.system( command )
 
 # ---------------------------------------------------------------------------
 #
@@ -905,7 +931,11 @@ if (args.nopdf == False):
     psname      = args.manuscriptname + ".ps"
     asciiname   = args.manuscriptname + ".txt"
     if ( args.wordcount == True ):
-        os.system( "echo 0 > m.sum" )
+        if ( args.numwords == "notDefined" ):
+            os.system( "echo 0 > m.sum" )
+        else:
+            os.system( "echo {0} > m.sum".format(args.numwords) )
+
     log.info( "creating " + pdfname + " from " + get_texfilename() ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
     os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
@@ -917,23 +947,25 @@ if (args.nopdf == False):
 
     # count the words
     if ( args.wordcount == True ):
-        log.info( "performing wordcount" )
-        os.system( APP_PDFTOPS + " " + pdfname ) 
-        os.system( APP_PS2ASCII + " " + psname + " > " + asciiname )
-        # os.system( "wc -w {0} > m.sum".format(asciiname) )
-        b_numwords = subprocess.check_output(["wc", "-w", asciiname])
-        numwords = (b_numwords.decode("utf-8").strip().split(" "))[0]
-        numwords = round(int(numwords), -2)
-        with open( "m.sum", 'w' ) as a:
-            a.write("{}".format(numwords)) 
-        # remake and rename the pdf file
-        log.info( "creating " + pdfname + " from " + get_texfilename() ) 
-        os.system( APP_LATEX + " " + get_texfilename() + " > /dev/null 2>&1" ) 
+        if ( args.numwords == "notDefined" ):
+            log.info( "performing wordcount" )
+            os.system( APP_PDFTOPS + " " + pdfname ) 
+            os.system( APP_PS2ASCII + " " + psname + " > " + asciiname )
+            # os.system( "wc -w {0} > m.sum".format(asciiname) )
+            b_numwords = subprocess.check_output(["wc", "-w", asciiname])
+            numwords = (b_numwords.decode("utf-8").strip().split(" "))[0]
+            numwords = round(int(numwords), -2)
+            with open( "m.sum", 'w' ) as a:
+                a.write("{}".format(numwords)) 
+            # remake and rename the pdf file
+            log.info( "creating " + pdfname + " from " + get_texfilename() ) 
+            os.system( APP_LATEX + " " + get_texfilename() + \
+                " > /dev/null 2>&1" ) 
 
-        # move the resulting pdf to the requested name
-        if  os.path.exists( get_autopdfname() ):
-            if ( not (get_autopdfname() == pdfname) ): 
-                os.system( "mv " + get_autopdfname() + " " + pdfname )
+            # move the resulting pdf to the requested name
+            if  os.path.exists( get_autopdfname() ):
+                if ( not (get_autopdfname() == pdfname) ): 
+                    os.system( "mv " + get_autopdfname() + " " + pdfname )
 
 # ---------------------------------------------------------------------------
 #
