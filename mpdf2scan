@@ -1,0 +1,3 @@
+#!/bin/bash
+
+convert -resize 1200 -colorspace gray $1 $2
