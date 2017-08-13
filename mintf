@@ -1,0 +1,162 @@
+#!/usr/bin/env python3.3
+
+newfile = "test.rtf"
+
+FONT = {
+    "size" : "24",
+    "family" : "Courier"
+}
+
+MARGIN = {
+    "t" : "1440",
+    "b" : "1440",
+    "l" : "1440",
+    "r" : "1440"
+}
+
+SPACING = {
+    "paragraph" : "480",
+    "parindent" : "720",
+    "newchapb"  : "3600",
+    "newchapa"  : "360",
+    "chapsuba"  : "720"
+}
+
+TEST_SCENE = "Urbem Romam a principio reges habuere; libertatem etconsulatum L. Brutus instituit. dictaturae ad tempussumebantur; neque decemviralis potestas ultra biennium,neque tribunorum militum consulare ius diu valuit. Non Cinnae, non Sullae longa dominatio; et Pompei Crassique potentia cito in  Caesarem, Lepidi atque Antonii arma in Augustum cessere, qui cuncta discordiis civilibus fessa nomine principis sub imperium accepit."
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_preamble( f ):
+    f.write("""{{\\rtf1 \\ansi \\margt{0} \\margb{1} \\margl{2} \\margr{3}
+{{\\fonttbl {{\\f0 \\fmodern \\fcharset0 {4};}}}}
+\n""".format(MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"],
+             FONT["family"]))
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_headers( f ):
+    f.write("{\\header \\pard \\qr Rogers / SPOOK / \\chpgn \\par}\n")
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_wordcount( f, numwords ):
+    f.write("""
+\\pard \\f0 \\fs{0} \\qr
+approx. {1} words
+\\par
+\n""".format(FONT["size"], str(numwords)))
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_author( f, author ):
+    f.write("""
+\\pard \\f0 \\fs{0} \\ql
+{1} \\
+{2} \\
+{3}, {4} {5} \\
+{6} \\
+{7}
+\\par
+\n""".format(FONT["size"], author["name"], author["address"], author["city"], author["state"],
+author["zip"], author["email"], author["phone"]))
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_title(f, title, author):
+    f.write("""
+\\pard \\f0 \\fs{0} \\sl{1} \\slmulti1 \\sb3600 \\qc {2} \\par
+\\pard \\f0 \\fs{3} \\sl{4} \\slmulti1 \\qc by \\
+{5}\\
+\par\n""".format(FONT["size"], SPACING["paragraph"], title, FONT["size"],
+SPACING["paragraph"], author["name"]))
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_postamble(f):
+    f.write("\n}\n")
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_chapter_heading(f, chapter):
+    f.write("""
+\\pard \\pagebb \\f0 \\fs{0} \\sl{1} \\slmulti1 \\qc \\sb{2} \\sa{3} {{\\b {4} }}
+\\par
+\\pard \\f0 \\fs{5} \\sl{6} \\slmulti1 \\qc \\sa{7} {{\\b {8} }}
+\par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["newchapb"],
+SPACING["newchapa"], chapter["title"], FONT["size"], SPACING["paragraph"],
+SPACING["chapsuba"], chapter["subtitle"]))
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_chapter(f, chapter):
+    write_chapter_heading(f, chapter)
+    write_scene(f)
+    write_scene_separator(f)
+    write_scene(f)
+    write_scene_separator(f)
+    write_scene(f)
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_scene(f):
+    f.write("""
+\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}
+{3}
+\\par""".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"], TEST_SCENE))
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+#TODO: add SPACING, etc. in this 
+def write_scene_separator(f):
+    f.write("\n\\pard \\sl480 \\slmulti1 \\qc \\sa720 ### \\par\n")
+
+# -----------------------------------------------------------------------------
+#
+# -----------------------------------------------------------------------------
+def write_chapters(f):
+    chapter = {
+        "title" : "This is the title",
+        "subtitle" : "This is the subtitle"
+    }
+    write_chapter(f, chapter)
+
+# temporary values
+numwords = 2700
+font = "Courier"
+margin = [ "1440", "1440", "1440", "1440" ]
+author = {
+	"name"      : "David H. Rogers",
+    "address"   : "1716 Camino Uva",
+    "city"      : "Los Alamos",
+    "state"     : "NM",
+    "zip"       : "87544",
+    "email"     : "david@dhrogers.com",
+    "phone"     : "(505) 259-7557"
+}
+title = "This is The Book"
+
+# -----------------------------------------------------------------------------
+#
+# execute
+#
+# -----------------------------------------------------------------------------
+with open( newfile, "w" ) as f:
+    write_preamble(f)
+    write_headers(f)
+    write_wordcount(f, numwords)
+    write_author(f, author)
+    write_title(f, title, author)
+    write_chapters(f)
+    write_postamble(f)
+
+
