@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import argparse
 import configparser
 import json
+import os
 import textwrap
 
 # ---------------------------------------------------------------------------
@@ -198,18 +199,26 @@ SPACING["chapsuba"], chapter["title"]))
 # -----------------------------------------------------------------------------
 def write_chapter(f, chapter, chapnum):
     write_chapter_heading(f, chapter, chapnum)
+    first = True
     for scene in chapter["scenes"]:
+        if not first:
+            write_scene_separator(f)
+        else:
+            first = False
         write_scene(f, scene)
-        write_scene_separator(f)
 
 # -----------------------------------------------------------------------------
 # write a single scene 
 # -----------------------------------------------------------------------------
 def write_scene(f, scene):
-    f.write("""
-\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}
-{3}
-\\par""".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"], TEST_SCENE))
+    scenefile = os.path.join( "scenes", scene + ".md")
+    with open( scenefile, "r") as sfile:
+        data = sfile.read()
+        split = data.split("\n\n")
+        for paragraph in split:
+            f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
+            f.write( paragraph )
+            f.write("\\par\n")
 
 # -----------------------------------------------------------------------------
 # write a scene separator
