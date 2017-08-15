@@ -34,6 +34,7 @@ import argparse
 import configparser
 import json
 import os
+import re
 import textwrap
 
 # ---------------------------------------------------------------------------
@@ -94,6 +95,8 @@ parser.add_argument( "--manuscriptfile", default="manuscript.json",
     help="read manuscript definition from this file")
 parser.add_argument( "--outputfile", default="manuscript.rtf", 
     help="write output to this file")
+parser.add_argument( "--underline", action="store_true", default="False", 
+    help="instead of bold or italic, use underline to show emphasis")
 
 args = parser.parse_args(remaining_argv)
 
@@ -118,8 +121,6 @@ SPACING = {
     "chapsuba"  : "720",
     "titleskip" : "3600"
 }
-
-TEST_SCENE = "Urbem Romam a principio reges habuere; libertatem etconsulatum L. Brutus instituit. dictaturae ad tempussumebantur; neque decemviralis potestas ultra biennium,neque tribunorum militum consulare ius diu valuit. Non Cinnae, non Sullae longa dominatio; et Pompei Crassique potentia cito in  Caesarem, Lepidi atque Antonii arma in Augustum cessere, qui cuncta discordiis civilibus fessa nomine principis sub imperium accepit."
 
 # -----------------------------------------------------------------------------
 # write document preamble
@@ -205,7 +206,8 @@ def write_chapter(f, chapter, chapnum):
             write_scene_separator(f)
         else:
             first = False
-        write_scene(f, scene)
+        if not scene.endswith(".pdf"):
+            write_scene(f, scene)
 
 # -----------------------------------------------------------------------------
 # write a single scene 
@@ -214,6 +216,10 @@ def write_scene(f, scene):
     scenefile = os.path.join( "scenes", scene + ".md")
     with open( scenefile, "r") as sfile:
         data = sfile.read()
+        data = handle_footnotes(data)
+        data = sub_bold(data)
+        data = sub_italics(data)
+        data = data.strip()
         split = data.split("\n\n")
         for paragraph in split:
             f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
@@ -235,6 +241,41 @@ def write_chapters(f, manuscript):
     for chapter in manuscript["chapters"]:
         write_chapter(f, chapter, chapnum)
         chapnum += 1
+
+# -----------------------------------------------------------------------------
+# handle footnotes 
+# -----------------------------------------------------------------------------
+def handle_footnotes( data ):
+    # for now, we remove footnotes
+    # this should be changed to properly handle them
+    data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
+    data  = re.sub('\[\^(.+?)\]', '', data)
+    return data
+
+# ----------------------------------------------------------------------------- # pull footnotes # -----------------------------------------------------------------------------
+def sub_bold( data ):
+    if (args.underline == True):
+        data  = re.sub(r'\*\*(.+)\*\*', r'{\\ul \1\\ul0}', data)
+    else:
+        data  = re.sub(r'\*\*(.+)\*\*', r'{\\b \1\\b0}', data)
+    return data
+
+# -----------------------------------------------------------------------------
+# # substitute italics # -----------------------------------------------------------------------------
+def sub_italics( data ):
+    if (args.underline == True):
+        data  = re.sub(r'\*(.+)\*', r'{\\ul \1\\ul0}', data)
+    else:
+        data  = re.sub(r'\*(.+)\*', r'{\\i \1\\i0}', data)
+
+    return data
+
+#   footnotes = re.findall(r'\[\^(.+?)\]\:(.+)', data)
+#   if len(footnotes) > 0:
+#       for note in footnotes:
+#           print(note)
+            
+    return data
 
 # temporary values
 numwords = 2700
