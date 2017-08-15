@@ -276,18 +276,18 @@ def handle_footnotes( data ):
 # ----------------------------------------------------------------------------- # pull footnotes # -----------------------------------------------------------------------------
 def sub_bold( data ):
     if (args.underline == True):
-        data  = re.sub(r'\*\*(.+)\*\*', r'{\\ul \1\\ul0}', data)
+        data  = re.sub(r'\*\*([^*]+)\*\*', r'{\\ul \1\\ul0}', data)
     else:
-        data  = re.sub(r'\*\*(.+)\*\*', r'{\\b \1\\b0}', data)
+        data  = re.sub(r'\*\*([^*]+)\*\*', r'{\\b \1\\b0}', data)
     return data
 
 # -----------------------------------------------------------------------------
 # # substitute italics # -----------------------------------------------------------------------------
 def sub_italics( data ):
     if (args.underline == True):
-        data  = re.sub(r'\*(.+)\*', r'{\\ul \1\\ul0}', data)
+        data  = re.sub(r'\*([^*]+)\*', r'{\\ul \1\\ul0}', data)
     else:
-        data  = re.sub(r'\*(.+)\*', r'{\\i \1\\i0}', data)
+        data  = re.sub(r'\*([^*]+)\*', r'{\\i \1\\i0}', data)
 
     return data
 
