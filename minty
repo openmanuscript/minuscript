@@ -37,6 +37,15 @@ import os
 import re
 import textwrap
 
+
+# ---------------------------------------------------------------------------
+# global variables
+# ---------------------------------------------------------------------------
+APP_NAME        = "minty"
+APP_VERSION     = 1.0
+# temporary values
+TMP_numwords    = 2700
+
 # ---------------------------------------------------------------------------
 #
 # get initial settings from settings file, if there is one
@@ -91,8 +100,12 @@ parser = argparse.ArgumentParser(
 # parser.set_defaults(**defaults)
 parser.add_argument( "--authorfile", default="author.json",
     help="read author data from this file")
+parser.add_argument( "--filescenesep", action="store_true", default="False", 
+    help="print file name as scene separator, instead of ###")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
+parser.add_argument( "--tags", nargs='+', type=str,
+    help="add chapter tags that are considered 'on'")
 parser.add_argument( "--outputfile", default="manuscript.rtf", 
     help="write output to this file")
 parser.add_argument( "--underline", action="store_true", default="False", 
@@ -202,10 +215,13 @@ def write_chapter(f, chapter, chapnum):
     write_chapter_heading(f, chapter, chapnum)
     first = True
     for scene in chapter["scenes"]:
-        if not first:
-            write_scene_separator(f)
+        if args.filescenesep: 
+            write_scene_separator(f, scene)
         else:
-            first = False
+            if not first:
+                write_scene_separator(f, scene)
+            else:
+                first = False
         if not scene.endswith(".pdf"):
             write_scene(f, scene)
 
@@ -230,8 +246,12 @@ def write_scene(f, scene):
 # write a scene separator
 # -----------------------------------------------------------------------------
 #TODO: add SPACING, etc. in this 
-def write_scene_separator(f):
-    f.write("\n\\pard \\sl480 \\slmulti1 \\qc \\sa720 ### \\par\n")
+def write_scene_separator(f, scene):
+    if (args.filescenesep):
+        f.write("""\n\\pard \\sl480 \\slmulti1 \\qc \\sa720 ({0})
+        \\par\n""".format(scene))
+    else:
+        f.write("\n\\pard \\sl480 \\slmulti1 \\qc \\sa720 ### \\par\n")
 
 # -----------------------------------------------------------------------------
 # iterate and write all the chapters
@@ -239,8 +259,9 @@ def write_scene_separator(f):
 def write_chapters(f, manuscript):
     chapnum = 1
     for chapter in manuscript["chapters"]:
-        write_chapter(f, chapter, chapnum)
-        chapnum += 1
+        if check_chapter_tags(chapter):
+            write_chapter(f, chapter, chapnum)
+            chapnum += 1
 
 # -----------------------------------------------------------------------------
 # handle footnotes 
@@ -277,8 +298,17 @@ def sub_italics( data ):
             
     return data
 
-# temporary values
-numwords = 2700
+# ---------------------------------------------------------------------------
+# check tags of a chapter 
+# ---------------------------------------------------------------------------
+def check_chapter_tags( chapter ): 
+    result = False
+
+    if (not args.tags is None) and (("tags" in chapter) and 
+             any( i in chapter["tags"] for i in args.tags)):
+        result = True
+
+    return result
 
 # -----------------------------------------------------------------------------
 #
@@ -297,7 +327,7 @@ with open( args.manuscriptfile ) as ms_file:
 with open( args.outputfile, "w" ) as f:
     write_preamble(f)
     write_headers(f, author_data["author"], ms_data["manuscript"])
-    write_wordcount(f, numwords)
+    write_wordcount(f, TMP_numwords)
     write_author(f, author_data["author"])
     write_title(f, ms_data["manuscript"], author_data["author"])
     write_chapters(f, ms_data["manuscript"])
