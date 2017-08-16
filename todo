@@ -1,3 +1,11 @@
+Minty
+ [ ] look at using pandoc and markdown, longterm
+ [ ] Footnotes
+ [ ] Table of contents
+ [ ] convert pdf to image file, and include in the same manner as 
+     minuscript.
+
+Minuscript
 Features
  [ ] incorporate 'make_pdf' script, found in the scans directory of the
      n.nimbus repo - it's a way of converting and image to a compliant pdf
