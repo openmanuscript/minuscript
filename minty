@@ -139,11 +139,20 @@ SPACING = {
 # write document preamble
 # -----------------------------------------------------------------------------
 def write_preamble( f ):
-    f.write("""{{\\rtf1 \\titlepg \\ansi \\margt{0} \\margb{1} \\margl{2}
-    \\margr{3} \\pgnrestart \\pgnstarts0
-{{\\fonttbl {{\\f0 \\fmodern \\fcharset0 {4};}}}}
-\n""".format(MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"],
-             FONT["family"]))
+    f.write("""{{\\rtf1 \\ansi {{\\fonttbl {{\\f0 \\fmodern {0};}}}}
+\\deflang1033 \\plain \\fs24 \\widowctrl \\hyphauto \\ftnbj
+\\titlepg \\margt{1} \\margb{2} \\margl{3} \\margr{4} \\pgnrestart \\pgnstarts0
+\n""".format(FONT["family"], MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"]))
+
+# -----------------------------------------------------------------------------
+# write document metadata 
+# -----------------------------------------------------------------------------
+def write_docinfo( f ):
+    f.write("""{\\info
+{\\title This title}
+{\\author This author}
+{\\creatim\yr2017\\mo11\\dy10\\hr12\\min30}
+}\n""")
 
 # -----------------------------------------------------------------------------
 # write the common headers on all pages
@@ -215,7 +224,7 @@ def write_chapter(f, chapter, chapnum):
     write_chapter_heading(f, chapter, chapnum)
     first = True
     for scene in chapter["scenes"]:
-        if args.filescenesep: 
+        if args.filescenesep == True: 
             write_scene_separator(f, scene)
         else:
             if not first:
@@ -238,6 +247,7 @@ def write_scene(f, scene):
         data = data.strip()
         split = data.split("\n\n")
         for paragraph in split:
+            paragraph = re.sub( '\n', ' ', paragraph)
             f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
             f.write( paragraph )
             f.write("\\par\n")
@@ -247,7 +257,7 @@ def write_scene(f, scene):
 # -----------------------------------------------------------------------------
 #TODO: add SPACING, etc. in this 
 def write_scene_separator(f, scene):
-    if (args.filescenesep):
+    if (args.filescenesep == True):
         f.write("""\n\\pard \\sl480 \\slmulti1 \\qc \\sa720 ({0})
         \\par\n""".format(scene))
     else:
@@ -326,6 +336,7 @@ with open( args.manuscriptfile ) as ms_file:
 # write the file
 with open( args.outputfile, "w" ) as f:
     write_preamble(f)
+    write_docinfo(f)
     write_headers(f, author_data["author"], ms_data["manuscript"])
     write_wordcount(f, TMP_numwords)
     write_author(f, author_data["author"])
