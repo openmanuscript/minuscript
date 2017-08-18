@@ -102,6 +102,8 @@ parser.add_argument( "--authorfile", default="author.json",
     help="read author data from this file")
 parser.add_argument( "--filescenesep", action="store_true", default="False", 
     help="print file name as scene separator, instead of ###")
+parser.add_argument( "--footnotes", action="store_true", default="False", 
+    help="if there are footnotes, print them")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
 parser.add_argument( "--tags", nargs='+', type=str,
@@ -139,10 +141,12 @@ SPACING = {
 # write document preamble
 # -----------------------------------------------------------------------------
 def write_preamble( f ):
+    notes = "ftnbj"
+
     f.write("""{{\\rtf1 \\ansi {{\\fonttbl {{\\f0 \\fmodern {0};}}}}
-\\deflang1033 \\plain \\fs24 \\widowctrl \\hyphauto \\ftnbj
-\\titlepg \\margt{1} \\margb{2} \\margl{3} \\margr{4} \\pgnrestart \\pgnstarts0
-\n""".format(FONT["family"], MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"]))
+\\deflang1033 \\plain \\fs24 \\widowctrl \\hyphauto \\{1}
+\\titlepg \\margt{2} \\margb{3} \\margl{4} \\margr{5} \\pgnrestart \\pgnstarts0
+\n""".format(FONT["family"], notes, MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"]))
 
 # -----------------------------------------------------------------------------
 # write document metadata 
@@ -277,18 +281,20 @@ def write_chapters(f, manuscript):
 # handle footnotes 
 # -----------------------------------------------------------------------------
 def handle_footnotes( data ):
-    # for now, we remove footnotes
-    # this should be changed to properly handle them
-    # data  = re.sub('\[\^(.+?)\]', '', data)
-
-    # find all the footnotes
-    match = re.findall('\[\^(.+?)\]\:(.+)', data)
-    # get rid of them 
-    data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
-    # iterate through, substituting
-    for m in match:
-        data = re.sub('\[\^{0}?\]'.format(m[0]),
-                      """{{\\super\\chftn}}{{\\\\footnote\\pard\\plain\\chftn  {0}}}""".format(m[1]), data)
+    if (args.footnotes == False): 
+        # we are removing footnotes
+        data  = re.sub('\[\^(.+?)\]', '', data)
+        data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
+    else:
+        # we are creating notes of some kind
+        # find all the footnotes
+        match = re.findall('\[\^(.+?)\]\:(.+)', data)
+        # get rid of them in the data
+        data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
+        # iterate through, substituting the correct rtf code
+        for m in match:
+            data = re.sub('\[\^{0}?\]'.format(m[0]),
+                      """{{\\super\\chftn}}{{\\\\footnote\\pard\\plain\\chftn {0}}}""".format(m[1]), data)
 
     return data
 
