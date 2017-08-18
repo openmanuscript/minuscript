@@ -91,9 +91,18 @@ parser = argparse.ArgumentParser(
     epilog=textwrap.dedent('''\
         examples:
         
-          minty --manuscriptfile novel.json 
+          minty --manuscriptfile novel.json --authorfile a.json
             will parse novel.json for information about the novel, 
-            instead of the default
+            and a.json for information about the author,
+            instead of the defaults (manuscript.json and author.json)
+
+          minty --tags one two three 
+            will create an rtf file, using only chapters that 
+            are tageed with 'one' 'two' or 'three'
+
+          minty --footnotes
+            creates an rtf file, adding footnotes if they are 
+            included in the markdown files
 
             ''')
 )
