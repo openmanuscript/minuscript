@@ -115,6 +115,10 @@ parser.add_argument( "--footnotes", action="store_true", default="False",
     help="if there are footnotes, print them")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
+parser.add_argument( "--synopsis", action="store_true", default="False", 
+    help="if there is a synopsis, include it at the beginning")
+parser.add_argument( "--synopsisfile", default="synopsis.md", 
+    help="read synopsis from this file")
 parser.add_argument( "--tags", nargs='+', type=str,
     help="add chapter tags that are considered 'on'")
 parser.add_argument( "--outputfile", default="manuscript.rtf", 
@@ -143,7 +147,9 @@ SPACING = {
     "newchapb"  : "3600",
     "newchapa"  : "360",
     "chapsuba"  : "720",
-    "titleskip" : "3600"
+    "titleskip" : "3600",
+    "synopsisb" : "720",
+    "synopsisa" : "360",
 }
 
 # -----------------------------------------------------------------------------
@@ -212,6 +218,17 @@ manuscript["title"], FONT["size"],
 SPACING["paragraph"], author["name"]))
 
 # -----------------------------------------------------------------------------
+# include the synopsis
+# -----------------------------------------------------------------------------
+def write_synopsis(f):
+    f.write("""
+\\pard \\pagebb \\f0 \\fs{0} \\sl{1} \\slmulti1 \\qc \\sb{2} \\sa{3} {{\\b
+Synopsis }}
+\par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["synopsisb"],
+SPACING["synopsisa"] ))
+    write_chapter(f, args.synopsisfile, "")
+
+# -----------------------------------------------------------------------------
 # finish things up and make a valid document
 # -----------------------------------------------------------------------------
 def write_postamble(f):
@@ -229,6 +246,8 @@ def write_chapter_heading(f, chapter, chapnum):
 \par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["newchapb"],
 SPACING["newchapa"], chapnum.upper(), FONT["size"], SPACING["paragraph"],
 SPACING["chapsuba"], chapter["title"]))
+
+    write(f, args.scenefile)
 
 # -----------------------------------------------------------------------------
 # write a single chapter
@@ -365,6 +384,7 @@ with open( args.outputfile, "w" ) as f:
     write_wordcount(f, TMP_numwords)
     write_author(f, author_data["author"])
     write_title(f, ms_data["manuscript"], author_data["author"])
+    write_synopsis(f)
     write_chapters(f, ms_data["manuscript"])
     write_postamble(f)
 
