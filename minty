@@ -279,8 +279,17 @@ def write_chapters(f, manuscript):
 def handle_footnotes( data ):
     # for now, we remove footnotes
     # this should be changed to properly handle them
+    # data  = re.sub('\[\^(.+?)\]', '', data)
+
+    # find all the footnotes
+    match = re.findall('\[\^(.+?)\]\:(.+)', data)
+    # get rid of them 
     data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
-    data  = re.sub('\[\^(.+?)\]', '', data)
+    # iterate through, substituting
+    for m in match:
+        data = re.sub('\[\^{0}?\]'.format(m[0]),
+                      """{{\\super\\chftn}}{{\\\\footnote\\pard\\plain\\chftn  {0}}}""".format(m[1]), data)
+
     return data
 
 # ----------------------------------------------------------------------------- # pull footnotes # -----------------------------------------------------------------------------
