@@ -58,24 +58,6 @@ conf_parser = argparse.ArgumentParser(
 
 args, remaining_argv = conf_parser.parse_known_args()
 
-# you can set stuff here, but we're not  currently using this
-# defaults = {
-#     "sourcedir" : "defaultSourcedir",
-#     "author"    : "defaultAuthor",
-#     }
-
-# SHORT CIRCUIT
-# currently not implementing this, until the following work correctly:
-#   1. full command line options
-#   2. run-in-the-directory mode, in which the script is run in a 
-#      manuscript directory, and all the data is local
-#
-#if args.conf_file:
-#    config = ConfigParser.SafeConfigParser()
-#    config.readfp(open(args.conf_file))
-#    defaults = dict(config.items("Default"))
-
-
 # ---------------------------------------------------------------------------
 #
 # command line options
@@ -123,6 +105,10 @@ parser.add_argument( "--tags", nargs='+', type=str,
     help="add chapter tags that are considered 'on'")
 parser.add_argument( "--outputfile", default="manuscript.rtf", 
     help="write output to this file")
+parser.add_argument( "--quote", action="store_true", default="False", 
+    help="if there is a quote, include it at the beginning")
+parser.add_argument( "--quotefile", default="quote.md", 
+    help="read quote from this file")
 parser.add_argument( "--underline", action="store_true", default="False", 
     help="instead of bold or italic, use underline to show emphasis")
 
@@ -149,7 +135,9 @@ SPACING = {
     "chapsuba"  : "720",
     "titleskip" : "3600",
     "synopsisb" : "720",
-    "synopsisa" : "360",
+    "synopsisa" : "720",
+    "quoteb"    : "1440",
+    "quotea"    : "720",
 }
 
 # -----------------------------------------------------------------------------
@@ -220,13 +208,23 @@ SPACING["paragraph"], author["name"]))
 # -----------------------------------------------------------------------------
 # include the synopsis
 # -----------------------------------------------------------------------------
-def write_synopsis(f):
+def write_synopsis(f, synop):
     f.write("""
 \\pard \\pagebb \\f0 \\fs{0} \\sl{1} \\slmulti1 \\qc \\sb{2} \\sa{3} {{\\b
 Synopsis }}
 \par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["synopsisb"],
 SPACING["synopsisa"] ))
-    write_chapter(f, args.synopsisfile, "")
+    write_scene(f, synop)
+
+# -----------------------------------------------------------------------------
+# include the quote
+# -----------------------------------------------------------------------------
+def write_quote(f, quote):
+    f.write("""
+\\pard \\pagebb \\f0 \\fs{0} \\sl{1} \\slmulti1 \\qc \\sb{2} \\sa{3}
+\par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["quoteb"],
+SPACING["quotea"] ))
+    write_scene(f, quote)
 
 # -----------------------------------------------------------------------------
 # finish things up and make a valid document
@@ -246,8 +244,6 @@ def write_chapter_heading(f, chapter, chapnum):
 \par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["newchapb"],
 SPACING["newchapa"], chapnum.upper(), FONT["size"], SPACING["paragraph"],
 SPACING["chapsuba"], chapter["title"]))
-
-    write(f, args.scenefile)
 
 # -----------------------------------------------------------------------------
 # write a single chapter
@@ -270,7 +266,8 @@ def write_chapter(f, chapter, chapnum):
 # write a single scene 
 # -----------------------------------------------------------------------------
 def write_scene(f, scene):
-    scenefile = os.path.join( "scenes", scene + ".md")
+    scene = clean_scene_filename(scene)
+    scenefile = os.path.join( "scenes", scene)
     with open( scenefile, "r") as sfile:
         data = sfile.read()
         data = handle_footnotes(data)
@@ -363,6 +360,18 @@ def check_chapter_tags( chapter ):
 
     return result
 
+# ---------------------------------------------------------------------------
+# clean scene filename 
+#
+# ensure that the scene filename ends in .md, whether it has it already
+# or not
+# ---------------------------------------------------------------------------
+def clean_scene_filename(scene): 
+    if scene.endswith(".md"):
+        return scene
+    else:
+        return scene + ".md"
+
 # -----------------------------------------------------------------------------
 #
 # execute
@@ -378,13 +387,26 @@ with open( args.manuscriptfile ) as ms_file:
 
 # write the file
 with open( args.outputfile, "w" ) as f:
+    success = True
+
     write_preamble(f)
     write_docinfo(f)
     write_headers(f, author_data["author"], ms_data["manuscript"])
     write_wordcount(f, TMP_numwords)
     write_author(f, author_data["author"])
     write_title(f, ms_data["manuscript"], author_data["author"])
-    write_synopsis(f)
+    if (args.synopsis == True):
+        write_synopsis(f, args.synopsisfile)
+    if (args.quote == True):
+        write_quote(f, args.quotefile)
     write_chapters(f, ms_data["manuscript"])
     write_postamble(f)
+
+    if (success != True):
+        # remove the rtf file, it is incomplete
+        print("ERROR: not writing rtf file")
+    else:
+        print("SUCCESS")
+    
+
 
