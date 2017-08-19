@@ -378,6 +378,14 @@ def clean_scene_filename(scene):
 #
 # -----------------------------------------------------------------------------
 
+if not os.path.isfile(args.authorfile):
+    print("ERROR: cannot open file: " + args.authorfile)
+    exit(0)
+
+if not os.path.isfile(args.manuscriptfile):
+    print("ERROR: cannot open file: " + args.manuscriptfile)
+    exit(0)
+
 # read in required data, checking validity
 with open( args.authorfile ) as author_file:
     author_data = json.load( author_file )

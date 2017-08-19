@@ -1,8 +1,6 @@
 Minty
  [ ] indent quote file
  [ ] make chapter and synopsis functions the same
- [ ] look at using pandoc and markdown, longterm
- [ ] Footnotes
  [ ] Table of contents
  [ ] convert pdf to image file, and include in the same manner as 
      minuscript.
