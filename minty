@@ -91,13 +91,13 @@ parser = argparse.ArgumentParser(
 # parser.set_defaults(**defaults)
 parser.add_argument( "--authorfile", default="author.json",
     help="read author data from this file")
-parser.add_argument( "--filescenesep", action="store_true", default="False", 
+parser.add_argument( "--filescenesep", action="store_true", default=False, 
     help="print file name as scene separator, instead of ###")
-parser.add_argument( "--footnotes", action="store_true", default="False", 
+parser.add_argument( "--footnotes", action="store_true", default=False, 
     help="if there are footnotes, print them")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
-parser.add_argument( "--synopsis", action="store_true", default="False", 
+parser.add_argument( "--synopsis", action="store_true", default=False, 
     help="if there is a synopsis, include it at the beginning")
 parser.add_argument( "--synopsisfile", default="synopsis.md", 
     help="read synopsis from this file")
@@ -105,11 +105,11 @@ parser.add_argument( "--tags", nargs='+', type=str,
     help="add chapter tags that are considered 'on'")
 parser.add_argument( "--outputfile", default="manuscript.rtf", 
     help="write output to this file")
-parser.add_argument( "--quote", action="store_true", default="False", 
+parser.add_argument( "--quote", action="store_true", default=False, 
     help="if there is a quote, include it at the beginning")
 parser.add_argument( "--quotefile", default="quote.md", 
     help="read quote from this file")
-parser.add_argument( "--underline", action="store_true", default="False", 
+parser.add_argument( "--underline", action="store_true", default=False, 
     help="instead of bold or italic, use underline to show emphasis")
 
 args = parser.parse_args(remaining_argv)
@@ -252,7 +252,7 @@ def write_chapter(f, chapter, chapnum):
     write_chapter_heading(f, chapter, chapnum)
     first = True
     for scene in chapter["scenes"]:
-        if args.filescenesep == True: 
+        if args.filescenesep: 
             write_scene_separator(f, scene)
         else:
             if not first:
@@ -268,25 +268,28 @@ def write_chapter(f, chapter, chapnum):
 def write_scene(f, scene):
     scene = clean_scene_filename(scene)
     scenefile = os.path.join( "scenes", scene)
-    with open( scenefile, "r") as sfile:
-        data = sfile.read()
-        data = handle_footnotes(data)
-        data = sub_bold(data)
-        data = sub_italics(data)
-        data = data.strip()
-        split = data.split("\n\n")
-        for paragraph in split:
-            paragraph = re.sub( '\n', ' ', paragraph)
-            f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
-            f.write( paragraph )
-            f.write("\\par\n")
+    if os.path.isfile(scenefile):
+        with open( scenefile, "r") as sfile:
+            data = sfile.read()
+            data = handle_footnotes(data)
+            data = sub_bold(data)
+            data = sub_italics(data)
+            data = data.strip()
+            split = data.split("\n\n")
+            for paragraph in split:
+                paragraph = re.sub( '\n', ' ', paragraph)
+                f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
+                f.write( paragraph )
+                f.write("\\par\n")
+    else:
+        print("ERROR: can't find scene file: " + scenefile)
 
 # -----------------------------------------------------------------------------
 # write a scene separator
 # -----------------------------------------------------------------------------
 #TODO: add SPACING, etc. in this 
 def write_scene_separator(f, scene):
-    if (args.filescenesep == True):
+    if args.filescenesep:
         f.write("""\n\\pard \\sl480 \\slmulti1 \\qc \\sa720 ({0})
         \\par\n""".format(scene))
     else:
@@ -306,11 +309,7 @@ def write_chapters(f, manuscript):
 # handle footnotes 
 # -----------------------------------------------------------------------------
 def handle_footnotes( data ):
-    if (args.footnotes == False): 
-        # we are removing footnotes
-        data  = re.sub('\[\^(.+?)\]', '', data)
-        data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
-    else:
+    if args.footnotes: 
         # we are creating notes of some kind
         # find all the footnotes
         match = re.findall('\[\^(.+?)\]\:(.+)', data)
@@ -320,12 +319,16 @@ def handle_footnotes( data ):
         for m in match:
             data = re.sub('\[\^{0}?\]'.format(m[0]),
                       """{{\\super\\chftn}}{{\\\\footnote\\pard\\plain\\chftn {0}}}""".format(m[1]), data)
+    else:
+        # we are removing footnotes
+        data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
+        data  = re.sub('\[\^.+?\]', '', data)
 
     return data
 
 # ----------------------------------------------------------------------------- # pull footnotes # -----------------------------------------------------------------------------
 def sub_bold( data ):
-    if (args.underline == True):
+    if args.underline:
         data  = re.sub(r'\*\*([^*]+)\*\*', r'{\\ul \1\\ul0}', data)
     else:
         data  = re.sub(r'\*\*([^*]+)\*\*', r'{\\b \1\\b0}', data)
@@ -334,7 +337,7 @@ def sub_bold( data ):
 # -----------------------------------------------------------------------------
 # # substitute italics # -----------------------------------------------------------------------------
 def sub_italics( data ):
-    if (args.underline == True):
+    if args.underline:
         data  = re.sub(r'\*([^*]+)\*', r'{\\ul \1\\ul0}', data)
     else:
         data  = re.sub(r'\*([^*]+)\*', r'{\\i \1\\i0}', data)
@@ -378,6 +381,7 @@ def clean_scene_filename(scene):
 #
 # -----------------------------------------------------------------------------
 
+# check existence of the files we will need
 if not os.path.isfile(args.authorfile):
     print("ERROR: cannot open file: " + args.authorfile)
     exit(0)
@@ -403,9 +407,9 @@ with open( args.outputfile, "w" ) as f:
     write_wordcount(f, TMP_numwords)
     write_author(f, author_data["author"])
     write_title(f, ms_data["manuscript"], author_data["author"])
-    if (args.synopsis == True):
+    if args.synopsis:
         write_synopsis(f, args.synopsisfile)
-    if (args.quote == True):
+    if args.quote:
         write_quote(f, args.quotefile)
     write_chapters(f, ms_data["manuscript"])
     write_postamble(f)
@@ -414,7 +418,7 @@ with open( args.outputfile, "w" ) as f:
         # remove the rtf file, it is incomplete
         print("ERROR: not writing rtf file")
     else:
-        print("SUCCESS")
+        print("wrote file: " + args.outputfile)
     
 
 
