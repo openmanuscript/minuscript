@@ -272,6 +272,7 @@ def write_scene(f, scene):
         with open( scenefile, "r") as sfile:
             data = sfile.read()
             data = handle_footnotes(data)
+            data = handle_comments(data)
             data = sub_bold(data)
             data = sub_italics(data)
             data = data.strip()
@@ -323,6 +324,16 @@ def handle_footnotes( data ):
         # we are removing footnotes
         data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
         data  = re.sub('\[\^.+?\]', '', data)
+
+    return data
+
+# -----------------------------------------------------------------------------
+# remove comments 
+# -----------------------------------------------------------------------------
+def handle_comments( data ):
+    # we are removing them 
+    data  = re.sub('\[comment]\:(.+)', '', data)
+    # data  = re.sub('\[comment]\:', '', data)
 
     return data
 
