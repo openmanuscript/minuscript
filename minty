@@ -278,10 +278,11 @@ def write_scene(f, scene):
             data = data.strip()
             split = data.split("\n\n")
             for paragraph in split:
-                paragraph = re.sub( '\n', ' ', paragraph)
-                f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
-                f.write( paragraph )
-                f.write("\\par\n")
+                if not paragraph.isspace():
+                    paragraph = re.sub( '\n', ' ', paragraph)
+                    f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
+                    f.write( paragraph )
+                    f.write("\\par\n")
     else:
         print("ERROR: can't find scene file: " + scenefile)
 
@@ -332,7 +333,7 @@ def handle_footnotes( data ):
 # -----------------------------------------------------------------------------
 def handle_comments( data ):
     # we are removing them 
-    data  = re.sub('\[comment]\:(.+)', '', data)
+    data  = re.sub('\[comment]\:(.+)\n*', '', data)
     # data  = re.sub('\[comment]\:', '', data)
 
     return data
