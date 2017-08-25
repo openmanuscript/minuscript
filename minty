@@ -93,6 +93,8 @@ parser.add_argument( "--authorfile", default="author.json",
     help="read author data from this file")
 parser.add_argument( "--filescenesep", action="store_true", default=False, 
     help="print file name as scene separator, instead of ###")
+parser.add_argument( "--internaloutline", action="store_true", default=False, 
+    help="print internal outline, instead of swallowing them")
 parser.add_argument( "--footnotes", action="store_true", default=False, 
     help="if there are footnotes, print them")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
@@ -273,6 +275,7 @@ def write_scene(f, scene):
             data = sfile.read()
             data = handle_footnotes(data)
             data = handle_comments(data)
+            data = handle_internal_outline(data)
             data = sub_bold(data)
             data = sub_italics(data)
             data = data.strip()
@@ -325,6 +328,20 @@ def handle_footnotes( data ):
         # we are removing footnotes
         data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
         data  = re.sub('\[\^.+?\]', '', data)
+
+    return data
+
+# -----------------------------------------------------------------------------
+# handle internal outline 
+# -----------------------------------------------------------------------------
+def handle_internal_outline( data ):
+    if not args.internaloutline:
+        # we are removing them 
+        data  = re.sub('\<\<(.+)\>\>\n', '', data)
+    else:
+        # we make them bold 
+        data  = re.sub(r'\<\<', r'**', data)
+        data  = re.sub(r'\>\>', r'**', data)
 
     return data
 
