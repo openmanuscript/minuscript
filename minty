@@ -347,6 +347,9 @@ def handle_internal_outline( data ):
 
 # -----------------------------------------------------------------------------
 # remove comments 
+#
+# TODO: handle the case in which a comment removes part of a footnote (there
+# is no longer a match between the indicator of the note, and the footnote)
 # -----------------------------------------------------------------------------
 def handle_comments( data ):
     # we are removing them 
@@ -355,7 +358,9 @@ def handle_comments( data ):
 
     return data
 
-# ----------------------------------------------------------------------------- # pull footnotes # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# under certain conditions, substitute underlines for bold 
+# -----------------------------------------------------------------------------
 def sub_bold( data ):
     if args.underline:
         data  = re.sub(r'\*\*([^*]+)\*\*', r'{\\ul \1\\ul0}', data)
@@ -364,7 +369,8 @@ def sub_bold( data ):
     return data
 
 # -----------------------------------------------------------------------------
-# # substitute italics # -----------------------------------------------------------------------------
+# under certain conditions, substitute underlines for italics 
+# -----------------------------------------------------------------------------
 def sub_italics( data ):
     if args.underline:
         data  = re.sub(r'\*([^*]+)\*', r'{\\ul \1\\ul0}', data)
