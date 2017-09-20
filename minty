@@ -93,24 +93,24 @@ parser.add_argument( "--authorfile", default="author.json",
     help="read author data from this file")
 parser.add_argument( "--filescenesep", action="store_true", default=False, 
     help="print file name as scene separator, instead of ###")
-parser.add_argument( "--internaloutline", action="store_true", default=False, 
-    help="print internal outline, instead of swallowing them")
 parser.add_argument( "--footnotes", action="store_true", default=False, 
     help="if there are footnotes, print them")
+parser.add_argument( "--internaloutline", action="store_true", default=False, 
+    help="print internal outline, instead of swallowing them")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
-parser.add_argument( "--synopsis", action="store_true", default=False, 
-    help="if there is a synopsis, include it at the beginning")
-parser.add_argument( "--synopsisfile", default="synopsis.md", 
-    help="read synopsis from this file")
-parser.add_argument( "--tags", nargs='+', type=str,
-    help="add chapter tags that are considered 'on'")
 parser.add_argument( "--outputfile", default="manuscript.rtf", 
     help="write output to this file")
 parser.add_argument( "--quote", action="store_true", default=False, 
     help="if there is a quote, include it at the beginning")
 parser.add_argument( "--quotefile", default="quote.md", 
     help="read quote from this file")
+parser.add_argument( "--synopsis", action="store_true", default=False, 
+    help="if there is a synopsis, include it at the beginning")
+parser.add_argument( "--synopsisfile", default="synopsis.md", 
+    help="read synopsis from this file")
+parser.add_argument( "--tags", nargs='+', type=str,
+    help="add chapter tags that are considered 'on'")
 parser.add_argument( "--underline", action="store_true", default=False, 
     help="instead of bold or italic, use underline to show emphasis")
 
@@ -333,11 +333,20 @@ def handle_footnotes( data ):
 
 # -----------------------------------------------------------------------------
 # handle internal outline 
+# 
+# an internal out line is a series of entries indicated by double arrow 
+# brackets, intended to show the internal outline for a scene. Example:
+#
+#    <<this is an entry>>
+#    <<this is another entry>>
+#
+# These can be shown as bold text, or swallowed by the system, depending
+# upon the value of the flags.
 # -----------------------------------------------------------------------------
 def handle_internal_outline( data ):
     if not args.internaloutline:
         # we are removing them 
-        data  = re.sub('\<\<(.+)\>\>\n', '', data)
+        data  = re.sub('\<\<(.+)\>\>\n\n', '', data)
     else:
         # we make them bold 
         data  = re.sub(r'\<\<', r'**', data)
