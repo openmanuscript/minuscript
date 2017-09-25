@@ -103,7 +103,7 @@ parser.add_argument( "--outputfile", default="manuscript.rtf",
     help="write output to this file")
 parser.add_argument( "--quote", action="store_true", default=False, 
     help="if there is a quote, include it at the beginning")
-parser.add_argument( "--quotefile", default="quote.md", 
+parser.add_argument( "--quotefile", default="quotes.md", 
     help="read quote from this file")
 parser.add_argument( "--synopsis", action="store_true", default=False, 
     help="if there is a synopsis, include it at the beginning")
