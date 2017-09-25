@@ -254,13 +254,12 @@ def write_chapter(f, chapter, chapnum):
     write_chapter_heading(f, chapter, chapnum)
     first = True
     for scene in chapter["scenes"]:
-        if args.filescenesep: 
+        if not first:
             write_scene_separator(f, scene)
         else:
-            if not first:
+            if args.filescenesep:
                 write_scene_separator(f, scene)
-            else:
-                first = False
+            first = False
         if not scene.endswith(".pdf"):
             write_scene(f, scene)
 
