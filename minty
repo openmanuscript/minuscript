@@ -93,7 +93,7 @@ parser.add_argument( "--authorfile", default="author.json",
     help="read author data from this file")
 parser.add_argument( "--filescenesep", action="store_true", default=False, 
     help="print file name as scene separator, instead of ###")
-parser.add_argument( "--font", default="Courier", 
+parser.add_argument( "--font", default="Courier", choices=["Courier", "Times"],
     help="Use this font for the manuscript")
 parser.add_argument( "--fontsize", default="12", 
     help="Use this font size for the manuscript")
@@ -122,8 +122,9 @@ args = parser.parse_args(remaining_argv)
 
 
 FONT = {
-    "size"   : "24",
-    "family" : "Courier"
+    "size"    : "24",
+    "family"  : "Courier",
+    "tableid" : "0"
 }
 
 MARGIN = {
@@ -152,7 +153,7 @@ SPACING = {
 def write_preamble( f ):
     notes = "ftnbj"
 
-    f.write("""{{\\rtf1 \\ansi {{\\fonttbl {{\\f0 \\fmodern {0};}}}}
+    f.write("""{{\\rtf1 \\ansi {{\\fonttbl {{\\f0 \\fmodern {0};}}{{\\f1 \\froman Times;}}}}
 \\deflang1033 \\plain \\fs{1} \\widowctrl \\hyphauto \\{2}
 \\titlepg \\margt{3} \\margb{4} \\margl{5} \\margr{6} \\pgnrestart \\pgnstarts0
 \n""".format(FONT["family"], FONT["size"], notes, MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"]))
@@ -179,24 +180,24 @@ def write_headers( f, author, manuscript ):
 # -----------------------------------------------------------------------------
 def write_wordcount( f, numwords ):
     f.write("""
-\\pard \\f0 \\fs{0} \\qr
+\\pard \\f{0} \\fs{1} \\qr
 approx. {1} words
 \\par
-\n""".format(FONT["size"], str(numwords)))
+\n""".format(FONT["tableid"], FONT["size"], str(numwords)))
 
 # -----------------------------------------------------------------------------
 # write the author information
 # -----------------------------------------------------------------------------
 def write_author( f, author ):
     f.write("""
-\\pard \\f0 \\fs{0} \\ql
-{1} \\
+\\pard \\f{0} \\fs{1} \\ql
 {2} \\
-{3}, {4} {5} \\
-{6} \\
-{7}
+{3} \\
+{4}, {5} {6} \\
+{7} \\
+{8}
 \\par
-\n""".format(FONT["size"], author["name"], author["address"], author["city"], author["state"],
+\n""".format(FONT["tableid"], FONT["size"], author["name"], author["address"], author["city"], author["state"],
 author["zip"], author["email"], author["phone"]))
 
 # -----------------------------------------------------------------------------
@@ -204,22 +205,20 @@ author["zip"], author["email"], author["phone"]))
 # -----------------------------------------------------------------------------
 def write_title(f, manuscript, author):
     f.write("""
-\\pard \\f0 \\fs{0} \\sl{1} \\slmulti1 \\sb{2} \\qc {3} \\par
-\\pard \\f0 \\fs{4} \\sl{5} \\slmulti1 \\qc by \\
-{6}\\
-\par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["titleskip"],
-manuscript["title"], FONT["size"],
-SPACING["paragraph"], author["name"]))
+\\pard \\f{0} \\fs{1} \\sl{2} \\slmulti1 \\sb{3} \\qc {4} \\par
+\\pard \\f{5} \\fs{6} \\sl{7} \\slmulti1 \\qc by \\
+{8}\\
+\par\n""".format(FONT["tableid"], FONT["size"], SPACING["paragraph"],
+SPACING["titleskip"], manuscript["title"], FONT["tableid"], FONT["size"], SPACING["paragraph"], author["name"]))
 
 # -----------------------------------------------------------------------------
 # include the synopsis
 # -----------------------------------------------------------------------------
 def write_synopsis(f, synop):
     f.write("""
-\\pard \\pagebb \\f0 \\fs{0} \\sl{1} \\slmulti1 \\qc \\sb{2} \\sa{3} {{\\b
+\\pard \\pagebb \\f{0} \\fs{1} \\sl{2} \\slmulti1 \\qc \\sb{3} \\sa{4} {{\\b
 Synopsis }}
-\par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["synopsisb"],
-SPACING["synopsisa"] ))
+\par\n""".format(FONT["tableid"], FONT["size"], SPACING["paragraph"], SPACING["synopsisb"], SPACING["synopsisa"] )) 
     write_scene(f, synop)
 
 # -----------------------------------------------------------------------------
@@ -227,9 +226,8 @@ SPACING["synopsisa"] ))
 # -----------------------------------------------------------------------------
 def write_quote(f, quote):
     f.write("""
-\\pard \\pagebb \\f0 \\fs{0} \\sl{1} \\slmulti1 \\qc \\sb{2} \\sa{3}
-\par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["quoteb"],
-SPACING["quotea"] ))
+\\pard \\pagebb \\f{0} \\fs{1} \\sl{2} \\slmulti1 \\qc \\sb{3} \\sa{4}
+\par\n""".format(FONT["tableid"], FONT["size"], SPACING["paragraph"], SPACING["quoteb"], SPACING["quotea"] ))
     write_scene(f, quote)
 
 # -----------------------------------------------------------------------------
@@ -244,12 +242,11 @@ def write_postamble(f):
 def write_chapter_heading(f, chapter, chapnum):
     chapnum = "CHAPTER {0}".format(chapnum)
     f.write("""
-\\pard \\pagebb \\f0 \\fs{0} \\sl{1} \\slmulti1 \\qc \\sb{2} \\sa{3} {{\\b {4} }}
+\\pard \\pagebb \\f{0} \\fs{1} \\sl{2} \\slmulti1 \\qc \\sb{3} \\sa{4} {{\\b {5} }}
 \\par
-\\pard \\f0 \\fs{5} \\sl{6} \\slmulti1 \\qc \\sa{7} {{\\b {8} }}
-\par\n""".format(FONT["size"], SPACING["paragraph"], SPACING["newchapb"],
-SPACING["newchapa"], chapnum.upper(), FONT["size"], SPACING["paragraph"],
-SPACING["chapsuba"], chapter["title"]))
+\\pard \\f{6} \\fs{7} \\sl{8} \\slmulti1 \\qc \\sa{9} {{\\b {10} }}
+\par\n""".format(FONT["tableid"], FONT["size"], SPACING["paragraph"],
+SPACING["newchapb"], SPACING["newchapa"], chapnum.upper(), FONT["tableid"], FONT["size"], SPACING["paragraph"], SPACING["chapsuba"], chapter["title"]))
 
 # -----------------------------------------------------------------------------
 # write a single chapter
@@ -288,7 +285,8 @@ def write_scene(f, scene):
                 if paragraph: 
                     if not paragraph.isspace():
                         paragraph = re.sub( '\n', ' ', paragraph)
-                        f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f0 \\fs{2}".format(SPACING["parindent"], SPACING["paragraph"], FONT["size"]))
+                        f.write("\\pard \\fi{0} \\sl{1} \\slmult1 \\f{2} \\fs{3}".format(SPACING["parindent"],
+                        SPACING["paragraph"], FONT["tableid"], FONT["size"]))
                         f.write( paragraph )
                         f.write("\\par\n")
     else:
@@ -328,7 +326,7 @@ def handle_footnotes( data ):
         # iterate through, substituting the correct rtf code
         for m in match:
             data = re.sub('\[\^{0}?\]'.format(m[0]),
-                      """{{\\super\\chftn}}{{\\\\footnote\\pard\\plain\\chftn {0}}}""".format(m[1]), data)
+            r"""{{\\super\\chftn}}{{\\footnote\\pard\\plain\\f{0}\\fs{1}\\chftn {2}}}""".format(FONT["tableid"], FONT["size"], m[1]), data)
     else:
         # we are removing footnotes
         data  = re.sub('\[\^(.+?)\]\:(.+)', '', data)
@@ -393,13 +391,6 @@ def sub_italics( data ):
 
     return data
 
-#   footnotes = re.findall(r'\[\^(.+?)\]\:(.+)', data)
-#   if len(footnotes) > 0:
-#       for note in footnotes:
-#           print(note)
-            
-    return data
-
 # ---------------------------------------------------------------------------
 # check tags of a chapter 
 # ---------------------------------------------------------------------------
@@ -431,8 +422,14 @@ def clean_scene_filename(scene):
 # -----------------------------------------------------------------------------
 
 # override values from command line
+    # font
 FONT["family"]  = args.font
 FONT["size"]    = 2*int(args.fontsize)
+if (args.font == "Courier"):
+    FONT["tableid"] = "0"
+else:
+    FONT["tableid"] = "1"
+
 
 # check existence of the files we will need
 if not os.path.isfile(args.authorfile):
