@@ -93,6 +93,10 @@ parser.add_argument( "--authorfile", default="author.json",
     help="read author data from this file")
 parser.add_argument( "--filescenesep", action="store_true", default=False, 
     help="print file name as scene separator, instead of ###")
+parser.add_argument( "--font", default="Courier", 
+    help="Use this font for the manuscript")
+parser.add_argument( "--fontsize", default="12", 
+    help="Use this font size for the manuscript")
 parser.add_argument( "--footnotes", action="store_true", default=False, 
     help="if there are footnotes, print them")
 parser.add_argument( "--internaloutline", action="store_true", default=False, 
@@ -149,9 +153,9 @@ def write_preamble( f ):
     notes = "ftnbj"
 
     f.write("""{{\\rtf1 \\ansi {{\\fonttbl {{\\f0 \\fmodern {0};}}}}
-\\deflang1033 \\plain \\fs24 \\widowctrl \\hyphauto \\{1}
-\\titlepg \\margt{2} \\margb{3} \\margl{4} \\margr{5} \\pgnrestart \\pgnstarts0
-\n""".format(FONT["family"], notes, MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"]))
+\\deflang1033 \\plain \\fs{1} \\widowctrl \\hyphauto \\{2}
+\\titlepg \\margt{3} \\margb{4} \\margl{5} \\margr{6} \\pgnrestart \\pgnstarts0
+\n""".format(FONT["family"], FONT["size"], notes, MARGIN["t"], MARGIN["b"], MARGIN["l"], MARGIN["r"]))
 
 # -----------------------------------------------------------------------------
 # write document metadata 
@@ -168,7 +172,7 @@ def write_docinfo( f ):
 # -----------------------------------------------------------------------------
 def write_headers( f, author, manuscript ):
     f.write("{\\headerf \\pard \\qr \\par}\n")
-    f.write("{{\\header \\pard \\qr {0} / {1} / \\chpgn \\par}}\n".format(author["surname"], manuscript["runningtitle"].upper()))
+    f.write("{{\\header \\pard \\qr \\fs{0} {1} / {2} / \\chpgn \\par}}\n".format(FONT["size"], author["surname"], manuscript["runningtitle"].upper()))
 
 # -----------------------------------------------------------------------------
 # write the word count
@@ -425,6 +429,10 @@ def clean_scene_filename(scene):
 # execute
 #
 # -----------------------------------------------------------------------------
+
+# override values from command line
+FONT["family"]  = args.font
+FONT["size"]    = 2*int(args.fontsize)
 
 # check existence of the files we will need
 if not os.path.isfile(args.authorfile):
