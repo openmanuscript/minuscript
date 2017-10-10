@@ -181,7 +181,7 @@ def write_headers( f, author, manuscript ):
 def write_wordcount( f, numwords ):
     f.write("""
 \\pard \\f{0} \\fs{1} \\qr
-approx. {1} words
+approx. {2} words
 \\par
 \n""".format(FONT["tableid"], FONT["size"], str(numwords)))
 
@@ -242,7 +242,7 @@ def write_postamble(f):
 def write_chapter_heading(f, chapter, chapnum):
     chapnum = "CHAPTER {0}".format(chapnum)
     f.write("""
-\\pard \\pagebb \\f{0} \\fs{1} \\sl{2} \\slmulti1 \\qc \\sb{3} \\sa{4} {{\\b {5} }}
+\\pard \\pagebb \\f{0} \\fs{1} \\sl{2} \\slmulti1 \\qc \\sb{3} \\sa{4} {{\\tc\\b {5} }}
 \\par
 \\pard \\f{6} \\fs{7} \\sl{8} \\slmulti1 \\qc \\sa{9} {{\\b {10} }}
 \par\n""".format(FONT["tableid"], FONT["size"], SPACING["paragraph"],
