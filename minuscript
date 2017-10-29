@@ -467,7 +467,14 @@ if (args.outline):
 
             print( chapter["title"].upper() )
             if ("desc" in chapter):
+                print( " " )
                 print(chapter["desc"])
+            if ("tod" in chapter):
+                print( " " )
+                print("TIME OF DAY: " + chapter["tod"])
+            if ("story" in chapter):
+                print( " " )
+                print("STORY: " + chapter["story"])
             print( " " )
 
     exit(0)
