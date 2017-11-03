@@ -157,6 +157,27 @@ APP_INIT_MANUSCRIPT_STRING = """{{
 
 APP_INIT_LOREM_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius faucibus fermentum. Ut id nibh orci. Praesent posuere purus ac libero sagittis porttitor. Donec pulvinar sapien ligula, id ultrices ipsum interdum ac. Integer maximus lobortis nisl, eget vulputate erat ultricies id. Phasellus semper, massa sit amet porttitor finibus, mauris lacus placerat orci, in sagittis lectus leo sit amet sem. Fusce eu condimentum sapien. Proin sed sapien tortor. Donec viverra, erat eget elementum laoreet, ipsum ligula faucibus massa, non pellentesque est quam eget tellus." 
 
+APP_OUTLINE_CSS = """
+table {
+    border: 1px solid black;
+    background: grey;
+    font-size: small;
+}
+
+th {
+    background: lightgrey;
+    vertical-align: top;
+    font-size: small;
+}
+
+td {
+    background: white;
+    vertical-align: top;
+    padding: 5px 5px 5px 5px;
+    font-size: small;
+}
+"""
+
 # ---------------------------------------------------------------------------
 #
 # write the inital files needed for a manuscript 
@@ -460,23 +481,46 @@ if (args.scenelist):
     exit(0)
 
 if (args.outline):
-    print(manuscript_data["manuscript"]["title"])
-    print( " " )
+    print("<html>")
+    print("<head>")
+    print("<style>")
+    print( APP_OUTLINE_CSS )
+    print("</style>")
+    print("</head>")
+    print("<body>")
+    print("<h3>" + manuscript_data["manuscript"]["title"] + " Outline</h3>")
+    print("<table>")
+    print("<tr>")
+    print("<th style=\"width:20%\">Title</th>")
+    print("<th style=\"width:10%\">Time</th>")
+    print("<th style=\"width:35%\">Description</th>")
+    print("<th style=\"width:35%\">Story</th>")
+    print("</tr>")
     for chapter in manuscript_data["manuscript"]["chapters"]:
         if (check_chapter_tags( chapter )):
 
-            print( chapter["title"].upper() )
-            if ("desc" in chapter):
-                print( " " )
-                print(chapter["desc"])
+            print("<tr>")
+            print("<td>" + chapter["title"] + "</td>" )
+            # time of day
             if ("tod" in chapter):
-                print( " " )
-                print("TIME OF DAY: " + chapter["tod"])
+                print("<td>" + chapter["tod"] + "</td>")
+            else:
+                print("<td></td>")
+            # description
+            if ("desc" in chapter):
+                print("<td>" + chapter["desc"] + "</td>")
+            else:
+                print("<td></td>")
+            # story
             if ("story" in chapter):
-                print( " " )
-                print("STORY: " + chapter["story"])
-            print( " " )
+                print("<td>" + chapter["story"] + "</td>")
+            else:
+                print("<td></td>")
+            print("</tr>")
 
+    print("</table>")
+    print("</body>")
+    print("</html>")
     exit(0)
 
 if (args.unusedscenes):
