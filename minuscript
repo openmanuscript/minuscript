@@ -493,8 +493,9 @@ if (args.outline):
     print("<tr>")
     print("<th style=\"width:20%\">Title</th>")
     print("<th style=\"width:10%\">Time</th>")
-    print("<th style=\"width:35%\">Description</th>")
-    print("<th style=\"width:35%\">Story</th>")
+    print("<th style=\"width:10%\">Scenes</th>")
+    print("<th style=\"width:30%\">Description</th>")
+    print("<th style=\"width:30%\">Story</th>")
     print("</tr>")
     for chapter in manuscript_data["manuscript"]["chapters"]:
         if (check_chapter_tags( chapter )):
@@ -506,6 +507,11 @@ if (args.outline):
                 print("<td>" + chapter["tod"] + "</td>")
             else:
                 print("<td></td>")
+            # scenes 
+            print("<td>")
+            for scene in chapter["scenes"]:
+                print(scene + " " )
+            print("</td>")
             # description
             if ("desc" in chapter):
                 print("<td>" + chapter["desc"] + "</td>")
