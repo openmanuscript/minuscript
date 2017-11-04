@@ -44,18 +44,26 @@ import textwrap
 
 # ---------------------------------------------------------------------------
 #
-# helper function to check tags of a chapter 
+# helper function to determine if a chapter is 'on', based on the tags or
+#     the chapter title. This is determined by command line arguments
 #
 # ---------------------------------------------------------------------------
-def check_chapter_tags( chapter ): 
-    result = False
+def check_chapter_state( chapter ): 
+    tag_result = False
+    chapter_result = False
 
+    # check tags
     if ( (len(APP_TAGS) == 0) or
          (("tags" in chapter) and 
              any( i in chapter["tags"] for i in APP_TAGS)) ):
-        result = True
+        tag_result = True
 
-    return result
+    # check chapter titles
+    if ( (len(APP_CHAPTERS) == 0) or
+         chapter["title"] in APP_CHAPTERS):
+        chapter_result = True
+
+    return (tag_result and chapter_result)
 
 # ---------------------------------------------------------------------------
 #
@@ -81,7 +89,7 @@ def get_autopdfname():
 def get_scenelist( mdata ): 
     scenes = []
     for chapter in mdata["manuscript"]["chapters"]:
-        if (check_chapter_tags( chapter )):
+        if (check_chapter_state( chapter )):
             for scene in chapter["scenes"]:
                 scenes.append( scene )
     return scenes
@@ -112,6 +120,8 @@ APP_FORMAT      = "latex"
 APP_FORMAT_EXT  = ".tex"
     # a list of chapter tags
 APP_TAGS        =  []
+    # a list of chapter titles
+APP_CHAPTERS    =  []
 
 # external applications
 APP_SED         = "sed"
@@ -274,6 +284,8 @@ parser.add_argument( "--endnotes", action="store_true", default=False,
     help="write internal notes as endnotes")
 parser.add_argument( "--chapsum", action="store_true", default=False,
     help="include chapter summaries, if they are present")
+parser.add_argument( "--chapters", nargs='+', type=str,
+    help="add chapters that are considered 'on'")
 parser.add_argument( "--filescenesep", action="store_true", default=False,
     help="include file name in scene separator")
 parser.add_argument( "--footnotes", action="store_true", default=False,
@@ -372,6 +384,10 @@ if args.tags is not None:
     for value in args.tags:
         APP_TAGS.append( value )
 
+if args.chapters is not None:
+    for value in args.chapters:
+        APP_CHAPTERS.append( value )
+
 if ( args.manuscriptname == "notDefined" ):  
     args.manuscriptname = \
         os.path.splitext(os.path.basename(args.manuscriptfile))[0]
@@ -466,7 +482,7 @@ if (args.scenecheck):
     print( "Scenes used more than once in " + args.manuscriptfile + ":" )
     print( " " )
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_tags( chapter )):
+        if (check_chapter_state( chapter )):
             for scene in chapter["scenes"]:
                 if scene in seen: 
                     print("    " + scene)
@@ -498,7 +514,7 @@ if (args.outline):
     print("<th style=\"width:30%\">Story</th>")
     print("</tr>")
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_tags( chapter )):
+        if (check_chapter_state( chapter )):
 
             print("<tr>")
             print("<td>" + chapter["title"] + "</td>" )
@@ -547,7 +563,7 @@ if  not os.path.exists( APP_BUILDDIR ):
     os.makedirs( APP_BUILDDIR ) 
 
 for chapter in manuscript_data["manuscript"]["chapters"]:
-    if (check_chapter_tags( chapter )):
+    if (check_chapter_state( chapter )):
 
         # get all the files that need to be converted
         allfiles = chapter["scenes"]
@@ -910,7 +926,7 @@ with open( get_texfilename(), 'w' ) as out:
 
     # iterate through chapters and scenes
     for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_tags( chapter )):
+        if (check_chapter_state( chapter )):
 
             # write chapters
             if ( args.toc == True ):
