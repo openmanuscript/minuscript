@@ -285,7 +285,7 @@ parser.add_argument( "--endnotes", action="store_true", default=False,
 parser.add_argument( "--chapsum", action="store_true", default=False,
     help="include chapter summaries, if they are present")
 parser.add_argument( "--chapters", nargs='+', type=str,
-    help="add chapters that are considered 'on'")
+    help="define chapters that are considered 'on'")
 parser.add_argument( "--filescenesep", action="store_true", default=False,
     help="include file name in scene separator")
 parser.add_argument( "--footnotes", action="store_true", default=False,
