@@ -122,6 +122,9 @@ APP_FORMAT_EXT  = ".tex"
 APP_TAGS        =  []
     # a list of chapter titles
 APP_CHAPTERS    =  []
+    # a list of widths for columns in an outline
+APP_OUTLINE_COL_WIDTHS = {'title': '25', 'tod': '5', 'setting': '5', 'scenes':
+'5', 'desc': '30', 'story': '30'}
 
 # external applications
 APP_SED         = "sed"
@@ -306,6 +309,9 @@ parser.add_argument( "--numwords", default="notDefined",
     help="override the wordcount with this number.")
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
+parser.add_argument( "--outlinecols", nargs="+", default = ["Title", "TOD",
+"Setting", "Scenes", "Desc", "Story"], 
+    help="set which columns of the outline to print when creating outline")
 parser.add_argument( "--poetry", action="store_true", default=False,
     help="the manuscript is a collection of poems")
 parser.add_argument( "--quotes", action="store_true", default=False,
@@ -507,37 +513,22 @@ if (args.outline):
     print("<h3>" + manuscript_data["manuscript"]["title"] + " Outline</h3>")
     print("<table>")
     print("<tr>")
-    print("<th style=\"width:20%\">Title</th>")
-    print("<th style=\"width:10%\">Time</th>")
-    print("<th style=\"width:10%\">Scenes</th>")
-    print("<th style=\"width:30%\">Description</th>")
-    print("<th style=\"width:30%\">Story</th>")
+    for col in args.outlinecols:
+        print("<th style=\"width:{0}%\">{1}</th>".
+            format(APP_OUTLINE_COL_WIDTHS[col.lower()], col))
     print("</tr>")
     for chapter in manuscript_data["manuscript"]["chapters"]:
         if (check_chapter_state( chapter )):
-
             print("<tr>")
-            print("<td>" + chapter["title"] + "</td>" )
-            # time of day
-            if ("tod" in chapter):
-                print("<td>" + chapter["tod"] + "</td>")
-            else:
-                print("<td></td>")
-            # scenes 
-            print("<td>")
-            for scene in chapter["scenes"]:
-                print(scene + " " )
-            print("</td>")
-            # description
-            if ("desc" in chapter):
-                print("<td>" + chapter["desc"] + "</td>")
-            else:
-                print("<td></td>")
-            # story
-            if ("story" in chapter):
-                print("<td>" + chapter["story"] + "</td>")
-            else:
-                print("<td></td>")
+            for col in args.outlinecols:
+                if (col.lower() in chapter):
+                    if (col == "Scenes"):
+                        print("<td>{0}</td>".
+                            format(" ".join(chapter[col.lower()])))
+                    else:
+                        print("<td>{0}</td>".format(chapter[col.lower()]))
+                else:
+                    print("<td></td>")
             print("</tr>")
 
     print("</table>")
