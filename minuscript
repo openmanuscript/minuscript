@@ -123,8 +123,15 @@ APP_TAGS        =  []
     # a list of chapter titles
 APP_CHAPTERS    =  []
     # a list of widths for columns in an outline
-APP_OUTLINE_COL_WIDTHS = {'title': '25', 'tod': '5', 'setting': '5', 'scenes':
-'5', 'desc': '30', 'story': '30'}
+APP_OUTLINE_COL_WIDTHS = {
+    'title': '25', 
+    'tod': '5', 
+    'pov': '5', 
+    'setting': '5', 
+    'scenes': '5', 
+    'desc': '30', 
+    'story': '30'
+}
 
 # external applications
 APP_SED         = "sed"
@@ -310,7 +317,7 @@ parser.add_argument( "--numwords", default="notDefined",
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
 parser.add_argument( "--outlinecols", nargs="+", default = ["Title", "TOD",
-"Setting", "Scenes", "Desc", "Story"], 
+    "POV", "Setting", "Scenes", "Desc", "Story"], 
     help="set which columns of the outline to print when creating outline")
 parser.add_argument( "--poetry", action="store_true", default=False,
     help="the manuscript is a collection of poems")
@@ -503,6 +510,7 @@ if (args.scenelist):
     exit(0)
 
 if (args.outline):
+    chapnum = 1;
     print("<html>")
     print("<head>")
     print("<style>")
@@ -513,6 +521,7 @@ if (args.outline):
     print("<h3>" + manuscript_data["manuscript"]["title"] + " Outline</h3>")
     print("<table>")
     print("<tr>")
+    print("<th style=\"width:1%\">No.</th>")
     for col in args.outlinecols:
         print("<th style=\"width:{0}%\">{1}</th>".
             format(APP_OUTLINE_COL_WIDTHS[col.lower()], col))
@@ -520,6 +529,8 @@ if (args.outline):
     for chapter in manuscript_data["manuscript"]["chapters"]:
         if (check_chapter_state( chapter )):
             print("<tr>")
+            print("<td>{0}</td>".format(chapnum))
+            chapnum = chapnum + 1
             for col in args.outlinecols:
                 if (col.lower() in chapter):
                     if (col == "Scenes"):
