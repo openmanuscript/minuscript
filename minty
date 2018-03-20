@@ -36,6 +36,7 @@ import json
 import os
 import re
 import textwrap
+import subprocess
 
 
 # ---------------------------------------------------------------------------
@@ -43,8 +44,11 @@ import textwrap
 # ---------------------------------------------------------------------------
 APP_NAME        = "minty"
 APP_VERSION     = 1.0
+APP_SED         = "sed"
 # temporary values
-TMP_numwords    = 2700
+TMP_numwords    = 10
+    # total number of words in document
+NUM_WORDS       = 0
 
 # ---------------------------------------------------------------------------
 #
@@ -181,7 +185,7 @@ def write_headers( f, author, manuscript ):
 def write_wordcount( f, numwords ):
     f.write("""
 \\pard \\f{0} \\fs{1} \\qr
-approx. {2} words
+TMPPROX
 \\par
 \n""".format(FONT["tableid"], FONT["size"], str(numwords)))
 
@@ -268,14 +272,19 @@ def write_chapter(f, chapter, chapnum):
 # write a single scene 
 # -----------------------------------------------------------------------------
 def write_scene(f, scene):
+    global NUM_WORDS
     scene = clean_scene_filename(scene)
     scenefile = os.path.join( "scenes", scene)
+
     if os.path.isfile(scenefile):
         with open( scenefile, "r") as sfile:
             data = sfile.read()
             data = handle_footnotes(data)
             data = handle_comments(data)
             data = handle_internal_outline(data)
+            # count the number of words in the file
+            count = data.split()
+            NUM_WORDS += len(count)
             data = sub_bold(data)
             data = sub_italics(data)
             data = data.strip()
@@ -289,8 +298,10 @@ def write_scene(f, scene):
                         SPACING["paragraph"], FONT["tableid"], FONT["size"]))
                         f.write( paragraph )
                         f.write("\\par\n")
+        return count
     else:
         print("ERROR: can't find scene file: " + scenefile)
+        return 0
 
 # -----------------------------------------------------------------------------
 # write a scene separator
@@ -470,5 +481,14 @@ with open( args.outputfile, "w" ) as f:
     else:
         print("wrote file: " + args.outputfile)
     
+# substitute the total number of words
+newText = ""
+rounded = NUM_WORDS - NUM_WORDS % -100
+with open(args.outputfile, "r") as f:
+    newText = f.read().replace("TMPPROX", 
+                               "approx. {} words".format(rounded))
+
+with open(args.outputfile, "w") as f:
+    f.write(newText)
 
 
