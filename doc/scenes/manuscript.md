@@ -15,6 +15,3 @@ You can save different embodiments of the manuscript by saving different `json` 
     - `minuscript --manuscript slow-buildup.json --manuscript buildup`
 - now you have two pdf files, one called `dramatic.pdf` and one called `buildup.pdf`
 - read and compare them
-- we note that you could also change the `runningtitle` tag in the `manuscript.json` file, and then run the following commands to achieve the same final result. Which method you choose is up to you. 
-    - `minuscript --manuscript dramatic-opening.json`
-    - `minuscript --manuscript slow-buildup.json`

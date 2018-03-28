@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+
+import json
+import sys
+
+input  = "products.json"
+
+name = sys.argv[1]
+
+products = "" 
+
+notFound = True
+
+with open( input ) as products_file:
+    products_data = json.load( products_file )
+
+for p in products_data["outputs"]:
+
+    products += p["name"] + " "
+    if (p["name"] == name):
+        # required
+        command = "minuscript --manuscriptfile " + p["manuscriptfile"] + " --author " + p["authorfile"] 
+
+        # optional
+        if "output" in p:
+            command += " --manuscriptname " + p["output"]
+
+        if "wordcount" in p:
+            command += " --wordcount"
+
+        print(command)
+        notFound = False
+
+if (notFound):
+    print(name + " not found: " + products)

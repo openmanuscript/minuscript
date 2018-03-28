@@ -10,7 +10,11 @@
         },
         {
             "title"  : "Workflow",
-            "scenes" : ["workflow", "directories"]
+            "scenes" : ["workflow"]
+        },
+        {
+            "title"  : "Data Specification",
+            "scenes" : ["directories"]
         },
         {
             "title"  : "What is a Manuscript?",
