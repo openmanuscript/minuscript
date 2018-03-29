@@ -10,7 +10,7 @@
         },
         {
             "title"  : "Workflow",
-            "scenes" : ["workflow"]
+            "scenes" : ["workflow", "structure"]
         },
         {
             "title"  : "Data Specification",

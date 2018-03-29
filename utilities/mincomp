@@ -2,7 +2,7 @@
 
 # ---------------------------------------------------------------------------
 #
-# mcompile, a compile tool for the minuscript format 
+# mincomp, a compile tool for the minuscript format 
 #
 # ---------------------------------------------------------------------------
 """
@@ -40,7 +40,6 @@ import textwrap
 
 APP_version  = "1.0"
 APP_input    = "products.json"
-APP_products = "" 
 
 # ---------------------------------------------------------------------------
 #
@@ -134,10 +133,6 @@ if (args.product == "none"):
         print(p)
     exit(0)
 
-if (len(args.product) == 0 ): 
-    print("help message")
-    exit(0)
-
 if not os.path.isfile(APP_input):
     print("ERROR: can't find expected file: " + APP_input)
     exit(0)
@@ -147,7 +142,6 @@ with open( APP_input ) as products_file:
 
 for p in products_data["outputs"]:
 
-    APP_products += p["name"] + " "
     if (p["name"] == args.product):
         # required
         command = "minuscript --manuscriptfile " + p["manuscriptfile"] + " --author " + p["authorfile"] 
@@ -233,4 +227,6 @@ for p in products_data["outputs"]:
         os.system(command)
 
 if (notFound):
-    print("product \"" + args.product + "\" not found. Valid products: " + APP_products)
+    print("ERROR: product \"" + args.product + "\" not found. Valid products:")
+    for p in get_products(APP_input):
+        print("    " + p)
