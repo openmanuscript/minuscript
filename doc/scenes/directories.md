@@ -19,6 +19,7 @@ This is a specification for manuscript v1.0, a database for a text-based workflo
 
 - `scenes/` (required). This is a directory containing scene files. There may be
   unused scenes (scenes not noted in a `manuscript` file).
+  
     1. `<scene name>.md` (required). One or more scene files, as called out
        in the `manuscript` file. A scene file is in `multimarkdown` format. 
 
@@ -124,6 +125,7 @@ The content of the value for each key is not examined for correctness - each is 
 
   **CHAPTER** Chapter ordering is implicit in the ordering of the chapters in 
   the file. Ordering of `scenes` is explicit in the array of scenes.
+
     1. `version` the version of this specification the file follows. Valid
        values are `[1.0]`.
     2. `title` The full title of the manuscript.
