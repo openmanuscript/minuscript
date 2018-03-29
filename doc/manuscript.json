@@ -17,6 +17,10 @@
             "scenes" : ["directories"]
         },
         {
+            "title"  : "Transformation from Data to Manuscript",
+            "scenes" : ["transformation"]
+        },
+        {
             "title"  : "What is a Manuscript?",
             "scenes" : ["manuscript"]
         },

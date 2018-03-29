@@ -7,6 +7,10 @@ Minty
 
 Minuscript
 Features
+ [ ] name chapter key/value pair 'summary' instead of 'desc' to be consistent
+     with the ways it is used (in particular, the CLA for chapsum
+ [ ] collapse 'poetry, stories, and manuscript' into a single CLO
+     'manuscripttype' or something
  [ ] incorporate 'make_pdf' script, found in the scans directory of the
      n.nimbus repo - it's a way of converting and image to a compliant pdf
  [ ] bug: if you use --endnotes and there are none, ms fails
