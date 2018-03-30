@@ -94,6 +94,11 @@ def get_scenelist( mdata ):
                 scenes.append( scene )
     return scenes
 
+# ---------------------------------------------------------------------------
+#
+# helper function gets unused scenes 
+#
+# ---------------------------------------------------------------------------
 def get_unused_scenelist( mdata ): 
     scenes = get_scenelist( mdata ) 
     unused = []
@@ -104,6 +109,16 @@ def get_unused_scenelist( mdata ):
         if base not in scenes:
             unused.append(base)
     return unused
+
+# ---------------------------------------------------------------------------
+#
+# write the scene separator as the current scene number 
+#
+# ---------------------------------------------------------------------------
+def write_filescenesep( f, scene ):
+    f.write("\\begin{center}\\footnotesize{(" + scene + ")}\end{center}\n")
+    f.write("\\bigskip\n")
+
 # ---------------------------------------------------------------------------
 #
 # global variables
@@ -965,8 +980,7 @@ with open( get_texfilename(), 'w' ) as out:
                 curscene += 1
 
                 if (args.filescenesep == True):
-                    out.write("\\begin{center}\\footnotesize{(" + scene + ")}\end{center}\n")
-                    out.write("\\bigskip\n")
+                    write_filescenesep( out, scene )
 
                 if scene.endswith(".pdf"): 
                     scene_name = os.path.basename( scene )
@@ -978,8 +992,9 @@ with open( get_texfilename(), 'w' ) as out:
                         scene + "\"}\n")
                     out.write("\\endgroup\n")
                     if (curscene != numscenes):
-                        out.write("\\sceneseparator\n")
-                        out.write("\n")
+                        if (args.filescenesep == False):
+                            out.write("\\sceneseparator\n")
+                            out.write("\n")
             out.write("\n")
 
     # end notes
