@@ -100,9 +100,9 @@ parser = argparse.ArgumentParser(
           mcompile 
             print the list of products that can be compiled.
 
-          mcompile <product> 
+          mcompile [product] 
             look in the local products.json file, and compile
-            product <product> if it exists. If it doesn't exist,
+            product [product] if it exists. If it doesn't exist,
             exit and report list of possible products.
 
             ''')
