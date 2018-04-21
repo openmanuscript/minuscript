@@ -140,6 +140,21 @@ if not os.path.isfile(APP_input):
 with open( APP_input ) as products_file:
     products_data = json.load( products_file )
 
+if (args.product == "clean"):
+    print("Cleaning up project ...\n")
+
+    for p in products_data["outputs"]:
+        if (p["name"] == "clean"):
+            if ("files" in p):
+                print("FILES: " + p["files"] + "\n")
+                os.system("rm -f " + p["files"])
+            if ("directories" in p):
+                print("DIRECTORIES: " + p["directories"] + "\n")
+                os.system("rm -rf " + p["directories"])
+            exit(0)
+    print("ERROR: product \'clean\' does not exist ...")
+    exit(0)
+
 for p in products_data["outputs"]:
 
     if (p["name"] == args.product):

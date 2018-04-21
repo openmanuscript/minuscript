@@ -139,13 +139,13 @@ APP_TAGS        =  []
 APP_CHAPTERS    =  []
     # a list of widths for columns in an outline
 APP_OUTLINE_COL_WIDTHS = {
-    'title': '25', 
+    'title': '15', 
     'tod': '5', 
     'pov': '5', 
     'setting': '5', 
     'scenes': '5', 
     'desc': '30', 
-    'story': '30'
+    'story': '40'
 }
 
 # external applications
