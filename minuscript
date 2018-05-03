@@ -215,7 +215,7 @@ td {
 
 # ---------------------------------------------------------------------------
 #
-# write the inital files needed for a manuscript 
+# write the initial files needed for a manuscript 
 #
 # ---------------------------------------------------------------------------
 def write_initial_files( directory ):
