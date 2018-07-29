@@ -6,6 +6,7 @@ Minty
      minuscript.
 
 Minuscript
+ [ ] add filename to outline workflow, instead of printing to command line
  [ ] Check on 'phantomsection' - should all of this be removed?
  [ ] name chapter key/value pair 'summary' instead of 'desc' to be consistent
      with the ways it is used (in particular, the CLA for chapsum

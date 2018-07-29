@@ -212,6 +212,9 @@ for p in products_data["outputs"]:
             if (p["filescenesep"] == "true"):
                 command += " --filescenesep"
 
+        if "outline" in p:
+            command += " --outline "
+
         if "toc" in p:
             if (p["toc"] == "true"):
                 command += " --toc"

@@ -536,7 +536,7 @@ if (args.outline):
     print("<h3>" + manuscript_data["manuscript"]["title"] + " Outline</h3>")
     print("<table>")
     print("<tr>")
-    print("<th style=\"width:1%\">No.</th>")
+    print("<th style=\"width:1%\">Chapter</th>")
     for col in args.outlinecols:
         print("<th style=\"width:{0}%\">{1}</th>".
             format(APP_OUTLINE_COL_WIDTHS[col.lower()], col))
