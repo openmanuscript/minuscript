@@ -2,7 +2,7 @@
 
 # ---------------------------------------------------------------------------
 #
-# mincomp, a compile tool for the minuscript format 
+# mmake, a compile tool for the minuscript format 
 #
 # ---------------------------------------------------------------------------
 """
@@ -97,10 +97,10 @@ parser = argparse.ArgumentParser(
     epilog=textwrap.dedent('''\
         examples:
         
-          mcompile 
+          mmake 
             print the list of products that can be compiled.
 
-          mcompile [product] 
+          mmake [product] 
             look in the local products.json file, and compile
             product [product] if it exists. If it doesn't exist,
             exit and report list of possible products.
