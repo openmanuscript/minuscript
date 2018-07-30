@@ -6,7 +6,6 @@ Minty
      minuscript.
 
 Minuscript
- [ ] add filename to outline workflow, instead of printing to command line
  [ ] Check on 'phantomsection' - should all of this be removed?
  [ ] name chapter key/value pair 'summary' instead of 'desc' to be consistent
      with the ways it is used (in particular, the CLA for chapsum
@@ -14,12 +13,12 @@ Minuscript
      'manuscripttype' or something
  [ ] incorporate 'make_pdf' script, found in the scans directory of the
      n.nimbus repo - it's a way of converting and image to a compliant pdf
- [ ] bug: if you use --endnotes and there are none, ms fails
  [ ] test synopsis file option. Should now report if a synopsis file isn't
      found and translated to the build directory
  [ ] check for existence of the scene files before doing anything
  [ ] create settings.min (minuscript settings file) that resides in the same
      directory as the manuscript, and controls things in the layout
+ [x] bug: if you use --endnotes and there are none, ms fails
  [x] "--init" likely no longer works, b/c the files are no longer being
      installed. Determine how best to fix that.
  [x] remove mentions of texcount in docs - it's no longer needed
