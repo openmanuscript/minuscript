@@ -6,30 +6,37 @@
     "chapters" : [
         {
             "title"  : "Overview",
+            "tags"   : ["docs"], 
             "scenes" : ["overview", "principles", "dependencies"]
         },
         {
             "title"  : "Workflow",
+            "tags"   : ["docs"], 
             "scenes" : ["workflow", "structure"]
         },
         {
             "title"  : "Data Specification",
+            "tags"   : ["docs", "spec"], 
             "scenes" : ["directories"]
         },
         {
             "title"  : "Transformation from Data to Manuscript",
+            "tags"   : ["docs"], 
             "scenes" : ["transformation"]
         },
         {
             "title"  : "What is a Manuscript?",
+            "tags"   : ["docs"], 
             "scenes" : ["manuscript"]
         },
         {
             "title"  : "Try This",
+            "tags"   : ["docs"], 
             "scenes" : ["trythis"]
         },
         {
             "title"  : "Scans As Part of the Workflow",
+            "tags"   : ["docs"], 
             "scenes" : ["pdf", "scans/lorem.pdf", "scans/ipsum.pdf", "end"]
         }
     ]

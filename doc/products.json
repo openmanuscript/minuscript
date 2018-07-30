@@ -1,0 +1,27 @@
+{
+"version" : "1.0",
+"outputs" : [
+    {
+        "name"           : "clean",
+        "files"          : "documentation.pdf specification.pdf"
+    },
+    {
+        "name"           : "docs",
+        "manuscriptfile" : "manuscript.json",
+        "authorfile"     : "author.json",
+        "toc"            : "true",
+        "wordcount"      : "true",
+        "fontfamily"     : "courier",
+        "tags"           : "docs",
+        "output"         : "documentation.pdf"
+    },
+    {
+        "name"           : "spec",
+        "manuscriptfile" : "manuscript.json",
+        "authorfile"     : "author.json",
+        "fontfamily"     : "courier",
+        "tags"           : "spec",
+        "output"         : "specification.pdf"
+    }
+]
+}
