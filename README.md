@@ -4,6 +4,8 @@
 
 Thanks for your interest in `minuscript`, software to support a minimal manuscript workflow for writing fiction.
 
+Project web page is: http://www.minuscript.org
+
 To me, the most important thing is getting ideas from raw writing to finished manuscript with the least intellectual burden possible. This software supports a versioned, text-only system that's easy to use, add new content to, and re-organize - all in the service of creating stories. 
 
 This is the simplest, most robust, least tool-confined workflow I could come up with. The files you create are simple text files that can be edited by any text editor. No need to worry about which version of Word you started with.
