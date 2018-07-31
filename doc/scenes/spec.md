@@ -51,11 +51,21 @@ The Open Manuscript data specification is a set of files and directories contain
 **AUTHOR.JSON File**
 The content of the value for each key is not examined for correctness - each is simply treated as a string. Each must follow proper `JSON` formats for strings.
 
-- `version` the version of this specification the file follows. Valid
-  values are [1.0].
-- `(key, value)` pairs for metadat are shown in the specification below. All are
-  required. The contents of the value string for each pair are not checked for
-  proper formatting.
+- **version** (required) the version of this specification the file follows. 
+  Valid values are [1.0].
+- **name** The author's full name. Can be a list of names. The string is not
+  checked for any formatting constraints (required).
+- **surname** A single name, to be included in the header for each manuscript
+  page, per standard manuscript formatting (required).
+- **email** The author's email address (required).
+- **phone** The author's phone number (required).
+- **website** The author's website (optional).
+- **addressLocality** String with "City, Country" (required). In the Case of 
+  the U.S. the country need not be present.
+- **addressRegion** State (optional). As needed, if the country has entities 
+  such as states. included.
+- **postalCode** Zip or other postal code (required).
+- **streetAddress** Street address (required).
 - Other valid `JSON` data may be present, but is not part of this    
   specification.
 
@@ -73,7 +83,7 @@ The content of the value for each key is not examined for correctness - each is 
         "addressLocality"   : String, (city)
         "addressRegion"     : String, (state)
         "postalCode"        : String, (zip)
-        "streeAddress"      : String
+        "streetAddress"     : String
     }
     }
 
