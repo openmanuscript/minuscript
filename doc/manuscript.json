@@ -17,7 +17,7 @@
         {
             "title"  : "Data Specification",
             "tags"   : ["docs", "spec"], 
-            "scenes" : ["directories"]
+            "scenes" : ["spec"]
         },
         {
             "title"  : "Transformation from Data to Manuscript",
