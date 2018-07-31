@@ -1,31 +1,36 @@
-This is a specification for manuscript v1.0, a database for a text-based workflow for creating manuscripts. There are a set of required and optional directories and files. This specification allows other files and directories to be present under the main manuscript directory, but they are not part of this  specification. 
+This is a specification for Open Manuscript v1.0, a database for a text-based workflow for creating manuscripts. There are a set of required and optional directories and files. This specification allows other files and directories to be present under the main manuscript directory, but they are not part of this  specification. 
 
 At the most basic level, a manuscript is a pairing of an author and a sequence
-of chapters. Meta data tags througout the specification capture additional data
+of chapters. Meta data tags throughout the specification capture additional data
 that can be included to enrich a properly formatted manuscript.
 
-- `manuscript/` directory (required). This is the top level of the data. This
-  specification imposes no restrictions on naming this directory.
+**OPEN MANUSCRIPT DATA SPECIFICATION**
 
-- `author file` (required). A properly formatted `JSON` file describing the 
+The Open Manuscript data specification is a set of files and directories contained within a single top level directory.
+
+- **manuscript directory** (required) top level directory (required). This is 
+  the top level of the data. This specification imposes no restrictions on 
+  naming this directory.
+
+- **author_file** (required). A properly formatted `JSON` file describing the 
   author of this manuscript. The specification is below. Name is not specified
-  by this document. 
+  by this document. There must be at least one author file.
 
-- `manuscript file` (required). A properly formatted `JSON` file that 
+- **manuscript_file** (required). A properly formatted `JSON` file that 
   describes the names and order of the chapters, and which scenes go into 
   them. The specification is below. Name of this file is not specified by this
-  document.
+  document. There must be at least one manuscript file.
 
-- `scans/` (optional). This is a directory for scanned pages that can be 
+- **scans/** (optional). This is a directory for scanned pages that can be 
   incorporated into the manuscript. The assumption is that a single scan is
   a scan of a full page of notes, a typewritten page, or other non-digital
   writing. Scans can be one of the supported image types: [.pdf, .jpg, .png].
 
-- `scenes/` (required). This is a directory containing scene files. There may be
-  unused scenes (scenes not noted in a `manuscript` file).
+- **scenes/** (required). This is a directory containing scene files. There may 
+  be unused scenes (scenes not noted in a `manuscript` file).
   
 ```
-    EXAMPLE
+    EXAMPLE of manuscript data
 
     adventure/
         author.json
@@ -48,7 +53,8 @@ The content of the value for each key is not examined for correctness - each is 
 
 - `version` the version of this specification the file follows. Valid
   values are [1.0].
-- All other values have no restrictions.
+- Other valid `JSON` data may be present, but is not part of this    
+  specification.
 
 ```
     SPECIFICATION of author.json file
@@ -88,22 +94,19 @@ The content of the value for each key is not examined for correctness - each is 
 ```
 
 **MANUSCRIPT file**
-The manuscript file contains the information needed to construct a manuscript,
-which is defined as a series of chapters made up of scenes. The basic file unit
-in this specification is the *scene*. A manuscript file is therefore a series of
-chapters, made up of scene files, with a small amount of additional information.
+The manuscript file defines a series of chapters, each of which is made up of
+scenes. The basic file unit in this specification is the *scene*. Most
+everything else is metadata. 
 
-- `version` the version of this specification the file follows. Valid
-   values are `[1.0]`.
-- `title` The full title of the manuscript.
-- `runningtitle` A one word title, included in each page's header, per 
-   common manuscript formatting. 
-- `chapters` A list of chapters. a `chapter` is defined below. A chapter 
-   is an array of scenes, with metadata. The following `(key,value)` pairs 
-   are defined by this specification. Other `(key,value)` pairs
-   may be present, but are not part of this specification. 
+- **version** the version of this specification the file follows. Valid
+  values are `[1.0]`.
+- **title** The full title of the manuscript.
+- **runningtitle** A one word title, included in each page's header, per 
+  common manuscript formatting. 
+- **chapters** A list of chapters. a `chapter` is defined below. A chapter 
+  is an array of scenes, with metadata. 
 - Other valid `JSON` data may be present, but is not part of this    
-   specification.
+  specification.
 
 ```
     SPECIFICATION of manuscript.json file
@@ -155,6 +158,8 @@ Chapter ordering is implicit in the file. Ordering of *scenes* is explicit in th
 - **tags** An array of strings used to define collections of chapters.
 - **title** The title of the chapter.
 - **tod** Time of day. Any string is valid.
+- Other valid `JSON` data may be present, but is not part of this    
+  specification.
 
 ```
     CHAPTER specification
