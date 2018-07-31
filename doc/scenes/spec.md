@@ -8,7 +8,7 @@ that can be included to enrich a properly formatted manuscript.
 
 The Open Manuscript data specification is a set of files and directories contained within a single top level directory.
 
-- **manuscript directory** (required) top level directory (required). This is 
+- **manuscript directory** (required). Top level directory. This is 
   the top level of the data. This specification imposes no restrictions on 
   naming this directory.
 
@@ -53,6 +53,9 @@ The content of the value for each key is not examined for correctness - each is 
 
 - `version` the version of this specification the file follows. Valid
   values are [1.0].
+- `(key, value)` pairs for metadat are shown in the specification below. All are
+  required. The contents of the value string for each pair are not checked for
+  proper formatting.
 - Other valid `JSON` data may be present, but is not part of this    
   specification.
 
@@ -67,10 +70,10 @@ The content of the value for each key is not examined for correctness - each is 
         "email"     : String,
         "phone"     : String,
         "website"   : String,
-        "address"   : String,
-        "city"      : String,
-        "state"     : String,
-        "zip"       : String
+        "addressLocality"   : String, (city)
+        "addressRegion"     : String, (state)
+        "postalCode"        : String, (zip)
+        "streeAddress"      : String
     }
     }
 
@@ -85,10 +88,10 @@ The content of the value for each key is not examined for correctness - each is 
         "email"     : "imaqwriter@imawriter.com",
         "phone"     : "(000) 000-0000",
         "website"   : "www.imawriter.com",
-        "address"   : "111 Writer's Way",
-        "city"      : "Writerville",
-        "state"     : "NM",
-        "zip"       : "88888"
+        "addressLocality"   : "Writerville",
+        "addressRegion"     : "NM",
+        "postalCode"        : "88888"
+        "streetAddress"     : "111 Writer's Way"
     }
     }
 ```
