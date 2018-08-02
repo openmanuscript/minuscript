@@ -52,37 +52,37 @@ The Open Manuscript data specification is a set of files and directories contain
 The content of the value for each key is not examined for correctness - each is simply treated as a string. Each must follow proper `JSON` formats for strings.
 
 - **version** (required) the version of this specification the file follows. 
-  Valid values are [1.0].
-- **name** The author's full name. Can be a list of names. The string is not
-  checked for any formatting constraints (required).
-- **surname** A single name, to be included in the header for each manuscript
-  page, per standard manuscript formatting (required).
-- **email** The author's email address (required).
-- **phone** The author's phone number (required).
-- **website** The author's website (optional).
-- **addressLocality** String with "City, Country" (required). In the Case of 
-  the U.S. the country need not be present.
-- **addressRegion** State (optional). As needed, if the country has entities 
-  such as states. included.
-- **postalCode** Zip or other postal code (required).
-- **streetAddress** Street address (required).
-- Other valid `JSON` data may be present, but is not part of this    
-  specification.
+
+- **author** A JSON object. The following [key,value] pairs define an author's
+  data.
+    - **name** The author's full name. Can be a list of names. The string is not checked for any formatting constraints (required).
+    - **surname** A single name, to be included in the header for each manuscript page, per standard manuscript formatting (required).
+    - **email** The author's email address (required).
+    - **phone** The author's phone number (required).
+    - **website** The author's website (optional).
+    - **addressLocality** String with "City, Country" (required). In the Case of the U.S. the country need not be present.
+    - **addressRegion** State (optional). As needed, if the country has  entities such as states. included.
+    - **postalCode** Zip or other postal code (required).
+    - **streetAddress** Street address (required).
+    - Other valid `JSON` data may be present, but is not part of this    specification. 
+
+- Other valid `JSON` data may be present, but is not part of this    specification. 
+
 
 ```
     SPECIFICATION of author.json file
 
     {
-    "version" : "1.0",
+    "version" : String, 
     "author" : {
         "name"      : String, 
         "surname"   : String,
         "email"     : String,
         "phone"     : String,
         "website"   : String,
-        "addressLocality"   : String, (city)
-        "addressRegion"     : String, (state)
-        "postalCode"        : String, (zip)
+        "addressLocality"   : String,
+        "addressRegion"     : String,
+        "postalCode"        : String,
         "streetAddress"     : String
     }
     }
@@ -111,15 +111,13 @@ The manuscript file defines a series of chapters, each of which is made up of
 scenes. The basic file unit in this specification is the *scene*. Most
 everything else is metadata. 
 
-- **version** the version of this specification the file follows. Valid
-  values are `[1.0]`.
-- **title** The full title of the manuscript.
-- **runningtitle** A one word title, included in each page's header, per 
-  common manuscript formatting. 
-- **chapters** A list of chapters. a `chapter` is defined below. A chapter 
-  is an array of scenes, with metadata. 
-- Other valid `JSON` data may be present, but is not part of this    
-  specification.
+- **version** the version of this specification the file follows. 
+- **manuscript** A JSON object. The following [key,value] pairs define
+  a manuscript's data.
+    - **title** The full title of the manuscript.
+    - **runningtitle** A one word title, included in each page's header, per common manuscript formatting. 
+    - **chapters** A list of chapters. a `chapter` is defined below. A chapter is an array of scenes, with metadata. 
+    - Other valid `JSON` data may be present, but is not part of this    specification.
 
 ```
     SPECIFICATION of manuscript.json file
