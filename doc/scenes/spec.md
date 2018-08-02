@@ -190,12 +190,60 @@ Chapter ordering is implicit in the file. Ordering of *scenes* is explicit in th
 ```
 **SCENE.MD file**
 A scene file is *required* to be a text-only file using a subset of
-multimarkdown for any formatting (bold, italic, lists, footnotes or endnotes,
+markdown for any formatting (bold, italic, lists, footnotes or endnotes,
 etc.) The following markdown must be supported by any application that
-implements this specification. All other markdown can be ignored. 
+implements this specification. All other markdown is ignored by
+OpenManuscript-compliant applications, and can be handled by extensions or other
+applications. 
 
-- bold
-- italic
+- bold 
+
+```
+        Here is a bold word: \*\*word\*\* 
+```
+    
+- italic 
+
+```
+        Here is an italicized word: \*word\* 
+```
+
 - ordered lists
+
+```
+        1. first
+        2. second
+        3. third
+```
+
 - unordered lists
-- foot or end notes (actually the same markdown)
+
+```
+        - first
+        - second
+        - third
+```
+
+- footnote or endnote 
+
+```
+        This is a sentence, with a footnote[^ this is a footnote]
+        This is another sentence, with a footnote[^check]
+
+        [^check]:If you have a long note, you can put it in another place
+        in the document, like maybe at the bottom of the doc. Any application
+        that reads, writes or displays OpenManuscript format handles this.
+```
+
+- links
+
+```
+        [Here is a link.](http://www.link.com)
+        [Here's another way of doing it.][1]
+        And one more [way to do it].
+        And one that you can parse [yourself].
+
+        [1]: http://something.com
+        [way to do it]: http://another_something.com
+        [yourself]: This can contain anything, and you can do ... anything 
+```
