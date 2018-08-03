@@ -60,8 +60,9 @@ The content of the value for each key is not examined for correctness - each is 
     - **email** The author's email address (required).
     - **phone** The author's phone number (required).
     - **website** The author's website (optional).
-    - **addressLocality** String with "City, Country" (required). In the Case of the U.S. the "Country" need not be present.
-    - **addressRegion** State (optional). As needed, if the country has  entities such as states.
+    - **addressCountry** The address' country" (required). 
+    - **addressLocality** The address' locality (city) required).
+    - **addressRegion** The address' region (state) (optional). As needed, if the country has entities such as states.
     - **postalCode** Zip or other postal code (required).
     - **streetAddress** Street address (required).
     - Other valid `JSON` data may be present, but is not part of this    specification. 
@@ -80,6 +81,7 @@ The content of the value for each key is not examined for correctness - each is 
         "email"     : String,
         "phone"     : String,
         "website"   : String,
+        "addressCountry"    : String,
         "addressLocality"   : String,
         "addressRegion"     : String,
         "postalCode"        : String,
@@ -98,6 +100,7 @@ The content of the value for each key is not examined for correctness - each is 
         "email"     : "imaqwriter@imawriter.com",
         "phone"     : "(000) 000-0000",
         "website"   : "www.imawriter.com",
+        "addressCountry"    : "USA",
         "addressLocality"   : "Writerville",
         "addressRegion"     : "NM",
         "postalCode"        : "88888"
