@@ -60,8 +60,8 @@ The content of the value for each key is not examined for correctness - each is 
     - **email** The author's email address (required).
     - **phone** The author's phone number (required).
     - **website** The author's website (optional).
-    - **addressLocality** String with "City, Country" (required). In the Case of the U.S. the country need not be present.
-    - **addressRegion** State (optional). As needed, if the country has  entities such as states. included.
+    - **addressLocality** String with "City, Country" (required). In the Case of the U.S. the "Country" need not be present.
+    - **addressRegion** State (optional). As needed, if the country has  entities such as states.
     - **postalCode** Zip or other postal code (required).
     - **streetAddress** Street address (required).
     - Other valid `JSON` data may be present, but is not part of this    specification. 
@@ -108,8 +108,7 @@ The content of the value for each key is not examined for correctness - each is 
 
 **MANUSCRIPT file**
 The manuscript file defines a series of chapters, each of which is made up of
-scenes. The basic file unit in this specification is the *scene*. Most
-everything else is metadata. 
+scenes.
 
 - **version** the version of this specification the file follows. 
 - **manuscript** A JSON object. The following [key,value] pairs define
@@ -156,13 +155,13 @@ everything else is metadata.
 
 **CHAPTER** 
 A chapter is a collection of scene files, with additional optional metadata.
-Chapter ordering is implicit in the file. Ordering of *scenes* is explicit in the array of scenes.
+Chapters are numbered automatically based on their order in the file.
+Scenes are included in the order that they appear in the scene list.
 
 - **desc**  A short description of the chapter, to be used in outlines.
 - **pov**   Point of view of the chapter. Any string is valid.
-- **scenes** An array of scene names. If the chapter is being used, the scenes 
-   in this array must be present in the `scenes/` directory. See the section on
-   **tags** for more information about controlling *scenes*.
+- **scenes** An array of scene names. These are expected to be present in the
+  `scenes` directory, but this is not strictly required by the specification. 
 - **setting** The setting of the scene. Any string is valid.
 - **story** A description of the story points in a scene. This is used for 
    notes to the author, and is not included in the outline.
@@ -178,7 +177,7 @@ Chapter ordering is implicit in the file. Ordering of *scenes* is explicit in th
     {
         "desc"    : String, 
         "pov"     : String, 
-        "scenes"  : Array.of(String) (required), 
+        "scenes"  : Array.of(String),
         "setting" : String, 
         "story"   : String, 
         "tags"    : Array.of(Strong) 
@@ -197,13 +196,13 @@ applications.
 - bold 
 
 ```
-        Here is a bold word: \*\*word\*\* 
+        Here is a bold word: **word** 
 ```
     
 - italic 
 
 ```
-        Here is an italicized word: \*word\* 
+        Here is an italicized word: *word* 
 ```
 
 - ordered lists
