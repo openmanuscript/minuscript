@@ -2,7 +2,9 @@
 
 `minuscript` ... keep it simple.
 
-Thanks for your interest in `minuscript`, software to support a minimal manuscript workflow for writing fiction.
+Thanks for your interest in `minuscript`, software to support a minimal
+manuscript workflow for writing fiction. This tool uses the OpenManuscript data
+format (https://github.com/moonimal/openmanuscript).
 
 Project web page is: http://www.minuscript.org
 
