@@ -6,9 +6,10 @@
     "email"     : "imaqwriter@imawriter.com",
     "phone"     : "(000) 000-0000",
     "website"   : "www.imawriter.com",
-    "address"   : "111 Writer's Way",
-    "city"      : "Writerville",
-    "state"     : "NM",
-    "zip"       : "88888"
+    "streetAddress"     : "111 Writer's Way",
+    "addressLocality"   : "Writerville",
+    "addressRegion"     : "NM",
+    "addressCountry"    : "USA",
+    "postalCode"        : "88888"
 }
 }

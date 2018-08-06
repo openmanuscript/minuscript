@@ -165,10 +165,11 @@ APP_INIT_AUTHOR_STRING = """{{
     \"email\"     : \"imaqwriter@imawriter.com\",
     \"phone\"     : \"(000) 000-0000\",
     \"website\"   : \"www.imawriter.com\",
-    \"address\"   : \"111 Writer's Way\",
-    \"city\"      : \"Writerville\",
-    \"state\"     : \"NM\",
-    \"zip\"       : \"88888\"
+    \"addressCountry\"  : \"USA\",
+    \"streetAddress\"   : \"111 Writer's Way\",
+    \"addressLocality\" : \"Writerville\",
+    \"addressRegion\"   : \"NM\",
+    \"postalCode\"      : \"88888\"
 }}
 }}""".format(version=APP_VERSION) 
 
@@ -861,10 +862,12 @@ with open( get_texfilename(), 'w' ) as out:
     out.write("\\begin{minipage}{0.5\\linewidth}\n")
     out.write("\\flushleft\n")
     out.write(author_data["author"]["name"]    + "\\\\\n")
-    out.write(author_data["author"]["address"] + "\\\\\n")
-    out.write(author_data["author"]["city"]    + ", ")
-    out.write(author_data["author"]["state"]   + " ")
-    out.write(author_data["author"]["zip"]     + "\\\\\n")
+    out.write(author_data["author"]["streetAddress"] + "\\\\\n")
+    out.write(author_data["author"]["addressLocality"] + ", ")
+    if ( "addressRegion" in author_data["author"]):
+        out.write(author_data["author"]["addressRegion"]   + ", ")
+    out.write(author_data["author"]["addressCountry"]  + " ")
+    out.write(author_data["author"]["postalCode"]      + "\\\\\n")
     out.write(author_data["author"]["email"]   + "\\\\\n")
     out.write(author_data["author"]["phone"]   + "\n")
     out.write("\\end{minipage}\n")

@@ -14,14 +14,6 @@
         "fontfamily"     : "courier",
         "tags"           : "docs",
         "output"         : "documentation.pdf"
-    },
-    {
-        "name"           : "spec",
-        "manuscriptfile" : "manuscript.json",
-        "authorfile"     : "author.json",
-        "fontfamily"     : "courier",
-        "tags"           : "spec",
-        "output"         : "specification.pdf"
     }
 ]
 }

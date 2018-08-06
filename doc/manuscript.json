@@ -15,11 +15,6 @@
             "scenes" : ["workflow", "structure"]
         },
         {
-            "title"  : "Data Specification",
-            "tags"   : ["docs", "spec"], 
-            "scenes" : ["spec"]
-        },
-        {
             "title"  : "Transformation from Data to Manuscript",
             "tags"   : ["docs"], 
             "scenes" : ["transformation"]
