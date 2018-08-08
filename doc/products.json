@@ -3,7 +3,7 @@
 "outputs" : [
     {
         "name"           : "clean",
-        "files"          : "documentation.pdf specification.pdf"
+        "files"          : "documentation.pdf"
     },
     {
         "name"           : "docs",

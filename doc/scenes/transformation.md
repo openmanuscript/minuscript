@@ -6,7 +6,7 @@ the requested output product.
 
 A set of operations is expected on this data, to be able to create a manuscript
 in typical fiction manuscript format. The example manuscript that is
-expected is **this (LINK NEEDED)** example. Transformations include:
+expected is [here](https://www.shunn.net/format/story.html). Transformations include:
 
 * A properly formatted title page, including author data, title and
   optional wordcount.
