@@ -326,6 +326,8 @@ parser.add_argument( "--manuscriptname", default="notDefined",
     help="name of the final pdf that will be created.")
 parser.add_argument( "--manuscriptfile", default="manuscript.json", 
     help="read manuscript definition from this file")
+parser.add_argument( "--nochapnames", action="store_true", default=False,
+    help="use chapter names, in addition to numbers")
 parser.add_argument( "--nopdf", action="store_true", default=False,
     help="don't create pdf file. useful in debugging problems")
 parser.add_argument( "--numwords", default="notDefined", 
@@ -710,18 +712,23 @@ def roundup(x):
 #   as a word, and the chapter title on a second line below that
 #
 def latex_write_newchapter_command( out ):
-    out.write("\\newcommand{\\newchapter}[1]\n")
+    if (args.nochapnames):
+        out.write("\\newcommand{\\newchapter}[1]\n")
+    else:
+        out.write("\\newcommand{\\newchapter}\n")
+
     out.write("{\n")
     out.write("  \\stepcounter{chapter}\n")
     out.write("  \\newpage\n")
-    out.write("  \\phantomsection\n")
+    # out.write("  \\phantomsection\n")
     out.write("  \\vspace*{3in}\n")
     if (args.shortstory == False):
         out.write("  \\begin{center}\n")
         out.write("  \\begin{noindent}\n")
         out.write("\n")
         out.write("  \\textbf{" + get_chapter_name_string() + "}\n\n" ) 
-        out.write("  \\textbf{#1}\n")
+        if (args.nochapnames):
+            out.write("  \\textbf{#1}\n")
         out.write("  \\end{noindent}\n")
         out.write("  \\end{center}\n")
         out.write("  \\bigskip\n")
@@ -949,13 +956,21 @@ with open( get_texfilename(), 'w' ) as out:
         if (check_chapter_state( chapter )):
 
             # write chapters
-            if ( args.toc == True ):
-                out.write("\\newchapter{" + chapter["title"] + "}\n")
-                # out.write("\\phantomsection\n")
-                out.write("  \\addcontentsline{toc}{section}{" + 
-                    chapter["title"] + "}\n")
+            if ( args.nochapnames ):
+                if ( args.toc == True ):
+                    out.write("\\newchapter{" + chapter["title"] + "}\n")
+                    # out.write("\\phantomsection\n")
+                    out.write("  \\addcontentsline{toc}{section}{" + 
+                        chapter["title"] + "}\n")
+                else:
+                    out.write("\\newchapter{" + chapter["title"] + "}\n")
             else:
-                out.write("\\newchapter{" + chapter["title"] + "}\n")
+                if ( args.toc == True ):
+                    out.write("\\newchapter\n")
+                    out.write("  \\addcontentsline{toc}{section}{" + 
+                        chapter["title"] + "}\n")
+                else:
+                    out.write("\\newchapter\n")
 
             # start the page numbering
             if APP_START_PAGE_NUMBERING:

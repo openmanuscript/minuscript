@@ -200,6 +200,10 @@ for p in products_data["outputs"]:
 
         # switches
         # ---------------------------------------------------------
+        if "chapnames" in p:
+            if (p["chapnames"] == "false"):
+                command += " --chapnames"
+
         if "chapsum" in p:
             if (p["chapsum"] == "true"):
                 command += " --chapsum"
