@@ -943,6 +943,7 @@ with open( get_texfilename(), 'w' ) as out:
         out.write("\\end{center}\n")
         out.write("\\footnotesize\n")
         out.write("\\tableofcontents\n")
+        out.write("\\addtocontents{toc}{\\textbf{Chapter}~\\hfill\\textbf{Page}\\par}\n")
         out.write("}\n")
 
     # write out quotes, if that's been requested
@@ -960,15 +961,14 @@ with open( get_texfilename(), 'w' ) as out:
                 if ( args.toc == True ):
                     out.write("\\newchapter{" + chapter["title"] + "}\n")
                     # out.write("\\phantomsection\n")
-                    out.write("  \\addcontentsline{toc}{section}{" + 
+                    out.write("\\addcontentsline{toc}{section}{" + 
                         chapter["title"] + "}\n")
                 else:
                     out.write("\\newchapter{" + chapter["title"] + "}\n")
             else:
                 if ( args.toc == True ):
                     out.write("\\newchapter\n")
-                    out.write("  \\addcontentsline{toc}{section}{" + 
-                        chapter["title"] + "}\n")
+                    out.write("\\addcontentsline{toc}{section}{\\arabic{chapter}}\n")
                 else:
                     out.write("\\newchapter\n")
 
