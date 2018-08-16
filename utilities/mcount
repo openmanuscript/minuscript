@@ -6,7 +6,8 @@ import sys
 if (len(sys.argv) == 1):
     print("ERROR: must include the name of the file to count")
 
-ignore = ["a", "an", "and", "are", "but", "by", "in", "from", "of", "on", "or", "the", "to", "-"]
+ignore = ["a", "an", "and", "are", "but", "by", "in", "from", "of", "on", "or",
+"than", "that", "the", "their", "to", "-"]
 
 mytext = open(sys.argv[1]).read()
 
