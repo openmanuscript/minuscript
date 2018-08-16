@@ -7,4 +7,3 @@ install:
 	install -d $(INSTALLDIR)
 	install -m 0755 $(APPNAME) $(INSTALLDIR)
 	install -m 0755 utilities/* $(INSTALLDIR)
-	install -m 0755 minty $(INSTALLDIR) 
