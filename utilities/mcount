@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 
 from collections import Counter
+import re
 import sys
+import operator
 
 if (len(sys.argv) == 1):
     print("ERROR: must include the name of the file to count")
 
-ignore = ["a", "an", "and", "are", "but", "by", "in", "from", "of", "on", "or",
-"than", "that", "the", "their", "to", "-"]
+ignore = ["a", "an", "as", "at", "and", "are", "be", "but", "by", "has", "he",
+"her", "him", "if", "in", "is", "it", "for", "from", "of", "on", "or", "she",
+"than", "that", "the", "there", "there's", "their", "to", "-"]
 
 mytext = open(sys.argv[1]).read()
+mytext = re.sub("[^a-zA-Z0-9'_-]+", ' ', mytext)
 
-results = Counter(mytext.replace(',','').replace('.','').lower().split()).most_common()
+results = Counter(mytext.replace('.','').replace('*','').lower().split()).most_common()
 
+results = sorted(results, key=operator.itemgetter(1, 0), reverse = True)
 for word in results:
     if (word[0] not in ignore):
-        if (word[1] > 1):
-            print("{:15}{:3}".format(word[0], word[1]))
+        print("{:15}{:3}".format(word[0], word[1]))
