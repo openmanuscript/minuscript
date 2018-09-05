@@ -1,4 +1,4 @@
-<img src="img/minuscript.png" width="50" align="left">
+<img src="doc/img/minuscript.png" width="50" align="left">
 
 `minuscript` ... keep it simple.
 
