@@ -1,12 +1,10 @@
-<img src="https://github.com/moonimal/minuscript/blob/master/doc/img/minuscript.png" width="50" align="left">
+<img src="img/minuscript.png" width="50" align="left">
 
 `minuscript` ... keep it simple.
 
 Thanks for your interest in `minuscript`, software to support a minimal
 manuscript workflow for writing fiction. This tool uses the OpenManuscript data
-format (https://github.com/moonimal/openmanuscript).
-
-Project web page is: http://www.minuscript.org
+format (https://github.com/openmanuscript).
 
 To me, the most important thing is getting ideas from raw writing to finished manuscript with the least intellectual burden possible. This software supports a versioned, text-only system that's easy to use, add new content to, and re-organize - all in the service of creating stories. 
 
