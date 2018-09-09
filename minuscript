@@ -334,6 +334,8 @@ parser.add_argument( "--numwords", default="notDefined",
     help="override the wordcount with this number.")
 parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
+parser.add_argument( "--outlinefile", default="outline.html", 
+    help="output outline to this file")
 parser.add_argument( "--outlinecols", nargs="+", default = ["Title", "TOD",
     "POV", "Setting", "Scenes", "Desc", "Story"], 
     help="set which columns of the outline to print when creating outline")
@@ -528,42 +530,45 @@ if (args.scenelist):
     exit(0)
 
 if (args.outline):
-    chapnum = 1;
-    print("<html>")
-    print("<head>")
-    print("<style>")
-    print( APP_OUTLINE_CSS )
-    print("</style>")
-    print("</head>")
-    print("<body>")
-    print("<h3>" + manuscript_data["manuscript"]["title"] + " Outline</h3>")
-    print("<table>")
-    print("<tr>")
-    print("<th style=\"width:1%\">Chapter</th>")
-    for col in args.outlinecols:
-        print("<th style=\"width:{0}%\">{1}</th>".
-            format(APP_OUTLINE_COL_WIDTHS[col.lower()], col))
-    print("</tr>")
-    for chapter in manuscript_data["manuscript"]["chapters"]:
-        if (check_chapter_state( chapter )):
-            print("<tr>")
-            print("<td>{0}</td>".format(chapnum))
-            chapnum = chapnum + 1
-            for col in args.outlinecols:
-                if (col.lower() in chapter):
-                    if (col == "Scenes"):
-                        print("<td>{0}</td>".
-                            format(" ".join(chapter[col.lower()])))
+    with open(args.outlinefile, "w") as o:
+        chapnum = 1;
+        o.write("<html>\n")
+        o.write("<head>\n")
+        o.write("<style>\n")
+        o.write( APP_OUTLINE_CSS )
+        o.write("</style>\n")
+        o.write("</head>\n")
+        o.write("<body>\n")
+        o.write("<h3>{}Outline</h3>\n".format(
+                            manuscript_data["manuscript"]["title"]))
+        o.write("<table>\n")
+        o.write("<tr>\n")
+        o.write("<th style=\"width:1%\">Chapter</th>\n")
+        for col in args.outlinecols:
+            o.write("<th style=\"width:{0}%\">{1}</th>".
+                format(APP_OUTLINE_COL_WIDTHS[col.lower()], col))
+        o.write("</tr>\n")
+        for chapter in manuscript_data["manuscript"]["chapters"]:
+            if (check_chapter_state( chapter )):
+                o.write("<tr>\n")
+                o.write("<td>{0}</td>\n".format(chapnum))
+                chapnum = chapnum + 1
+                for col in args.outlinecols:
+                    if (col.lower() in chapter):
+                        if (col == "Scenes"):
+                            o.write("<td>{0}</td>\n".
+                                format(" ".join(chapter[col.lower()])))
+                        else:
+                            o.write("<td>{0}</td>\n".
+                                format(chapter[col.lower()]))
                     else:
-                        print("<td>{0}</td>".format(chapter[col.lower()]))
-                else:
-                    print("<td></td>")
-            print("</tr>")
+                        o.write("<td></td>\n")
+                o.write("</tr>\n")
 
-    print("</table>")
-    print("</body>")
-    print("</html>")
-    exit(0)
+        o.write("</table>\n")
+        o.write("</body>\n")
+        o.write("</html>\n")
+        exit(0)
 
 if (args.unusedscenes):
     for scene in get_unused_scenelist( manuscript_data ):
@@ -713,9 +718,9 @@ def roundup(x):
 #
 def latex_write_newchapter_command( out ):
     if (args.nochapnames):
-        out.write("\\newcommand{\\newchapter}[1]\n")
-    else:
         out.write("\\newcommand{\\newchapter}\n")
+    else:
+        out.write("\\newcommand{\\newchapter}[1]\n")
 
     out.write("{\n")
     out.write("  \\stepcounter{chapter}\n")
@@ -726,8 +731,8 @@ def latex_write_newchapter_command( out ):
         out.write("  \\begin{center}\n")
         out.write("  \\begin{noindent}\n")
         out.write("\n")
-        out.write("  \\textbf{" + get_chapter_name_string() + "}\n\n" ) 
-        if (args.nochapnames):
+        out.write("  \\textbf{" + get_chapter_number_string() + "}\n\n" ) 
+        if (not args.nochapnames):
             out.write("  \\textbf{#1}\n")
         out.write("  \\end{noindent}\n")
         out.write("  \\end{center}\n")
@@ -779,7 +784,7 @@ def latex_write_quotes_command( out ):
     out.write("  \\bigskip\n")
     out.write("}\n")
 
-def get_chapter_name_string():
+def get_chapter_number_string():
     return "CHAPTER \\NUMBERstringnum{\\value{chapter}}"
 
 # ---------------------------------------------------------------------------
@@ -959,19 +964,19 @@ with open( get_texfilename(), 'w' ) as out:
             # write chapters
             if ( args.nochapnames ):
                 if ( args.toc == True ):
-                    out.write("\\newchapter{" + chapter["title"] + "}\n")
-                    # out.write("\\phantomsection\n")
-                    out.write("\\addcontentsline{toc}{section}{" + 
-                        chapter["title"] + "}\n")
-                else:
-                    out.write("\\newchapter{" + chapter["title"] + "}\n")
-            else:
-                if ( args.toc == True ):
                     out.write("\\newchapter\n")
                     out.write("\\addcontentsline{toc}{section}{\\arabic{chapter}}\n")
                 else:
                     out.write("\\newchapter\n")
 
+            else:
+                if ( args.toc == True ):
+                    out.write("\\newchapter{" + chapter["title"] + "}\n")
+                    # out.write("\\phantomsection\n")
+                    out.write("\\addcontentsline{toc}{section}{\\arabic{chapter}: " + 
+                        chapter["title"] + "}\n")
+                else:
+                    out.write("\\newchapter{" + chapter["title"] + "}\n")
             # start the page numbering
             if APP_START_PAGE_NUMBERING:
                 out.write("\\pagenumbering{arabic}\n")
