@@ -139,7 +139,8 @@ APP_TAGS        =  []
 APP_CHAPTERS    =  []
     # a list of widths for columns in an outline
 APP_OUTLINE_COL_WIDTHS = {
-    'title': '15', 
+    'title': '10', 
+    'arc' : '5',
     'tod': '5', 
     'pov': '5', 
     'setting': '5', 
@@ -336,8 +337,8 @@ parser.add_argument( "--outline", action="store_true", default=False,
     help="print a simple outline of the manuscript and exit")
 parser.add_argument( "--outlinefile", default="outline.html", 
     help="output outline to this file")
-parser.add_argument( "--outlinecols", nargs="+", default = ["Title", "TOD",
-    "POV", "Setting", "Scenes", "Desc", "Story"], 
+parser.add_argument( "--outlinecols", nargs="+", default = ["Title", "Arc",
+    "POV", "TOD", "Setting", "Scenes", "Desc"], 
     help="set which columns of the outline to print when creating outline")
 parser.add_argument( "--poetry", action="store_true", default=False,
     help="the manuscript is a collection of poems")
