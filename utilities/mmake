@@ -194,7 +194,6 @@ for p in products_data["outputs"]:
                 command += " --fontfamily pcr"
             elif p["fontfamily"] == "times":
                 command += " --fontfamily ptm"
-                print("NOTE: check font family")
             else:
                 print("ERROR: invalid fontfamily: " + p["fontfamily"])
 
