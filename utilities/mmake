@@ -66,7 +66,7 @@ def get_products( fname ):
             for p in products_data["outputs"]:
                 products.append(p["name"])
     else:
-        print("ERROR: can't find expected file: " + APP_input)
+        print("ERROR: can't find expected file: " + fname)
 
     return products
 
@@ -110,6 +110,8 @@ parser = argparse.ArgumentParser(
 # parser.set_defaults(**defaults)
 parser.add_argument( "-d", "--debug", action="store_true", default=False,
     help="run in debug mode: create all files, but do not clean up after pdf is created.")
+parser.add_argument( "-p", "--products", default=APP_input,
+    help="define products file (other than default)")
 parser.add_argument( "-v", "--verbose", action="store_true", default=False,
     help="report verbosely")
 parser.add_argument( "-V", "--version", action="store_true", default=False,
@@ -129,15 +131,15 @@ if (args.version == True):
 
 # print the list of products
 if (args.product == "none"):
-    for p in get_products(APP_input):
+    for p in get_products(args.products):
         print(p)
     exit(0)
 
-if not os.path.isfile(APP_input):
-    print("ERROR: can't find expected file: " + APP_input)
+if not os.path.isfile(args.products):
+    print("ERROR: can't find expected file: " + args.products)
     exit(0)
 
-with open( APP_input ) as products_file:
+with open( args.products ) as products_file:
     products_data = json.load( products_file )
 
 if (args.product == "clean"):
@@ -249,5 +251,5 @@ for p in products_data["outputs"]:
 
 if (notFound):
     print("ERROR: product \"" + args.product + "\" not found. Valid products:")
-    for p in get_products(APP_input):
+    for p in get_products(args.products):
         print("    " + p)
